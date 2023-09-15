@@ -1,24 +1,21 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { BrowserRouter as Router } from "react-router-dom";
+import "./styles/styles.scss";
+import { createBrowserHistory } from "history";
+import { Provider as ReduxProvider } from "react-redux";
+import createStore from "./redux/store";
+import Layout from "./components/container/Layout";
 
 function App() {
+  const store = createStore();
+  const history = createBrowserHistory();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ReduxProvider store={store}>
+      <Router>
+        <Layout history={history} />
+      </Router>
+    </ReduxProvider>
   );
 }
 
