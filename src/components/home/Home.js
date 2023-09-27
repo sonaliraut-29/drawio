@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
+import api from "../../redux/services/api";
+import { LEAFLETS } from "../../redux/reduxConstants/EndPoints";
 
 import OwlCarousel from "react-owl-carousel";
 import "owl.carousel/dist/assets/owl.carousel.css";
@@ -7,6 +9,23 @@ import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import Carousel from "react-bootstrap/Carousel";
 
 const Home = () => {
+  useEffect(() => {
+    fetchLeafts();
+  }, []);
+
+  const baseUrl = process.env.REACT_APP_API_BASEURL;
+
+  const fetchLeafts = () => {
+    api(baseUrl)
+      .get(LEAFLETS + "?days_tolerance=-25&num_of_rows_required=10")
+      .then((res) => {
+        console.log(res);
+        if (res.data.success) {
+        }
+      })
+      .catch((e) => console.log(e));
+  };
+  
   return (
     <div className="Home">
       <Container className="mt-5">
