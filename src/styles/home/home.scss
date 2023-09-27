@@ -1,0 +1,253 @@
+
+
+  // Banner
+
+  body{
+    background: #F5F5F5;
+    font-family: 'Open Sans', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6{font-family: 'Open Sans', sans-serif; font-weight: 600 !important;}
+
+ #home__banner {
+  img{ width: 100%;}
+ }
+
+
+ .title-wrap{
+  span {
+    a {
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      color: #0B0E10;
+      padding-left: 55px;
+
+        &::after {
+          content: "";
+          // background-image: url('/assets/images/arrow.svg') no-repeat;
+          width: 12px;
+          height: 14px;
+          position: absolute;
+          right: -20px;
+          top: 5px;
+      }
+    }
+  }
+  
+}
+
+
+
+.angle-right-icon{height: 12px;}
+
+
+
+//  Search
+
+ #home__search {
+  input {
+    border-color: #007CC3;
+    border-radius: 30px;
+    height: 50px;
+    text-indent: 20px;
+  }
+  button.btn.btn-primary {
+    background: transparent;
+    border: 0;
+    position: relative;
+    left: -46px;
+    top: -3px;
+  }
+ }
+
+
+
+
+// categories
+
+.cat-img {
+  display: flex;
+  justify-content: center;
+  background: #ccc;
+  padding: 20px;
+  border-radius: 20px;
+  border: 1px solid #0B0E10;
+  min-height: 160px;
+  
+  img {
+    width: 55px !important;
+  }
+
+}
+
+.cat-item.beauty img {
+  width: 80px !important;
+}
+
+.cat-item.mobile .cat-img {
+  background: #219EBC;
+}
+
+.cat-item.perfume .cat-img {
+  background: #D6CCC2;
+}
+
+.cat-item.watches .cat-img {
+  background: #778DA9;
+}
+
+.cat-item.fashion .cat-img {
+  background: #FFAFCC;
+}
+.cat-item.beauty .cat-img {
+  background: #DDA15E;
+}
+
+
+// Popular Search
+
+#home__popular {
+
+  .item {
+    padding: 15px;
+
+    .item-wrap {
+      background: #fff;
+      padding: 15px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px #00000014;
+      
+        .item-desc{
+          position: relative;
+          img {
+            width: 60px !important;
+            position: absolute;
+            right: 0;
+            top: -18px;
+          }
+          h5 {
+            text-align: left;
+            padding-top: 15px;
+          }
+    
+          p {
+            text-align: left;
+          }
+
+        }
+        .price {
+          text-align: left;
+          border-top: 1px solid #ddd;
+          padding-top: 5px;
+          span {
+            font-size: 24px;
+            font-weight: 600;
+          }
+          strike {
+            color: #848484;
+        }
+        }
+    }
+    .item-wrap > img {
+      height: 320px;
+  }
+  }
+}
+
+
+// Leaflet 
+
+#home__leaflet {
+
+  .item {
+    padding: 15px;
+
+    .item-wrap {
+      background: #fff;
+      padding: 15px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px #00000014;
+      
+        .item-desc{
+          position: relative;
+          .vendor-logo{
+              img {
+                object-fit: contain;
+                background: #fff;
+                padding: 5px;
+                border-radius: 50px;
+                border: 1px solid #0B0E10;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.10);
+                width: 60px !important;
+                position: absolute;
+                right: 0;
+                top: -18px;
+                height: 60px;
+            }
+          }
+         
+          h5 {
+            text-align: left;
+            padding-top: 15px;
+          }
+    
+          p {
+            text-align: left;
+          }
+
+        }
+        .view {
+          text-align: left;
+          border-top: 1px solid #ddd;
+          padding-top: 12px;
+          span {
+            font-size: 14px;
+            font-weight: 600;
+             display: flex;
+            img{
+              width: 6px;
+              margin-left: 6px;
+              position: relative;
+              top: 5px;
+            }
+          }
+         
+        }
+    }
+  }
+
+  .item-wrap > img {
+    height: 238px;
+    object-fit: cover;
+}
+
+
+}
+
+
+// Hot Deals
+
+#home__hotdeals {
+
+img{
+  width: 100%;
+}
+
+.bottom img, .top img {
+  height: 300px;
+}
+
+.right-image img {
+  height: 340px;
+}
+
+.right-image .top {
+  margin-bottom: 20px;
+}
+ 
+
+
+}
+
+
