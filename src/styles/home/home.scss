@@ -251,3 +251,34 @@ img{
 }
 
 
+// responsive 
+
+
+@media only screen and (max-width: 767px){
+  form.d-flex input {
+    width: 100%;
+  }
+  form.d-flex {
+    position: relative;
+  }
+  #home__search button.btn.btn-primary {
+    position: absolute;
+    right: 0;
+    top: 4px;
+  }
+  #home__popular .item .item-wrap > img {
+    height: 94px;
+  }
+  #home__leaflet .item-wrap > img {
+    height: 100px;
+  }
+  #home__hotdeals .right-image img {
+    height: 89px;
+  }
+  .cat-img {
+    min-height: 70px;
+}
+
+}
+
+

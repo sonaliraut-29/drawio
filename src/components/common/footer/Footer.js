@@ -6,8 +6,8 @@ const Footer = () => {
       <div className="footer-section">
         <Container>
           <Row>
-            <Col><img src="./dist/assets/images/logo.png" /></Col>
-            <Col>
+          <div className="col-12 col-sm-3"><img src="./dist/assets/images/logo.png" /></div>
+          <div className="col-12 col-sm-3">
               <ul>
                 <li>Home</li>
                 <li>Home</li>
@@ -15,8 +15,8 @@ const Footer = () => {
                 <li>Home</li>
                 <li>Home</li>
               </ul>
-            </Col>
-            <Col>
+            </div>
+            <div className="col-12 col-sm-3">
               <ul>
                 <li>Home</li>
                 <li>Home</li>
@@ -24,8 +24,8 @@ const Footer = () => {
                 <li>Home</li>
                 <li>Home</li>
               </ul>
-            </Col>
-            <Col>
+            </div>
+            <div className="col-12 col-sm-3">
               <ul>
                 <li>Home</li>
                 <li>Home</li>
@@ -33,7 +33,7 @@ const Footer = () => {
                 <li>Home</li>
                 <li>Home</li>
               </ul>
-            </Col>
+            </div>
           </Row>
         </Container>
       </div>
