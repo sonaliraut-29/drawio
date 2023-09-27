@@ -65,7 +65,7 @@ const Home = () => {
                           src={
                             item.Banner_Image && "" !== item.Banner_Image
                               ? item.Banner_Image
-                              : ""
+                              : images.homeBannerImage
                           }
                           alt="banner"
                         />
