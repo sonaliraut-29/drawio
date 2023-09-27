@@ -1,16 +1,22 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import api from "../../redux/services/api";
-import { LEAFLETS } from "../../redux/reduxConstants/EndPoints";
+import { LEAFLETS, BANNERS } from "../../redux/reduxConstants/EndPoints";
 
 import OwlCarousel from "react-owl-carousel";
 import "owl.carousel/dist/assets/owl.carousel.css";
 import "owl.carousel/dist/assets/owl.theme.default.css";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import Carousel from "react-bootstrap/Carousel";
+import moment from "moment";
+import * as images from "../constant/Assets";
 
 const Home = () => {
+  const [leaflets, setLeaflets] = useState([]);
+  const [banners, setBanners] = useState([]);
+
   useEffect(() => {
     fetchLeafts();
+    fetchBanners();
   }, []);
 
   const baseUrl = process.env.REACT_APP_API_BASEURL;
@@ -19,26 +25,58 @@ const Home = () => {
     api(baseUrl)
       .get(LEAFLETS + "?days_tolerance=-25&num_of_rows_required=10")
       .then((res) => {
-        console.log(res);
         if (res.data.success) {
+          setLeaflets(res.data.data);
         }
       })
       .catch((e) => console.log(e));
   };
-  
+
+  const fetchBanners = () => {
+    api(baseUrl)
+      .get(BANNERS + "?days_tolerance=-25&num_of_rows_required=10")
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.success) {
+          setBanners(res.data.data);
+        }
+      })
+      .catch((e) => console.log(e));
+  };
+
   return (
     <div className="Home">
       <Container className="mt-5">
         <section id="home__banner">
           <Row>
-            <Carousel>
-              <Carousel.Item>
-                <img src="./dist/assets/images/banner.png" alt="banner" />
-              </Carousel.Item>
-              <Carousel.Item>
-                <img src="./dist/assets/images/banner.png" alt="banner" />
-              </Carousel.Item>
-            </Carousel>
+            {banners && banners.length > 0 ? (
+              <Carousel>
+                {banners.map((item) => {
+                  return (
+                    <Carousel.Item>
+                      <a
+                        href={
+                          item.Banner_Link && "" !== item.Banner_Link
+                            ? item.Banner_Link
+                            : "#"
+                        }
+                      >
+                        <img
+                          src={
+                            item.Banner_Image && "" !== item.Banner_Image
+                              ? item.Banner_Image
+                              : ""
+                          }
+                          alt="banner"
+                        />
+                      </a>
+                    </Carousel.Item>
+                  );
+                })}
+              </Carousel>
+            ) : (
+              ""
+            )}
           </Row>
         </section>
 
@@ -166,7 +204,7 @@ const Home = () => {
                   </div>
                 </div>
               </div>
-              
+
               <div class="item">
                 <div className="item-wrap">
                   <img src="./dist/assets/images/image.png" alt="img" />
@@ -220,75 +258,66 @@ const Home = () => {
             </OwlCarousel>
           </Row>
         </section>
+        {leaflets && leaflets.length > 0 ? (
+          <section id="home__leaflet" className="mt-5 text-center">
+            <Row>
+              <Col className="d-flex justify-content-center align-items-center title-wrap mt-5 mb-4">
+                <h2 className="section-title mb-1">Leaflets</h2>
+                <span>
+                  <a href="#">View All</a>
+                </span>
+              </Col>
+            </Row>
 
-        <section id="home__leaflet" className="mt-5 text-center">
-          <Row>
-            <Col className="d-flex justify-content-center align-items-center title-wrap mt-5 mb-4">
-              <h2 className="section-title mb-1">Leaflets</h2>
-              <span>
-                <a href="#">View All</a>
-              </span>
-            </Col>
-          </Row>
-
-          <Row>
-            <OwlCarousel className="owl-theme" loop margin={20}>
-              <div class="item">
-                <div className="item-wrap">
-                  <img src="./dist/assets/images/l1.png" alt="img" />
-                  <div className="item-desc">
-                    <div className="vendor-logo">
-                      <img src="./dist/assets/images/v2.png" alt="img" />
-                    </div>
-                    <h5>Leaflet name</h5>
-                    <p>Created: 04/11/2023</p>
-                  </div>
-                  <div className="view">
-                    <span>View Leaflet <img src="./dist/assets/images/arrow.svg" alt="arrow" class="angle-right-icon" /></span>
-                   
-                  </div>
-                </div>
-              </div>
-
-              <div class="item">
-                <div className="item-wrap">
-                  <img src="./dist/assets/images/l2.png" alt="img" />
-                  <div className="item-desc">
-                    <div className="vendor-logo">
-                      <img src="./dist/assets/images/v3.png" alt="img" />
-                    </div>
-                    <h5>Leaflet name</h5>
-                    <p>Created: 04/11/2023</p>
-                  </div>
-                  <div className="view">
-                    <span>View Leaflet <img src="./dist/assets/images/arrow.svg" alt="arrow" class="angle-right-icon" /></span>
-                   
-                  </div>
-                </div>
-              </div>
-              
-              <div class="item">
-                <div className="item-wrap">
-                  <img src="./dist/assets/images/l1.png" alt="img" />
-                  <div className="item-desc">
-                    <div className="vendor-logo">
-                      <img src="./dist/assets/images/v2.png" alt="img" />
-                    </div>
-                    <h5>Leaflet name</h5>
-                    <p>Created: 04/11/2023</p>
-                  </div>
-                  <div className="view">
-                    <span>View Leaflet <img src="./dist/assets/images/arrow.svg" alt="arrow" class="angle-right-icon" /></span>
-                   
-                  </div>
-                </div>
-              </div>
-
-           
-            </OwlCarousel>
-          </Row>
-        </section>
-
+            <Row>
+              <OwlCarousel className="owl-theme" loop margin={20}>
+                {leaflets &&
+                  leaflets.length > 0 &&
+                  leaflets.map((item) => {
+                    return (
+                      <div class="item">
+                        <div className="item-wrap">
+                          <img
+                            src={
+                              item.leaflet_image && "" !== item.leaflet_image
+                                ? item.leaflet_image
+                                : images.homeLeafletImage
+                            }
+                            alt="img"
+                          />
+                          <div className="item-desc">
+                            <div className="vendor-logo">
+                              <img
+                                src="./dist/assets/images/v2.png"
+                                alt="img"
+                              />
+                            </div>
+                            <h5>{item.leaflet_name}</h5>
+                            <p>
+                              Created:{" "}
+                              {moment(item.data_asof).format("MM/DD/YYYY")}
+                            </p>
+                          </div>
+                          <div className="view">
+                            <span>
+                              <a href={item.leaflet_link}>View Leaflet</a>
+                              <img
+                                src="./dist/assets/images/arrow.svg"
+                                alt="arrow"
+                                class="angle-right-icon"
+                              />
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+              </OwlCarousel>
+            </Row>
+          </section>
+        ) : (
+          ""
+        )}
 
         <section id="home__hotdeals" className="mt-5 text-center">
           <Row>
@@ -301,21 +330,33 @@ const Home = () => {
           </Row>
 
           <Row>
-
-            <div className="col-6 left-image"><img src="./dist/assets/images/d1.png" className="img-fluid" alt="hot deal" /></div>
+            <div className="col-6 left-image">
+              <img
+                src="./dist/assets/images/d1.png"
+                className="img-fluid"
+                alt="hot deal"
+              />
+            </div>
             <div className="col-6 right-image">
               <Row>
-                <div className="col-12 top"><img src="./dist/assets/images/d2.png" className="img-fluid" alt="hot deal" /></div>
-                <div className="col-12 bottom"><img src="./dist/assets/images/d3.png" className="img-fluid" alt="hot deal" /></div>
+                <div className="col-12 top">
+                  <img
+                    src="./dist/assets/images/d2.png"
+                    className="img-fluid"
+                    alt="hot deal"
+                  />
+                </div>
+                <div className="col-12 bottom">
+                  <img
+                    src="./dist/assets/images/d3.png"
+                    className="img-fluid"
+                    alt="hot deal"
+                  />
+                </div>
               </Row>
             </div>
-            
           </Row>
         </section>
-
-
-
-
       </Container>
     </div>
   );
