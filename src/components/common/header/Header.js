@@ -10,14 +10,14 @@ const Header = () => {
     return (
       <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
       <Container>
-        <Navbar.Brand href="#home"><img src="./dist/assets/images/logo.png" /></Navbar.Brand>
+        <Navbar.Brand href="#home"><img src="./dist/assets/images/logo.png" alt="logo" /></Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link href="#features">Leaflets</Nav.Link>
-            <Nav.Link href="#pricing">Banners</Nav.Link>
+            <Nav.Link href="">Search</Nav.Link>
             <NavDropdown title="Products" id="collapsible-nav-dropdown">
-              <NavDropdown.Item href="#action/3.1">Categories</NavDropdown.Item>
+              <NavDropdown.Item href="./src/components/search/search.js">Search Page</NavDropdown.Item>
               <NavDropdown.Item href="#action/3.2">
                 Another action
               </NavDropdown.Item>
