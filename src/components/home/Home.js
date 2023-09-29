@@ -9,12 +9,12 @@ import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import Carousel from "react-bootstrap/Carousel";
 import moment from "moment";
 import * as images from "../constant/Assets";
-import Search from "../search/Search";
-import SearchDetails from "../searchDetails/SearchDetails";
+import * as routes from "../constant/Routes";
 
-const Home = () => {
+const Home = ({ history }) => {
   const [leaflets, setLeaflets] = useState([]);
   const [banners, setBanners] = useState([]);
+  const [searchValue, setSearchValue] = useState("");
 
   useEffect(() => {
     fetchLeafts();
@@ -38,12 +38,35 @@ const Home = () => {
     api(baseUrl)
       .get(BANNERS + "?days_tolerance=-25&num_of_rows_required=10")
       .then((res) => {
-        console.log(res.data);
         if (res.data.success) {
           setBanners(res.data.data);
         }
       })
       .catch((e) => console.log(e));
+  };
+
+  const handleChange = (e) => {
+    if (e.target.value) {
+      setSearchValue(e.target.value);
+    } else {
+      setSearchValue("");
+    }
+  };
+
+  const handleSearch = () => {
+    history.push({
+      pathname: `${routes.SEARCH_ROUTE}`,
+      search: `?query=${searchValue}`,
+    });
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && searchValue.trim().length > 0) {
+      history.push({
+        pathname: `${routes.SEARCH_ROUTE}`,
+        search: `?query=${searchValue}`,
+      });
+    }
   };
 
   return (
@@ -91,9 +114,15 @@ const Home = () => {
                   placeholder="Find the best offer products"
                   className=""
                   aria-label="Find the best offer products"
+                  value={searchValue}
+                  onChange={(e) => handleChange(e)}
+                  onKeyDown={(e) => handleKeyDown(e)}
                 />
-                <Button>
-                  <img src="./dist/assets/images/search.svg" />
+                <Button
+                  onClick={handleSearch}
+                  disabled={searchValue && "" !== searchValue ? false : true}
+                >
+                  <img src={images.searchImage} />
                 </Button>
               </Form>
             </Col>

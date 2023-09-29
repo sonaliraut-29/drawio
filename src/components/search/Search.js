@@ -21,7 +21,6 @@ const Search = ({ history }) => {
     api(baseUrl)
       .get(BANNERS + "?days_tolerance=-25&num_of_rows_required=10")
       .then((res) => {
-        console.log(res.data);
         if (res.data.success) {
           setBanners(res.data.data);
         }
@@ -42,6 +41,15 @@ const Search = ({ history }) => {
       pathname: `${routes.SEARCH_ROUTE}`,
       search: `?query=${searchValue}`,
     });
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && searchValue.trim().length > 0) {
+      history.push({
+        pathname: `${routes.SEARCH_ROUTE}`,
+        search: `?query=${searchValue}`,
+      });
+    }
   };
 
   return (
@@ -94,7 +102,8 @@ const Search = ({ history }) => {
                   placeholder="Find the best offer products"
                   className=""
                   aria-label="Find the best offer products"
-                  onChange={handleChange}
+                  onChange={(e) => handleChange(e)}
+                  onKeyDown={(e) => handleKeyDown(e)}
                   value={searchValue}
                 />
                 <Button disabled={"" !== searchValue ? false : true}>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 
 import * as images from "../constant/Assets";
+import * as routes from "../constant/Routes";
 
 import api from "../../redux/services/api";
 import { SEARCH } from "../../redux/reduxConstants/EndPoints";
@@ -10,6 +11,7 @@ const SearchDetails = ({ history }) => {
   const [productList, setProductList] = useState([]);
   const [limit, setLimit] = useState(20);
   const [page, setPage] = useState(1);
+  const [searchValue, setSearchValue] = useState("");
 
   let fullSlug = "";
   let slugString = "";
@@ -45,12 +47,13 @@ const SearchDetails = ({ history }) => {
   const fetchProductList = (searchText) => {
     api(baseUrl)
       .get(
-        SEARCH + "?search_text=" + searchText
-        //  +
-        // "&offset_rows=" +
-        // page +
-        // "&page_size=" +
-        // limit
+        SEARCH +
+          "?search_text=" +
+          searchText +
+          "&offset_rows=" +
+          page +
+          "&page_size=" +
+          limit
       )
       .then((res) => {
         if (res.data.success) {
@@ -64,10 +67,34 @@ const SearchDetails = ({ history }) => {
     window.open(link, "_blank");
   };
 
+  const handleChange = (e) => {
+    if (e.target.value) {
+      setSearchValue(e.target.value);
+    } else {
+      setSearchValue("");
+    }
+  };
+
+  const handleSearch = () => {
+    history.push({
+      pathname: `${routes.SEARCH_ROUTE}`,
+      search: `?query=${searchValue}`,
+    });
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && searchValue.trim().length > 0) {
+      history.push({
+        pathname: `${routes.SEARCH_ROUTE}`,
+        search: `?query=${searchValue}`,
+      });
+    }
+  };
+
   return (
     <main className="search-page">
       <Container>
-        <section id="search-bar" className=" mb-4 px-0">
+        <section id="search-bar" className="mb-4 px-0">
           <Row>
             <div className="col-10">
               <Form className="d-flex">
@@ -76,8 +103,14 @@ const SearchDetails = ({ history }) => {
                   placeholder="Search product here"
                   className=""
                   aria-label="Search product here"
+                  value={searchValue}
+                  onChange={(e) => handleChange(e)}
+                  onKeyDown={(e) => handleKeyDown(e)}
                 />
-                <Button>
+                <Button
+                  onClick={handleSearch}
+                  disabled={searchValue && "" !== searchValue ? false : true}
+                >
                   <img src={images.SearchBack} alt="searchBack" />
                 </Button>
               </Form>
