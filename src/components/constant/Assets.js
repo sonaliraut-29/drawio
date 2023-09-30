@@ -11,10 +11,10 @@ export const al_hamiki = `${imageBasePath}/Al-Hakimi.png`;
 export const best = `${imageBasePath}/Best.png`;
 export const carrefour = `${imageBasePath}/Carrefour.png`;
 export const citycenter = `${imageBasePath}/CityCenter.png`;
-export const eureka = `${imageBasePath}/Eureka.png`;
+export const eureka = `${imageBasePath}/Eureka.jpg`;
 export const grandhyper = `${imageBasePath}/GrandHyper.png`;
 
 export const jarir = `${imageBasePath}/Jarir Book Store.png`;
-export const lulu = `${imageBasePath}/Lulu.png`;
-export const sultan_center = `${imageBasePath}/Sultan Center.png`;
+export const lulu = `${imageBasePath}/Lulu.jpg`;
+export const sultan = `${imageBasePath}/Sultan Center.png`;
 export const xcite = `${imageBasePath}/Xcite.jpg`;
