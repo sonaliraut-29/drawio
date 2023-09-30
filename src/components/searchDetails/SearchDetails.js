@@ -70,26 +70,23 @@ const SearchDetails = ({ history }) => {
   const handleChange = (e) => {
     if (e.target.value) {
       setSearchValue(e.target.value);
+      if (e.target.value.length > 3) {
+        fetchProductList(searchValue);
+      }
     } else {
       setSearchValue("");
     }
   };
 
-  const handleSearch = () => {
-    history.push({
-      pathname: `${routes.SEARCH_ROUTE}`,
-      search: `?query=${searchValue}`,
-    });
-  };
+  // const handleSearch = () => {
+  //   fetchProductList(searchValue);
+  // };
 
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter" && searchValue.trim().length > 0) {
-      history.push({
-        pathname: `${routes.SEARCH_ROUTE}`,
-        search: `?query=${searchValue}`,
-      });
-    }
-  };
+  // const handleKeyDown = (e) => {
+  //   if (e.key === "Enter" && searchValue.trim().length > 0) {
+  //     fetchProductList(searchValue);
+  //   }
+  // };
 
   return (
     <main className="search-page">
@@ -105,10 +102,10 @@ const SearchDetails = ({ history }) => {
                   aria-label="Search product here"
                   value={searchValue}
                   onChange={(e) => handleChange(e)}
-                  onKeyDown={(e) => handleKeyDown(e)}
+                  // onKeyDown={(e) => handleKeyDown(e)}
                 />
                 <Button
-                  onClick={handleSearch}
+                  // onClick={handleSearch}
                   disabled={searchValue && "" !== searchValue ? false : true}
                 >
                   <img src={images.SearchBack} alt="searchBack" />
@@ -122,6 +119,7 @@ const SearchDetails = ({ history }) => {
           <section className="search-products">
             <Row>
               {productList.map((item, index) => {
+                let vendorName = item.Vendor.replace(" ", "-").toLowerCase();
                 return (
                   <div
                     className="col-6 col-sm-3 mb-4"
@@ -138,7 +136,14 @@ const SearchDetails = ({ history }) => {
                           className="img-fluid"
                         />
                         <div className="item-desc">
-                          <img src={images.vendor} alt="img" />
+                          <img
+                            src={
+                              item.vendor
+                                ? images[vendorName]
+                                : "./dist/assets/images/v2.png"
+                            }
+                            alt="img"
+                          />
                           <h5>{item.Brand}</h5>
                           <p>{item.Item_name}</p>
                         </div>

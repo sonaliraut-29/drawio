@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import api from "../../redux/services/api";
-import { LEAFLETS, BANNERS } from "../../redux/reduxConstants/EndPoints";
+import {
+  LEAFLETS,
+  BANNERS,
+  POPULAR_PRODUCTS,
+} from "../../redux/reduxConstants/EndPoints";
 
 import OwlCarousel from "react-owl-carousel";
 import "owl.carousel/dist/assets/owl.carousel.css";
@@ -15,10 +19,12 @@ const Home = ({ history }) => {
   const [leaflets, setLeaflets] = useState([]);
   const [banners, setBanners] = useState([]);
   const [searchValue, setSearchValue] = useState("");
+  const [popularProducts, setPopularProducts] = useState([]);
 
   useEffect(() => {
     fetchLeafts();
     fetchBanners();
+    fetchPopularProducts();
   }, []);
 
   const baseUrl = process.env.REACT_APP_API_BASEURL;
@@ -40,6 +46,17 @@ const Home = ({ history }) => {
       .then((res) => {
         if (res.data.success) {
           setBanners(res.data.data);
+        }
+      })
+      .catch((e) => console.log(e));
+  };
+
+  const fetchPopularProducts = () => {
+    api(baseUrl)
+      .get(POPULAR_PRODUCTS)
+      .then((res) => {
+        if (res.data.success) {
+          setPopularProducts(res.data.data);
         }
       })
       .catch((e) => console.log(e));
@@ -69,6 +86,9 @@ const Home = ({ history }) => {
     }
   };
 
+  const handleRedirect = (link) => {
+    window.open(link, "_blank");
+  };
   return (
     <div className="Home">
       <Container className="mt-5">
@@ -202,90 +222,43 @@ const Home = ({ history }) => {
 
           <Row>
             <OwlCarousel className="owl-theme" loop margin={20}>
-              <div className="item">
-                <div className="item-wrap">
-                  <img src="./dist/assets/images/image.png" alt="img" />
-                  <div className="item-desc">
-                    <img src="./dist/assets/images/vendor.png" alt="img" />
-                    <h5>iPhone 15</h5>
-                    <p>Description</p>
-                  </div>
-                  <div className="price">
-                    <span>KD 4.000 </span>
-                    <small>
-                      <strike>Old Price</strike>
-                    </small>
-                  </div>
-                </div>
-              </div>
-
-              <div className="item">
-                <div className="item-wrap">
-                  <img src="./dist/assets/images/image.png" alt="img" />
-                  <div className="item-desc">
-                    <img src="./dist/assets/images/vendor.png" alt="img" />
-                    <h5>iPhone 15</h5>
-                    <p>Description</p>
-                  </div>
-                  <div className="price">
-                    <span>KD 4.000 </span>
-                    <small>
-                      <strike>Old Price</strike>
-                    </small>
-                  </div>
-                </div>
-              </div>
-
-              <div className="item">
-                <div className="item-wrap">
-                  <img src="./dist/assets/images/image.png" alt="img" />
-                  <div className="item-desc">
-                    <img src="./dist/assets/images/vendor.png" alt="img" />
-                    <h5>iPhone 15</h5>
-                    <p>Description</p>
-                  </div>
-                  <div className="price">
-                    <span>KD 4.000 </span>
-                    <small>
-                      <strike>Old Price</strike>
-                    </small>
-                  </div>
-                </div>
-              </div>
-
-              <div className="item">
-                <div className="item-wrap">
-                  <img src="./dist/assets/images/image.png" alt="img" />
-                  <div className="item-desc">
-                    <img src="./dist/assets/images/vendor.png" alt="img" />
-                    <h5>iPhone 15</h5>
-                    <p>Description</p>
-                  </div>
-                  <div className="price">
-                    <span>KD 4.000 </span>
-                    <small>
-                      <strike>Old Price</strike>
-                    </small>
-                  </div>
-                </div>
-              </div>
-
-              <div className="item">
-                <div className="item-wrap">
-                  <img src="./dist/assets/images/image.png" alt="img" />
-                  <div className="item-desc">
-                    <img src="./dist/assets/images/vendor.png" alt="img" />
-                    <h5>iPhone 15</h5>
-                    <p>Description</p>
-                  </div>
-                  <div className="price">
-                    <span>KD 4.000 </span>
-                    <small>
-                      <strike>Old Price</strike>
-                    </small>
-                  </div>
-                </div>
-              </div>
+              {popularProducts && popularProducts.length > 0
+                ? popularProducts.map((item) => {
+                    let vendorName = item.Vendor.replace(
+                      " ",
+                      "-"
+                    ).toLowerCase();
+                    return (
+                      <div
+                        className="item"
+                        onClick={() => handleRedirect(item.Item_URL)}
+                        style={{ cursor: "pointer" }}
+                      >
+                        <div className="item-wrap">
+                          <img src={item && item.Item_Image_URL} alt="img" />
+                          <div className="item-desc">
+                            <img
+                              src={
+                                item.vendor
+                                  ? images[vendorName]
+                                  : "./dist/assets/images/v2.png"
+                              }
+                              alt="img"
+                            />
+                            <h5>{item.Brand}</h5>
+                            <p>{item.Item_name}</p>
+                          </div>
+                          <div className="price">
+                            <span>KD {item.Selling_Price} </span>
+                            <small>
+                              <strike>Old Price</strike>
+                            </small>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })
+                : ""}
             </OwlCarousel>
           </Row>
         </section>
@@ -305,6 +278,10 @@ const Home = ({ history }) => {
                 {leaflets &&
                   leaflets.length > 0 &&
                   leaflets.map((item) => {
+                    let vendorName = item.vendor
+                      .replace(" ", "-")
+                      .toLowerCase();
+
                     return (
                       <div className="item">
                         <div className="item-wrap">
@@ -319,7 +296,11 @@ const Home = ({ history }) => {
                           <div className="item-desc">
                             <div className="vendor-logo">
                               <img
-                                src="./dist/assets/images/v2.png"
+                                src={
+                                  item.vendor
+                                    ? images[vendorName]
+                                    : "./dist/assets/images/v2.png"
+                                }
                                 alt="img"
                               />
                             </div>
@@ -331,7 +312,9 @@ const Home = ({ history }) => {
                           </div>
                           <div className="view">
                             <span>
-                              <a href={item.leaflet_link}>View Leaflet</a>
+                              <a href={item.leaflet_link} target="_blank">
+                                View Leaflet
+                              </a>
                               <img
                                 src="./dist/assets/images/arrow.svg"
                                 alt="arrow"
