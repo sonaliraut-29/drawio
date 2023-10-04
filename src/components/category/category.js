@@ -3,39 +3,13 @@ import OwlCarousel from "react-owl-carousel";
 import "owl.carousel/dist/assets/owl.carousel.css";
 import "owl.carousel/dist/assets/owl.theme.default.css";
 
-const searchDetails = () => {
+const Category = () => {
   return (
-    <main className="search-page">
+    <main className="category-page">
       <Container >
-      <section id="search-bar" className=" mb-4 px-0">
-          <Row>
-           <div className="col-10">
-           <Form className="d-flex">
-                <Form.Control
-                  type="Search product here"
-                  placeholder="Search product here"
-                  className=""
-                  aria-label="Search product here"
-                />
-                <Button>
-                  <img src="./dist/assets/images/search-black.svg" />
-                </Button>
-              </Form>
-           </div>
-           <div className="col-2 d-flex align-items-center">
-            
-
-            
-            
-            
-            Filter</div>
-              
-            
-          </Row>
-        </section>
 
 
-        <section id="categories" className="mt-5 text-center">
+        <section id="categories" className="mt-5 text-center mb-5">
           <Row>
             <h2 className="section-title mb-4">Categories</h2>
           </Row>
@@ -97,9 +71,24 @@ const searchDetails = () => {
         </section>
 
 
+        <section className="mt-5 mb-5">
+          <Row>
+            <div className="col-sm-6">
+               Sub Category Listing
+            </div>
+            <div className="col-sm-3">
+              Sort
+            </div>
+            <div className="col-sm-3">
+               Filter
+            </div>
+          </Row>
+          </section>
 
 
-        <section className="search-products">
+
+
+        <section className="search-products ">
           <Row>
             <div className="col-6 col-sm-3 mb-4">
               <div class="item">
@@ -254,4 +243,4 @@ const searchDetails = () => {
     </main>
   );
 };
-export default searchDetails;
+export default Category;
