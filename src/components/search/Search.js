@@ -5,9 +5,11 @@ import api from "../../redux/services/api";
 import { BANNERS } from "../../redux/reduxConstants/EndPoints";
 
 import * as images from "../constant/Assets";
+import * as routes from "../constant/Routes";
 
-const Search = () => {
+const Search = ({ history }) => {
   const [banners, setBanners] = useState([]);
+  const [searchValue, setSearchValue] = useState("");
 
   useEffect(() => {
     fetchBanners();
@@ -19,12 +21,35 @@ const Search = () => {
     api(baseUrl)
       .get(BANNERS + "?days_tolerance=-25&num_of_rows_required=10")
       .then((res) => {
-        console.log(res.data);
         if (res.data.success) {
           setBanners(res.data.data);
         }
       })
       .catch((e) => console.log(e));
+  };
+
+  const handleChange = (e) => {
+    if (e.target.value) {
+      setSearchValue(e.target.value);
+    } else {
+      setSearchValue("");
+    }
+  };
+
+  const handleSearch = () => {
+    history.push({
+      pathname: `${routes.SEARCH_ROUTE}`,
+      search: `?query=${searchValue}`,
+    });
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && searchValue.trim().length > 0) {
+      history.push({
+        pathname: `${routes.SEARCH_ROUTE}`,
+        search: `?query=${searchValue}`,
+      });
+    }
   };
 
   return (
@@ -66,7 +91,7 @@ const Search = () => {
         <section id="home__search" className="mt-5">
           <Row>
             <div className="col-12 text-center s_logo mb-4">
-              <img src="./dist/assets/images/logo.png" alt="logo" />
+              <img src={images.LogoImage} alt="logo" />
             </div>
           </Row>
           <Row>
@@ -77,9 +102,12 @@ const Search = () => {
                   placeholder="Find the best offer products"
                   className=""
                   aria-label="Find the best offer products"
+                  onChange={(e) => handleChange(e)}
+                  onKeyDown={(e) => handleKeyDown(e)}
+                  value={searchValue}
                 />
-                <Button>
-                  <img src="./dist/assets/images/search.svg" />
+                <Button disabled={"" !== searchValue ? false : true}>
+                  <img src={images.searchImage} alt="search" />
                 </Button>
               </Form>
             </Col>
@@ -89,11 +117,13 @@ const Search = () => {
         <section>
           <Row>
             <div className="col-12 text-center mt-5">
-              <button className="btn btn-search">Search</button>
+              <button className="btn btn-search" onClick={handleSearch}>
+                Search
+              </button>
             </div>
 
             <div className="col-12 text-center mt-5 pt-5 home-link">
-              <a href="#" className="mt-5">
+              <a href="/home" className="mt-5">
                 Go to Home Page
               </a>
               <p>Explore the best delas </p>

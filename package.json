@@ -16,7 +16,7 @@
     "react-owl-carousel": "^2.3.3",
     "react-redux": "^8.1.2",
     "react-router": "^5.2.0",
-    "react-router-dom": "^5.2.0",
+    "react-router-dom": "^4.2.2",
     "react-scripts": "5.0.1",
     "redux": "^4.2.1",
     "redux-thunk": "^2.4.2",
@@ -27,7 +27,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy": "aws s3 sync build/ s3://giniesaves",
+    "prod": "npm run build && npm run deploy"
   },
   "eslintConfig": {
     "extends": [

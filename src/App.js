@@ -6,7 +6,7 @@ import { createBrowserHistory } from "history";
 import { Provider as ReduxProvider } from "react-redux";
 import createStore from "./redux/store";
 import Layout from "./components/container/Layout";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   const store = createStore();
@@ -14,8 +14,8 @@ function App() {
 
   return (
     <ReduxProvider store={store}>
-      <Router>
-        <Layout history={history} />
+      <Router history={history}>
+        <Layout />
       </Router>
     </ReduxProvider>
   );

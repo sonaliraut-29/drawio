@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Switch, Route, withRouter } from "react-router-dom";
 import NoPageFound from "../common/uikit/NoPageFound";
-import routes from "../../routes";
+import routesList from "../../routesList";
 import Header from "../common/header/Header";
 import Footer from "../common/footer/Footer";
 
@@ -11,7 +11,7 @@ const Layout = ({ history }) => {
       <Header />
 
       <Switch>
-        {routes.map((route) => {
+        {routesList.map((route) => {
           const data = {
             ...route,
           };
