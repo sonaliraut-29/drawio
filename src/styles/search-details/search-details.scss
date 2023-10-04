@@ -21,6 +21,12 @@ main.search-page {
             position: absolute;
             right: 0;
             top: -18px;
+            border-radius: 50px;
+            border: 1px solid #0b0e10;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 60px !important;
+            object-fit: none;
+
           }
           h5 {
             text-align: left;
@@ -46,6 +52,7 @@ main.search-page {
       }
       .item-wrap > img {
         height: 215px;
+        min-height: 240px;
       }
     }
   }

@@ -1,11 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 
+
 import * as images from "../constant/Assets";
 import * as routes from "../constant/Routes";
 
 import api from "../../redux/services/api";
 import { SEARCH } from "../../redux/reduxConstants/EndPoints";
+
+
 
 const SearchDetails = ({ history }) => {
   const [productList, setProductList] = useState([]);
@@ -135,7 +138,7 @@ const SearchDetails = ({ history }) => {
   // };
 
   return (
-    <main className="search-page">
+    <main className="search-page test">
       <Container>
         <section id="search-bar" className="mb-4 px-0">
           <Row>
@@ -161,6 +164,12 @@ const SearchDetails = ({ history }) => {
             <div className="col-2 d-flex align-items-center">Filter</div>
           </Row>
         </section>
+
+
+       
+
+        
+
         {resultList && resultList.list.length > 0 ? (
           <section className="search-products">
             <Row>

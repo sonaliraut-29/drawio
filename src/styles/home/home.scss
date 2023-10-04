@@ -116,7 +116,7 @@ h6 {
 
 // Popular Search
 
-#home__popular {
+.item-design {
   .item {
     padding: 15px;
 
@@ -133,6 +133,10 @@ h6 {
           position: absolute;
           right: 0;
           top: -18px;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+          border: 1px solid #0b0e10;
+          border-radius: 50%;
+          object-fit: none;
         }
         h5 {
           text-align: left;
@@ -141,6 +145,11 @@ h6 {
 
         p {
           text-align: left;
+          overflow: hidden;
+          display: -webkit-box;
+          -webkit-line-clamp: 3;
+          -webkit-box-orient: vertical;
+          min-height: 72px;
         }
       }
       .price {
@@ -166,16 +175,11 @@ h6 {
 
 #home__leaflet {
   .item {
-    padding: 15px;
 
     .item-wrap {
-      background: #fff;
-      padding: 15px;
-      border-radius: 20px;
-      box-shadow: 0 0 20px #00000014;
 
       .item-desc {
-        position: relative;
+       
         .vendor-logo {
           img {
             object-fit: contain;
@@ -190,15 +194,6 @@ h6 {
             top: -18px;
             height: 60px;
           }
-        }
-
-        h5 {
-          text-align: left;
-          padding-top: 15px;
-        }
-
-        p {
-          text-align: left;
         }
       }
       .view {
