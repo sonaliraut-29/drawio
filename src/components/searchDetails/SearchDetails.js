@@ -115,8 +115,9 @@ const SearchDetails = ({ history }) => {
 
   const handleChange = (e) => {
     if (e.target.value) {
+      setResultList({ list: [] });
       setSearchValue(e.target.value);
-      if (e.target.value.length > 3) {
+      if (e.target.value.length >= 2) {
         fetchProductList(searchValue);
       }
     } else {
@@ -128,11 +129,11 @@ const SearchDetails = ({ history }) => {
   //   fetchProductList(searchValue);
   // };
 
-  // const handleKeyDown = (e) => {
-  //   if (e.key === "Enter" && searchValue.trim().length > 0) {
-  //     fetchProductList(searchValue);
-  //   }
-  // };
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+    }
+  };
 
   return (
     <main className="search-page">
@@ -148,7 +149,7 @@ const SearchDetails = ({ history }) => {
                   aria-label="Search product here"
                   value={searchValue}
                   onChange={(e) => handleChange(e)}
-                  // onKeyDown={(e) => handleKeyDown(e)}
+                  onKeyDown={(e) => handleKeyDown(e)}
                 />
                 <Button
                   // onClick={handleSearch}

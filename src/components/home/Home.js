@@ -214,9 +214,7 @@ const Home = ({ history }) => {
           <Row>
             <Col className="d-flex justify-content-center align-items-center title-wrap mt-5 mb-4">
               <h2 className="section-title mb-1">Popular Products</h2>
-              <span>
-                <a href="#">View All</a>
-              </span>
+              <span>{/* <a href="#">View All</a> */}</span>
             </Col>
           </Row>
 
@@ -337,9 +335,7 @@ const Home = ({ history }) => {
           <Row>
             <Col className="d-flex justify-content-center align-items-center title-wrap mt-5 mb-4">
               <h2 className="section-title mb-1">Todays Hot Deals</h2>
-              <span>
-                <a href="#">View All</a>
-              </span>
+              <span>{/* <a href="#">View All</a> */}</span>
             </Col>
           </Row>
 
