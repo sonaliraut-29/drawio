@@ -32,7 +32,7 @@ const Home = ({ history }) => {
 
   const fetchLeafts = () => {
     api(baseUrl)
-      .get(LEAFLETS + "?days_tolerance=-25&num_of_rows_required=10")
+      .get(LEAFLETS + "?days_tolerance=-35&num_of_rows_required=10")
       .then((res) => {
         if (res.data.success) {
           setLeaflets(res.data.data);
@@ -43,7 +43,7 @@ const Home = ({ history }) => {
 
   const fetchBanners = () => {
     api(baseUrl)
-      .get(BANNERS + "?days_tolerance=-25&num_of_rows_required=10")
+      .get(BANNERS + "?days_tolerance=-35&num_of_rows_required=10")
       .then((res) => {
         if (res.data.success) {
           setBanners(res.data.data);
@@ -211,15 +211,13 @@ const Home = ({ history }) => {
     //       </Row>
     //     </section>
 
-    //     <section id="home__popular" className="mt-5 text-center item-design">
-    //       <Row>
-    //         <Col className="d-flex justify-content-center align-items-center title-wrap mt-5 mb-4">
-    //           <h2 className="section-title mb-1">Popular Products</h2>
-    //           <span>
-    //             <a href="#">View All</a>
-    //           </span>
-    //         </Col>
-    //       </Row>
+        // <section id="home__popular" className="mt-5 text-center">
+        //   <Row>
+        //     <Col className="d-flex justify-content-center align-items-center title-wrap mt-5 mb-4">
+        //       <h2 className="section-title mb-1">Popular Products</h2>
+        //       <span>{/* <a href="#">View All</a> */}</span>
+        //     </Col>
+        //   </Row>
 
     //       <Row>
     //         <OwlCarousel className="owl-theme" loop margin={20}>
@@ -338,40 +336,38 @@ const Home = ({ history }) => {
     //       <Row>
     //         <Col className="d-flex justify-content-center align-items-center title-wrap mt-5 mb-4">
     //           <h2 className="section-title mb-1">Todays Hot Deals</h2>
-    //           <span>
-    //             <a href="#">View All</a>
-    //           </span>
+    //           <span>{/* <a href="#">View All</a> */}</span>
     //         </Col>
     //       </Row>
 
-    //       <Row>
-    //         <div className="col-6 left-image">
-    //           <img
-    //             src="./dist/assets/images/d1.png"
-    //             className="img-fluid"
-    //             alt="hot deal"
-    //           />
-    //         </div>
-    //         <div className="col-6 right-image">
-    //           <Row>
-    //             <div className="col-12 top">
-    //               <img
-    //                 src="./dist/assets/images/d2.png"
-    //                 className="img-fluid"
-    //                 alt="hot deal"
-    //               />
-    //             </div>
-    //             <div className="col-12 bottom">
-    //               <img
-    //                 src="./dist/assets/images/d3.png"
-    //                 className="img-fluid"
-    //                 alt="hot deal"
-    //               />
-    //             </div>
-    //           </Row>
-    //         </div>
-    //       </Row>
-    //     </section>
+    // //       <Row>
+    // //         <div className="col-6 left-image">
+    // //           <img
+    // //             src="./dist/assets/images/d1.png"
+    // //             className="img-fluid"
+    // //             alt="hot deal"
+    // //           />
+    // //         </div>
+    // //         <div className="col-6 right-image">
+    // //           <Row>
+    // //             <div className="col-12 top">
+    // //               <img
+    // //                 src="./dist/assets/images/d2.png"
+    // //                 className="img-fluid"
+    // //                 alt="hot deal"
+    // //               />
+    // //             </div>
+    // //             <div className="col-12 bottom">
+    // //               <img
+    // //                 src="./dist/assets/images/d3.png"
+    // //                 className="img-fluid"
+    // //                 alt="hot deal"
+    // //               />
+    // //             </div>
+    // //           </Row>
+    // //         </div>
+    // //       </Row>
+    // //     </section>
     //   </Container>
     // </div>
 

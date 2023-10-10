@@ -10,3 +10,5 @@
 export const ROOT_ROUTE = "/";
 export const HOME_ROUTE = "/home";
 export const SEARCH_ROUTE = "/search";
+export const LEAFLETS = "/leaflets";
+export const BANNERS = "/banners";
