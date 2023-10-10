@@ -4,6 +4,7 @@ import Search from "./components/search/Search";
 import SearchDetails from "./components/searchDetails/SearchDetails";
 import Leaflet from "./components/leaflet/Leaflet";
 import Banner from "./components/banner/Banner";
+import Category from "./components/category/Category";
 
 const routesList = [
   {
@@ -29,6 +30,11 @@ const routesList = [
   {
     path: routes.BANNERS,
     component: Banner,
+    exact: true,
+  },
+  {
+    path: routes.CATEGORY,
+    component: Category,
     exact: true,
   },
 ];
