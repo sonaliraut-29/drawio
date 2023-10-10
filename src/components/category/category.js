@@ -1,4 +1,4 @@
-import { Button, Col, Container, Form, Row } from "react-bootstrap";
+import { Button, Col, Container, Form, Row, Dropdown } from "react-bootstrap";
 import OwlCarousel from "react-owl-carousel";
 import "owl.carousel/dist/assets/owl.carousel.css";
 import "owl.carousel/dist/assets/owl.theme.default.css";
@@ -74,7 +74,18 @@ const Category = () => {
         <section className="mt-5 mb-5">
           <Row>
             <div className="col-sm-6">
-               Sub Category Listing
+               
+               <Dropdown>
+                <Dropdown.Toggle variant="success" id="dropdown-basic">
+                Sub Category Listing
+                </Dropdown.Toggle>
+
+                <Dropdown.Menu>
+                  <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
+                  <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
+                  <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
             </div>
             <div className="col-sm-3">
               Sort
@@ -89,7 +100,10 @@ const Category = () => {
 
 
         <section className="search-products ">
-          <Row>
+          <div className="row">
+            <div className="col-sm-3"></div>
+            <div className="col-sm-9">
+            <Row>
             <div className="col-6 col-sm-3 mb-4">
               <div class="item">
                 <div className="item-wrap">
@@ -238,6 +252,9 @@ const Category = () => {
               </div>
             </div>
           </Row>
+            </div>
+          </div>
+          
         </section>
       </Container>
     </main>
