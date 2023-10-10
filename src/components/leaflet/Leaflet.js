@@ -66,9 +66,7 @@ const Leaflet = () => {
             <Row>
               <Col className="d-flex justify-content-center align-items-center title-wrap mt-5 mb-4">
                 <h2 className="section-title mb-1">Leaflets</h2>
-                <span>
-                  <a href="#">View All</a>
-                </span>
+                <span></span>
               </Col>
             </Row>
 
