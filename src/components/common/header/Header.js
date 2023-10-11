@@ -14,24 +14,27 @@ const Header = () => {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link href="#features">Leaflets</Nav.Link>
-            <Nav.Link href="">Search</Nav.Link>
+            <Nav.Link href="/home">Home</Nav.Link>
+            <Nav.Link href="/leaflets">Leaflets</Nav.Link>
+            <Nav.Link href="/banners">Banners</Nav.Link>
+            <Nav.Link href="/search">Search</Nav.Link>
+            <Nav.Link href="/category">Categories</Nav.Link>
             <NavDropdown title="Products" id="collapsible-nav-dropdown">
-              <NavDropdown.Item href="./src/components/search/search.js">
-                Search Page
+              <NavDropdown.Item href="#">
+                Mobile
               </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2">
-                Another action
+              <NavDropdown.Item href="#">
+               Perfume
               </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
+             
               <NavDropdown.Divider />
               <NavDropdown.Item href="#action/3.4">
-                Separated link
+                Watches
               </NavDropdown.Item>
             </NavDropdown>
           </Nav>
           <Nav>
-            <Nav.Link href="#deets">Favourites</Nav.Link>
+            <Nav.Link href="#">Favourites</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
