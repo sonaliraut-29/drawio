@@ -1,14 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 
-
 import * as images from "../constant/Assets";
 import * as routes from "../constant/Routes";
 
 import api from "../../redux/services/api";
 import { SEARCH } from "../../redux/reduxConstants/EndPoints";
-
-
 
 const SearchDetails = ({ history }) => {
   const [productList, setProductList] = useState([]);
@@ -166,11 +163,6 @@ const SearchDetails = ({ history }) => {
           </Row>
         </section>
 
-
-       
-
-        
-
         {resultList && resultList.list.length > 0 ? (
           <section className="search-products">
             <Row>
@@ -196,7 +188,7 @@ const SearchDetails = ({ history }) => {
                           <div className="item-desc">
                             <img
                               src={
-                                item.vendor
+                                item.Vendor
                                   ? images[vendorName]
                                   : "./dist/assets/images/v2.png"
                               }
