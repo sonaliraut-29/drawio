@@ -4,7 +4,7 @@ import Search from "./components/search/Search";
 import SearchDetails from "./components/searchDetails/SearchDetails";
 import Leaflet from "./components/leaflet/Leaflet";
 import Banner from "./components/banner/Banner";
-import Category from "./components/category/Category";
+import Category from "./components/category/Categories";
 
 const routesList = [
   {
