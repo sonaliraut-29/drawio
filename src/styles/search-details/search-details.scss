@@ -25,7 +25,8 @@ main.search-page {
             border: 1px solid #0b0e10;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 60px !important;
-            object-fit: none;
+            height: 60px;
+            object-fit: contain;
 
           }
           h5 {

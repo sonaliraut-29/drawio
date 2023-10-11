@@ -190,7 +190,7 @@ const SearchDetails = ({ history }) => {
                               src={
                                 item.Vendor
                                   ? images[vendorName]
-                                  : "./dist/assets/images/v2.png"
+                                  : "./dist/assets/images/default-logo-sm.png"
                               }
                               alt="img"
                             />
