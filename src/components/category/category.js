@@ -54,7 +54,7 @@ const Category = () => {
                   <div className="cat-txt">
                     <span>Fashion</span>
                   </div>
-                </div>
+                </div> 
               </div>
               <div className="item">
                 <div className="cat-item beauty">
