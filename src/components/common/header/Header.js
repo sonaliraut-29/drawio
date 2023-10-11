@@ -19,19 +19,7 @@ const Header = () => {
             <Nav.Link href="/banners">Banners</Nav.Link>
             <Nav.Link href="/search">Search</Nav.Link>
             <Nav.Link href="/category">Categories</Nav.Link>
-            <NavDropdown title="Products" id="collapsible-nav-dropdown">
-              <NavDropdown.Item href="#">
-                Mobile
-              </NavDropdown.Item>
-              <NavDropdown.Item href="#">
-               Perfume
-              </NavDropdown.Item>
-             
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3.4">
-                Watches
-              </NavDropdown.Item>
-            </NavDropdown>
+            
           </Nav>
           <Nav>
             <Nav.Link href="#">Favourites</Nav.Link>
