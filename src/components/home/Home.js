@@ -149,7 +149,7 @@ const Home = ({ history }) => {
           </Row>
         </section>
 
-        <section id="home__categories" className="mt-5 text-center">
+        <section id="categories" className="mt-5 text-center">
           <Row>
             <h2 className="section-title mb-4">Categories</h2>
           </Row>
@@ -261,7 +261,7 @@ const Home = ({ history }) => {
           </Row>
         </section>
         {leaflets && leaflets.length > 0 ? (
-          <section id="home__leaflet" className="mt-5 text-center">
+          <section id="home__leaflet" className="mt-5 text-center item-design">
             <Row>
               <Col className="d-flex justify-content-center align-items-center title-wrap mt-5 mb-4">
                 <h2 className="section-title mb-1">Leaflets</h2>

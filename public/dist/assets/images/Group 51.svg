@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="27" height="38" viewBox="0 0 27 38">
+  <g id="Group_51" data-name="Group 51" transform="translate(-321 -766)">
+    <text id="Payment_method" data-name="Payment method" transform="translate(334 802)" fill="#0b0e10" font-size="8" font-family="OpenSans, Open Sans"><tspan x="-9.904" y="0">More</tspan></text>
+    <g id="Group_82" data-name="Group 82" transform="translate(321 766)">
+      <rect id="Rectangle_24" data-name="Rectangle 24" width="27" height="27" fill="none"/>
+      <circle id="Ellipse_10" data-name="Ellipse 10" cx="7" cy="7" r="7" transform="translate(6.5 2)" fill="none" stroke="#007cc3" stroke-miterlimit="10" stroke-width="2"/>
+      <path id="Path_57" data-name="Path 57" d="M30.989,165.905a11.816,11.816,0,0,1,20.463,0" transform="translate(-27.489 -143.125)" fill="none" stroke="#007cc3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+    </g>
+  </g>
+</svg>
