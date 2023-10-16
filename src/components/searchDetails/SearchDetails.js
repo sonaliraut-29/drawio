@@ -20,7 +20,7 @@ const SearchDetails = ({ history }) => {
   let slugString = "";
   let slug = "";
   let searchArr = "";
-  let searchText = "";
+  let searchText = ""; 
 
   if (window !== undefined && typeof window !== "undefined") {
     const paramArray = window.location.href.split("/");
@@ -213,7 +213,7 @@ const SearchDetails = ({ history }) => {
             {loading && <InlineLoader />}
           </section>
         ) : (
-          ""
+          <p>Hang tight! Genie is searching high and low to find the best results for you. Sit back, relax, and let us do the work. Your wait will be worth it!</p>
         )}
       </Container>
     </main>
