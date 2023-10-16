@@ -4,6 +4,7 @@ import {
   LEAFLETS,
   BANNERS,
   POPULAR_PRODUCTS,
+  CATEGORIES,
 } from "../../redux/reduxConstants/EndPoints";
 
 import OwlCarousel from "react-owl-carousel";
@@ -20,18 +21,31 @@ const Home = ({ history }) => {
   const [banners, setBanners] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const [popularProducts, setPopularProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     fetchLeafts();
     fetchBanners();
     fetchPopularProducts();
+    fetchCategories();
   }, []);
 
   const baseUrl = process.env.REACT_APP_API_BASEURL;
 
+  const fetchCategories = () => {
+    api(baseUrl)
+      .get(CATEGORIES)
+      .then((res) => {
+        if (res.data.success) {
+          setCategories(res.data.data);
+        }
+      })
+      .catch((e) => console.log(e));
+  };
+
   const fetchLeafts = () => {
     api(baseUrl)
-      .get(LEAFLETS + "?days_tolerance=-35&num_of_rows_required=10")
+      .get(LEAFLETS + "?days_tolerance=-10&num_of_rows_required=10")
       .then((res) => {
         if (res.data.success) {
           setLeaflets(res.data.data);
@@ -42,7 +56,7 @@ const Home = ({ history }) => {
 
   const fetchBanners = () => {
     api(baseUrl)
-      .get(BANNERS + "?days_tolerance=-35&num_of_rows_required=10")
+      .get(BANNERS + "?days_tolerance=-10&num_of_rows_required=10")
       .then((res) => {
         if (res.data.success) {
           setBanners(res.data.data);
@@ -89,6 +103,7 @@ const Home = ({ history }) => {
   const handleRedirect = (link) => {
     window.open(link, "_blank");
   };
+
   return (
     <div className="Home">
       <Container className="mt-5">
@@ -153,61 +168,41 @@ const Home = ({ history }) => {
           <Row>
             <h2 className="section-title mb-4">Categories</h2>
           </Row>
+          {categories && categories.length > 0 ? (
+            <Row>
+              <OwlCarousel className="owl-theme" loop margin={30} nav items={5}>
+                {categories.map((item) => {
+                  const imageName = item.Category.replace(",", "")
+                    .replace(" ", "_")
+                    .replace("&", "and")
+                    .replace(" ", "_")
+                    .replace(" ", "_");
 
-          <Row>
-            <OwlCarousel className="owl-theme" loop margin={30} nav items={5}>
-              <div className="item">
-                <div className="cat-item mobile">
-                  <div className="cat-img">
-                    <img src="./dist/assets/images/c1.svg" alt="img" />
-                  </div>
-                  <div className="cat-txt">
-                    <span>Mobile and Tablets</span>
-                  </div>
-                </div>
-              </div>
-              <div className="item">
-                <div className="cat-item perfume">
-                  <div className="cat-img">
-                    <img src="./dist/assets/images/c2.svg" alt="img" />
-                  </div>
-                  <div className="cat-txt">
-                    <span>Perfumes & Fragrances</span>
-                  </div>
-                </div>
-              </div>
-              <div className="item">
-                <div className="cat-item watches">
-                  <div className="cat-img">
-                    <img src="./dist/assets/images/c3.svg" alt="img" />
-                  </div>
-                  <div className="cat-txt">
-                    <span>Watches & Eyewear</span>
-                  </div>
-                </div>
-              </div>
-              <div className="item">
-                <div className="cat-item fashion">
-                  <div className="cat-img">
-                    <img src="./dist/assets/images/c4.svg" alt="img" />
-                  </div>
-                  <div className="cat-txt">
-                    <span>Fashion</span>
-                  </div>
-                </div>
-              </div>
-              <div className="item">
-                <div className="cat-item beauty">
-                  <div className="cat-img">
-                    <img src="./dist/assets/images/c5.svg" alt="img" />
-                  </div>
-                  <div className="cat-txt">
-                    <span>Beauty & Health</span>
-                  </div>
-                </div>
-              </div>
-            </OwlCarousel>
-          </Row>
+                  return (
+                    <div className="item">
+                      <div className="cat-item mobile">
+                        <div className="cat-img">
+                          <img
+                            src={
+                              imageName && images[imageName]
+                                ? images[imageName]
+                                : "./dist/assets/images/Smartphones,_Tablets_&_Wearables.svg"
+                            }
+                            alt="img"
+                          />
+                        </div>
+                        <div className="cat-txt">
+                          <span>{item.Category}</span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </OwlCarousel>
+            </Row>
+          ) : (
+            ""
+          )}
         </section>
 
         <section id="home__popular" className="mt-5 text-center">
@@ -217,48 +212,46 @@ const Home = ({ history }) => {
               <span>{/* <a href="#">View All</a> */}</span>
             </Col>
           </Row>
-
-          <Row>
-            <OwlCarousel className="owl-theme" loop margin={20}>
-              {popularProducts && popularProducts.length > 0
-                ? popularProducts.map((item) => {
-                    let vendorName = item.Vendor.replace(
-                      " ",
-                      "-"
-                    ).toLowerCase();
-                    return (
-                      <div
-                        className="item"
-                        onClick={() => handleRedirect(item.Item_URL)}
-                        style={{ cursor: "pointer" }}
-                      >
-                        <div className="item-wrap">
-                          <img src={item && item.Item_Image_URL} alt="img" />
-                          <div className="item-desc">
-                            <img
-                              src={
-                                item.vendor
-                                  ? images[vendorName]
-                                  : "./dist/assets/images/v2.png"
-                              }
-                              alt="img"
-                            />
-                            <h5>{item.Brand}</h5>
-                            <p>{item.Item_name}</p>
-                          </div>
-                          <div className="price">
-                            <span>KD {item.Selling_Price} </span>
-                            <small>
-                              <strike>Old Price</strike>
-                            </small>
-                          </div>
+          {popularProducts && popularProducts.length > 0 ? (
+            <Row>
+              <OwlCarousel className="owl-theme" loop margin={20}>
+                {popularProducts.map((item) => {
+                  let vendorName = item.Vendor.replace(" ", "-").toLowerCase();
+                  return (
+                    <div
+                      className="item"
+                      onClick={() => handleRedirect(item.Item_URL)}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <div className="item-wrap">
+                        <img src={item && item.Item_Image_URL} alt="img" />
+                        <div className="item-desc">
+                          <img
+                            src={
+                              item.Vendor
+                                ? images[vendorName]
+                                : "./dist/assets/images/v2.png"
+                            }
+                            alt="img"
+                          />
+                          <h5>{item.Brand}</h5>
+                          <p>{item.Item_name}</p>
+                        </div>
+                        <div className="price">
+                          <span>KD {item.Selling_Price} </span>
+                          <small>
+                            <strike>Old Price</strike>
+                          </small>
                         </div>
                       </div>
-                    );
-                  })
-                : ""}
-            </OwlCarousel>
-          </Row>
+                    </div>
+                  );
+                })}
+              </OwlCarousel>
+            </Row>
+          ) : (
+            ""
+          )}
         </section>
         {leaflets && leaflets.length > 0 ? (
           <section id="home__leaflet" className="mt-5 text-center item-design">

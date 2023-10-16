@@ -118,6 +118,7 @@ const SearchDetails = ({ history }) => {
       setResultList({ list: [] });
       setSearchValue(e.target.value);
       if (e.target.value.length >= 2) {
+        setPage(1);
         fetchProductList(searchValue);
       }
     } else {
