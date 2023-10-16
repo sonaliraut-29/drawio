@@ -103,6 +103,7 @@ const Home = ({ history }) => {
   const handleRedirect = (link) => {
     window.open(link, "_blank");
   };
+
   return (
     <div className="Home">
       <Container className="mt-5">
@@ -211,48 +212,46 @@ const Home = ({ history }) => {
               <span>{/* <a href="#">View All</a> */}</span>
             </Col>
           </Row>
-
-          <Row>
-            <OwlCarousel className="owl-theme" loop margin={20}>
-              {popularProducts && popularProducts.length > 0
-                ? popularProducts.map((item) => {
-                    let vendorName = item.Vendor.replace(
-                      " ",
-                      "-"
-                    ).toLowerCase();
-                    return (
-                      <div
-                        className="item"
-                        onClick={() => handleRedirect(item.Item_URL)}
-                        style={{ cursor: "pointer" }}
-                      >
-                        <div className="item-wrap">
-                          <img src={item && item.Item_Image_URL} alt="img" />
-                          <div className="item-desc">
-                            <img
-                              src={
-                                item.vendor
-                                  ? images[vendorName]
-                                  : "./dist/assets/images/v2.png"
-                              }
-                              alt="img"
-                            />
-                            <h5>{item.Brand}</h5>
-                            <p>{item.Item_name}</p>
-                          </div>
-                          <div className="price">
-                            <span>KD {item.Selling_Price} </span>
-                            <small>
-                              <strike>Old Price</strike>
-                            </small>
-                          </div>
+          {popularProducts && popularProducts.length > 0 ? (
+            <Row>
+              <OwlCarousel className="owl-theme" loop margin={20}>
+                {popularProducts.map((item) => {
+                  let vendorName = item.Vendor.replace(" ", "-").toLowerCase();
+                  return (
+                    <div
+                      className="item"
+                      onClick={() => handleRedirect(item.Item_URL)}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <div className="item-wrap">
+                        <img src={item && item.Item_Image_URL} alt="img" />
+                        <div className="item-desc">
+                          <img
+                            src={
+                              item.Vendor
+                                ? images[vendorName]
+                                : "./dist/assets/images/v2.png"
+                            }
+                            alt="img"
+                          />
+                          <h5>{item.Brand}</h5>
+                          <p>{item.Item_name}</p>
+                        </div>
+                        <div className="price">
+                          <span>KD {item.Selling_Price} </span>
+                          <small>
+                            <strike>Old Price</strike>
+                          </small>
                         </div>
                       </div>
-                    );
-                  })
-                : ""}
-            </OwlCarousel>
-          </Row>
+                    </div>
+                  );
+                })}
+              </OwlCarousel>
+            </Row>
+          ) : (
+            ""
+          )}
         </section>
         {leaflets && leaflets.length > 0 ? (
           <section id="home__leaflet" className="mt-5 text-center item-design">
