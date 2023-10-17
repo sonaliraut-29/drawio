@@ -95,7 +95,8 @@ const Search = ({ history }) => {
             </div>
           </Row>
           <Row>
-            <Col sm={12}>
+            <Col sm={2}></Col>
+            <Col sm={8}>
               <Form className="d-flex">
                 <Form.Control
                   type="Find the best offer products"
@@ -111,6 +112,7 @@ const Search = ({ history }) => {
                 </Button>
               </Form>
             </Col>
+            <Col sm={2}></Col>
           </Row>
         </section>
 

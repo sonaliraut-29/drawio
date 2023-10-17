@@ -135,7 +135,15 @@ const Category = () => {
                           <Accordion.Body>
                             <ul>
                               {item.map((innerItem) => {
-                                return <li>{innerItem}</li>;
+                                return (
+                                  <li>
+                                    <Form.Check
+                                      type="checkbox"
+                                      id="1"
+                                      label={innerItem}
+                                    />
+                                  </li>
+                                );
                               })}
                             </ul>
                           </Accordion.Body>
@@ -147,8 +155,8 @@ const Category = () => {
                   ""
                 )}
               </section>
-              <section>
-                <div>Price</div>
+              <section className="cat-price-filter">
+                <h6>Price</h6>
                 <RangeSlider
                   value={value}
                   onChange={(changeEvent) => setValue(changeEvent.target.value)}
@@ -156,8 +164,10 @@ const Category = () => {
                   min="0"
                   tooltip="on"
                 />
-                <div>0</div>
-                <div>100000</div>
+                <div className="range-min-max">
+                  <span>0</span>
+                  <span>100000</span>
+                </div>
               </section>
               <section className="cat-for-mobile"></section>
             </div>
@@ -165,10 +175,32 @@ const Category = () => {
             <div className="col-sm-9 cat-right">
               {/* sort row */}
               <Row>
-                <div className="col-sm-9 mb-4 mt-sm-0 mt-4">
+                <div className="col-sm-12 mb-4 mt-sm-0 mt-4 category-title-wrapper">
                   <h4>Selected Category Name</h4>
+                  <div className="sort-dropdown">
+                    <Dropdown>
+                      <Dropdown.Toggle variant="success" id="dropdown-basic">
+                        Sort by
+                      </Dropdown.Toggle>
+
+                      <Dropdown.Menu>
+                        <Dropdown.Item href="#/action-1">
+                          Best Product
+                        </Dropdown.Item>
+                        <Dropdown.Item href="#/action-1">
+                          Price Low to High
+                        </Dropdown.Item>
+                        <Dropdown.Item href="#/action-1">
+                          Price High to Low
+                        </Dropdown.Item>
+                        <Dropdown.Item href="#/action-1">
+                          Newest First
+                        </Dropdown.Item>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </div>
                 </div>
-                <div className="col-sm-3">
+                <div className="col-sm-12">
                   <section className="cat-for-mobile mb-4">
                     <Row>
                       <div className="col-6">
@@ -203,6 +235,28 @@ const Category = () => {
                       </div>
                     </Row>
                   </section>
+                </div>
+              </Row>
+              <Row>
+                <div className="col-sm-12 mb-4 mt-sm-0 mt-4 category-tags">
+                  <span class="badge badge-primary">
+                    Category
+                    <button type="button" class="close" aria-label="Dismiss">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </span>
+                  <span class="badge badge-primary">
+                    Category
+                    <button type="button" class="close" aria-label="Dismiss">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </span>
+                  <span class="badge badge-primary">
+                    Category
+                    <button type="button" class="close" aria-label="Dismiss">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </span>
                 </div>
               </Row>
 

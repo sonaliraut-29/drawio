@@ -35,7 +35,17 @@ main.search-page {
           }
   
           p {
+
             text-align: left;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            min-height: 72px;
+            font-size: 14px;
+            height: 45px;
+            display: flex;
+            align-items: center;
           }
         }
         .price {
@@ -86,6 +96,19 @@ main.search-page {
 
   #search-bar {
     background: #fff;
+}
+
+
+.loading-msg {
+  padding: 50px;
+  font-size: 18px;
+  text-align: center;
+  color: #0090d3;
+  font-weight: bold;
+  width: 57%;
+  margin: auto;
+  line-height: 2;
+
 }
   
 

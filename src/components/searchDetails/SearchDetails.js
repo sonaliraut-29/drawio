@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Button, Col, Container, Form, Row, Accordion } from "react-bootstrap";
+import {
+  Button,
+  Col,
+  Container,
+  Form,
+  Row,
+  Accordion,
+  Dropdown,
+} from "react-bootstrap";
 
 import * as images from "../constant/Assets";
 
@@ -27,6 +35,9 @@ const SearchDetails = ({ history }) => {
   const [actualSubcategories, setActualSubCategories] = useState([]);
   const [actualCategories, setActualCategories] = useState([]);
 
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedSubCategories, setSelectedSubCategories] = useState([]);
+
   useEffect(() => {
     fetchCategories();
     fetchSubcategories();
@@ -49,6 +60,18 @@ const SearchDetails = ({ history }) => {
   }, [subCategories]);
 
   const baseUrl = process.env.REACT_APP_API_BASEURL;
+
+  const handleCategories = (e) => {
+    const prevValues = [...selectedCategories];
+
+    if (e.target.checked) {
+      prevValues.push(e.target.value);
+      setSelectedCategories(prevValues);
+    } else {
+      const newArray = prevValues.filter((item) => item !== e.target.value);
+      setSelectedCategories(newArray);
+    }
+  };
 
   const fetchCategories = () => {
     api(baseUrl)
@@ -179,7 +202,7 @@ const SearchDetails = ({ history }) => {
       <Container>
         {loading && <CommunityLoaderCircularDash isbackground={false} />}
 
-        <section id="search-bar" className="mb-4 px-0">
+        <section id="search-bar" className="mb-4 px-0 ">
           <Row>
             <div className="col-10">
               <Form className="d-flex">
@@ -213,12 +236,26 @@ const SearchDetails = ({ history }) => {
                       return (
                         <Accordion.Item eventKey={index}>
                           <Accordion.Header>
-                            {actualCategories[index]}
+                            <Form.Check
+                              type="checkbox"
+                              id={index}
+                              label={actualCategories[index]}
+                              value={actualCategories[index]}
+                              onChange={handleCategories}
+                            />
                           </Accordion.Header>
                           <Accordion.Body>
                             <ul>
-                              {item.map((innerItem) => {
-                                return <li>{innerItem}</li>;
+                              {item.map((innerItem, idx) => {
+                                return (
+                                  <li>
+                                    <Form.Check
+                                      type="checkbox"
+                                      id={idx}
+                                      label={innerItem}
+                                    />
+                                  </li>
+                                );
                               })}
                             </ul>
                           </Accordion.Body>
@@ -246,6 +283,107 @@ const SearchDetails = ({ history }) => {
             </div>
 
             <div className="col-sm-9 cat-right">
+              <Row>
+                <div className="col-sm-12 mb-4 mt-sm-0 mt-4 category-title-wrapper">
+                  <h4>
+                    Search Result of{" "}
+                    {searchValue && "" !== searchValue
+                      ? searchValue
+                      : searchText}
+                  </h4>
+                  <div className="sort-dropdown">
+                    <Dropdown>
+                      <Dropdown.Toggle variant="success" id="dropdown-basic">
+                        Sort by
+                      </Dropdown.Toggle>
+
+                      <Dropdown.Menu>
+                        <Dropdown.Item href="#/action-1">
+                          Best Product
+                        </Dropdown.Item>
+                        <Dropdown.Item href="#/action-1">
+                          Price Low to High
+                        </Dropdown.Item>
+                        <Dropdown.Item href="#/action-1">
+                          Price High to Low
+                        </Dropdown.Item>
+                        <Dropdown.Item href="#/action-1">
+                          Newest First
+                        </Dropdown.Item>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </div>
+                </div>
+                <div className="col-sm-12">
+                  <section className="cat-for-mobile mb-4">
+                    <Row>
+                      <div className="col-6">
+                        <div className="sort-dropdown">
+                          <Dropdown>
+                            <Dropdown.Toggle
+                              variant="success"
+                              id="dropdown-basic"
+                            >
+                              Sort by
+                            </Dropdown.Toggle>
+
+                            <Dropdown.Menu>
+                              <Dropdown.Item href="#/action-1">
+                                Best Product
+                              </Dropdown.Item>
+                              <Dropdown.Item href="#/action-1">
+                                Price Low to High
+                              </Dropdown.Item>
+                              <Dropdown.Item href="#/action-1">
+                                Price High to Low
+                              </Dropdown.Item>
+                              <Dropdown.Item href="#/action-1">
+                                Newest First
+                              </Dropdown.Item>
+                            </Dropdown.Menu>
+                          </Dropdown>
+                        </div>
+                      </div>
+                      <div className="col-6">
+                        <div className="cat-list">Category</div>
+                      </div>
+                    </Row>
+                  </section>
+                </div>
+              </Row>
+              <Row>
+                <div className="col-sm-12 mb-4 mt-sm-0 mt-4 category-tags">
+                  {selectedCategories && selectedCategories.length > 0
+                    ? selectedCategories.map((item) => {
+                        return (
+                          <span className="badge badge-primary">
+                            {item}
+                            <button
+                              type="button"
+                              className="close"
+                              aria-label="Dismiss"
+                            >
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </span>
+                        );
+                      })
+                    : ""}
+                  {/* 
+                  <span className="badge badge-primary">
+                    Category
+                    <button type="button" className="close" aria-label="Dismiss">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </span>
+                  <span className="badge badge-primary">
+                    Category
+                    <button type="button" className="close" aria-label="Dismiss">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </span> */}
+                </div>
+              </Row>
               {productList && productList.length > 0 ? (
                 <section className="cat-products">
                   <Row>
@@ -307,7 +445,7 @@ const SearchDetails = ({ history }) => {
                   </Row>
                 </section>
               ) : (
-                <p>
+                <p className="loading-msg">
                   Hang tight! Genie is searching high and low to find the best
                   results for you. Sit back, relax, and let us do the work. Your
                   wait will be worth it!

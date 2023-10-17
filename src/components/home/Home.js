@@ -104,6 +104,28 @@ const Home = ({ history }) => {
     window.open(link, "_blank");
   };
 
+  const options = {
+    responsiveClass: true,
+    responsive: {
+      margin: 15,
+      0: {
+        items: 2,
+      },
+      400: {
+        items: 2,
+      },
+      600: {
+        items: 3,
+      },
+      700: {
+        items: 3,
+      },
+      1000: {
+        items: 3,
+      },
+    },
+  };
+
   return (
     <div className="Home">
       <Container className="mt-5">
@@ -142,7 +164,8 @@ const Home = ({ history }) => {
 
         <section id="home__search" className="mt-5">
           <Row>
-            <Col sm={12}>
+            <Col sm={2}></Col>
+            <Col sm={8}>
               <Form className="d-flex">
                 <Form.Control
                   type="Find the best offer products"
@@ -161,6 +184,7 @@ const Home = ({ history }) => {
                 </Button>
               </Form>
             </Col>
+            <Col sm={2}></Col>
           </Row>
         </section>
 
@@ -170,7 +194,7 @@ const Home = ({ history }) => {
           </Row>
           {categories && categories.length > 0 ? (
             <Row>
-              <OwlCarousel className="owl-theme" loop margin={30} nav items={5}>
+              <OwlCarousel className="owl-theme" loop margin={30} items={5}>
                 {categories.map((item) => {
                   const imageName = item.Category.replace(",", "")
                     .replace(" ", "_")
@@ -205,7 +229,7 @@ const Home = ({ history }) => {
           )}
         </section>
 
-        <section id="home__popular" className="mt-5 text-center">
+        <section id="home__popular" className="mt-5 text-center item-design">
           <Row>
             <Col className="d-flex justify-content-center align-items-center title-wrap mt-5 mb-4">
               <h2 className="section-title mb-1">Popular Products</h2>
@@ -223,17 +247,21 @@ const Home = ({ history }) => {
                       onClick={() => handleRedirect(item.Item_URL)}
                       style={{ cursor: "pointer" }}
                     >
-                      <div className="item-wrap">
-                        <img src={item && item.Item_Image_URL} alt="img" />
+                      <div className="main-item-wrap">
+                        <div className="img-wrap">
+                          <img src={item && item.Item_Image_URL} alt="img" />
+                        </div>
                         <div className="item-desc">
-                          <img
-                            src={
-                              item.Vendor
-                                ? images[vendorName]
-                                : "./dist/assets/images/v2.png"
-                            }
-                            alt="img"
-                          />
+                          <div className="vendor-logo">
+                            <img
+                              src={
+                                item.Vendor
+                                  ? images[vendorName]
+                                  : "./dist/assets/images/v2.png"
+                              }
+                              alt="img"
+                            />
+                          </div>
                           <h5>{item.Brand}</h5>
                           <p>{item.Item_name}</p>
                         </div>
@@ -275,15 +303,17 @@ const Home = ({ history }) => {
 
                     return (
                       <div className="item">
-                        <div className="item-wrap">
-                          <img
-                            src={
-                              item.leaflet_image && "" !== item.leaflet_image
-                                ? item.leaflet_image
-                                : images.homeLeafletImage
-                            }
-                            alt="img"
-                          />
+                        <div className="main-item-wrap">
+                          <div className="img-wrap">
+                            <img
+                              src={
+                                item.leaflet_image && "" !== item.leaflet_image
+                                  ? item.leaflet_image
+                                  : images.homeLeafletImage
+                              }
+                              alt="img"
+                            />
+                          </div>
                           <div className="item-desc">
                             <div className="vendor-logo">
                               <img
