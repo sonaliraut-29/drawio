@@ -13,14 +13,68 @@ import {
   NavDropdown,
   Navbar,
 } from "react-bootstrap";
+import {
+  CATEGORIES,
+  SUBCATEGORIES,
+} from "../../redux/reduxConstants/EndPoints";
 import OwlCarousel from "react-owl-carousel";
 import "owl.carousel/dist/assets/owl.carousel.css";
 import "owl.carousel/dist/assets/owl.theme.default.css";
 import "react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css";
 import RangeSlider from "react-bootstrap-range-slider";
+import api from "../../redux/services/api";
 
 const Category = () => {
   const [value, setValue] = useState(0);
+  const [categories, setCategories] = useState([]);
+  const [subCategories, setSubcategories] = useState([]);
+  const [actualSubcategories, setActualSubCategories] = useState([]);
+  const [actualCategories, setActualCategories] = useState([]);
+
+  useEffect(() => {
+    fetchCategories();
+    fetchSubcategories();
+  }, []);
+
+  useEffect(() => {
+    const subCategoriesTemp = [];
+    if (subCategories && subCategories.length > 0) {
+      subCategories.forEach((item) => {
+        const Category = item.Category;
+        subCategoriesTemp[Category] = subCategoriesTemp[Category] || [];
+        subCategoriesTemp[Category].push(item.Sub_Category);
+      });
+      const resultKeys = Object.keys(subCategoriesTemp);
+      const resultArray = Object.values(subCategoriesTemp);
+
+      setActualSubCategories(resultArray);
+      setActualCategories(resultKeys);
+    }
+  }, [subCategories]);
+
+  const baseUrl = process.env.REACT_APP_API_BASEURL;
+
+  const fetchCategories = () => {
+    api(baseUrl)
+      .get(CATEGORIES)
+      .then((res) => {
+        if (res.data.success) {
+          setCategories(res.data.data);
+        }
+      })
+      .catch((e) => console.log(e));
+  };
+
+  const fetchSubcategories = () => {
+    api(baseUrl)
+      .get(SUBCATEGORIES)
+      .then((res) => {
+        if (res.data.success) {
+          setSubcategories(res.data.data);
+        }
+      })
+      .catch((e) => console.log(e));
+  };
 
   return (
     <main className="category-page">
@@ -29,93 +83,69 @@ const Category = () => {
           <Row>
             <h2 className="section-title mb-4">Categories</h2>
           </Row>
+          {categories && categories.length > 0 ? (
+            <Row>
+              <OwlCarousel className="owl-theme" loop margin={30} nav items={5}>
+                {categories.map((item) => {
+                  const imageName = item.Category.replace(",", "")
+                    .replace(" ", "_")
+                    .replace("&", "and")
+                    .replace(" ", "_")
+                    .replace(" ", "_");
 
-          <Row>
-            <OwlCarousel className="owl-theme" loop margin={30} nav items={5}>
-              <div className="item">
-                <div className="cat-item mobile">
-                  <div className="cat-img">
-                    <img src="./dist/assets/images/c1.svg" alt="img" />
-                  </div>
-                  <div className="cat-txt">
-                    <span>Mobile and Tablets</span>
-                  </div>
-                </div>
-              </div>
-              <div className="item">
-                <div className="cat-item perfume">
-                  <div className="cat-img">
-                    <img src="./dist/assets/images/c2.svg" alt="img" />
-                  </div>
-                  <div className="cat-txt">
-                    <span>Perfumes & Fragrances</span>
-                  </div>
-                </div>
-              </div>
-              <div className="item">
-                <div className="cat-item watches">
-                  <div className="cat-img">
-                    <img src="./dist/assets/images/c3.svg" alt="img" />
-                  </div>
-                  <div className="cat-txt">
-                    <span>Watches & Eyewear</span>
-                  </div>
-                </div>
-              </div>
-              <div className="item">
-                <div className="cat-item fashion">
-                  <div className="cat-img">
-                    <img src="./dist/assets/images/c4.svg" alt="img" />
-                  </div>
-                  <div className="cat-txt">
-                    <span>Fashion</span>
-                  </div>
-                </div>
-              </div>
-              <div className="item">
-                <div className="cat-item beauty">
-                  <div className="cat-img">
-                    <img src="./dist/assets/images/c5.svg" alt="img" />
-                  </div>
-                  <div className="cat-txt">
-                    <span>Beauty & Health</span>
-                  </div>
-                </div>
-              </div>
-            </OwlCarousel>
-          </Row>
+                  return (
+                    <div className="item">
+                      <div className="cat-item mobile">
+                        <div className="cat-img">
+                          <img
+                            src={
+                              imageName && images[imageName]
+                                ? images[imageName]
+                                : "./dist/assets/images/Smartphones,_Tablets_&_Wearables.svg"
+                            }
+                            alt="img"
+                          />
+                        </div>
+                        <div className="cat-txt">
+                          <span>{item.Category}</span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </OwlCarousel>
+            </Row>
+          ) : (
+            ""
+          )}
         </section>
 
         <section className="pt-0 pt-sm-5 pb-5">
           <Row>
             <div className="col-sm-3 cat-left">
               <section className="cat-for-desktop">
-                <Accordion defaultActiveKey={["0"]} alwaysOpen>
-                  <Accordion.Item eventKey="0">
-                    <Accordion.Header>Category One</Accordion.Header>
-                    <Accordion.Body>
-                      <ul>
-                        <li>Sub Category list</li>
-                        <li>Sub Category list</li>
-                        <li>Sub Category list</li>
-                        <li>Sub Category list</li>
-                        <li>Sub Category list</li>
-                      </ul>
-                    </Accordion.Body>
-                  </Accordion.Item>
-                  <Accordion.Item eventKey="1">
-                    <Accordion.Header>Category Two</Accordion.Header>
-                    <Accordion.Body>
-                      <ul>
-                        <li>Sub Category list</li>
-                        <li>Sub Category list</li>
-                        <li>Sub Category list</li>
-                        <li>Sub Category list</li>
-                        <li>Sub Category list</li>
-                      </ul>
-                    </Accordion.Body>
-                  </Accordion.Item>
-                </Accordion>
+                {actualSubcategories && actualSubcategories.length > 0 ? (
+                  <Accordion defaultActiveKey={["0"]} alwaysOpen>
+                    {actualSubcategories.map((item, index) => {
+                      return (
+                        <Accordion.Item eventKey={index}>
+                          <Accordion.Header>
+                            {actualCategories[index]}
+                          </Accordion.Header>
+                          <Accordion.Body>
+                            <ul>
+                              {item.map((innerItem) => {
+                                return <li>{innerItem}</li>;
+                              })}
+                            </ul>
+                          </Accordion.Body>
+                        </Accordion.Item>
+                      );
+                    })}
+                  </Accordion>
+                ) : (
+                  ""
+                )}
               </section>
               <section>
                 <div>Price</div>
