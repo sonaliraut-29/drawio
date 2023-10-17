@@ -1,11 +1,12 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 
 import * as images from "../constant/Assets";
-import * as routes from "../constant/Routes";
 
 import api from "../../redux/services/api";
 import { SEARCH } from "../../redux/reduxConstants/EndPoints";
+import Pagination from "../../uikit/Paginate";
+import CommunityLoaderCircularDash from "../../uikit/CommunityLoaderCircularDash";
 
 const SearchDetails = ({ history }) => {
   const [productList, setProductList] = useState([]);
@@ -13,8 +14,6 @@ const SearchDetails = ({ history }) => {
   const [page, setPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   const [loading, setLoading] = useState(false);
-  const [resultList, setResultList] = useState({ list: [] });
-  const loaderProfile = useRef(null);
 
   let fullSlug = "";
   let slugString = "";
@@ -40,63 +39,25 @@ const SearchDetails = ({ history }) => {
   }
 
   useEffect(() => {
-    const arrActualData = resultList && resultList.list;
-
-    const arrListData = productList;
-
-    const tempArr = [...resultList.list, ...arrListData];
-
-    setResultList({
-      list: tempArr,
-    });
-  }, [productList]);
-
-  useEffect(() => {
-    if (resultList && resultList.list.length > 0) {
-      var options = {
-        root: null,
-        rootMargin: "20px",
-        threshold: 1.0,
-      };
-
-      const observer = new IntersectionObserver(handleObserver, options);
-      if (loaderProfile.current) {
-        observer.observe(loaderProfile.current);
-      }
-    }
-  }, [resultList]);
-
-  const handleObserver = (entities) => {
-    const target = entities[0];
-    if (target.isIntersecting) {
-      setPage((page) => page + 1);
-    }
-  };
-
-  useEffect(() => {
     if (searchText && "" !== searchText) {
       fetchProductList(searchText);
     }
   }, [searchText]);
 
-  useEffect(() => {
-    page > 1 &&
-      fetchProductList(
-        searchValue && "" !== searchValue ? searchValue : searchText
-      );
-  }, [page]);
-
   const baseUrl = process.env.REACT_APP_API_BASEURL;
 
   const fetchProductList = (searchText) => {
     setLoading(true);
+
+    const offset_rows = (page - 1) * limit;
+
     api(baseUrl)
       .get(
         SEARCH +
           "?search_text=" +
           searchText +
           "&offset_rows=" +
-          page +
+          offset_rows +
           "&page_size=" +
           limit
       )
@@ -115,20 +76,15 @@ const SearchDetails = ({ history }) => {
 
   const handleChange = (e) => {
     if (e.target.value) {
-      setResultList({ list: [] });
+      setPage(1);
       setSearchValue(e.target.value);
       if (e.target.value.length >= 2) {
-        setPage(1);
-        fetchProductList(searchValue);
+        fetchProductList(e.target.value);
       }
     } else {
       setSearchValue("");
     }
   };
-
-  // const handleSearch = () => {
-  //   fetchProductList(searchValue);
-  // };
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
@@ -136,9 +92,38 @@ const SearchDetails = ({ history }) => {
     }
   };
 
+  const handlePageClick = (currentpage) => {
+    window.scroll(0, 0);
+
+    setPage(currentpage.selected + 1);
+    const currentPageSelected = currentpage.selected + 1;
+    const offset_rows = (currentPageSelected - 1) * limit;
+
+    setLoading(true);
+    api(baseUrl)
+      .get(
+        SEARCH +
+          "?search_text=" +
+          searchText +
+          "&offset_rows=" +
+          offset_rows +
+          "&page_size=" +
+          limit
+      )
+      .then((res) => {
+        setLoading(false);
+        if (res.data.success) {
+          setProductList(res.data.data);
+        }
+      })
+      .catch((e) => console.log(e));
+  };
+
   return (
     <main className="search-page test">
       <Container>
+        {loading && <CommunityLoaderCircularDash isbackground={false} />}
+
         <section id="search-bar" className="mb-4 px-0">
           <Row>
             <div className="col-10">
@@ -164,11 +149,11 @@ const SearchDetails = ({ history }) => {
           </Row>
         </section>
 
-        {resultList && resultList.list.length > 0 ? (
+        {productList && productList.length > 0 ? (
           <section className="search-products">
             <Row>
-              {resultList &&
-                resultList.list.map((item, index) => {
+              {productList &&
+                productList.map((item, index) => {
                   let vendorName = item.Vendor.replace(" ", "-").toLowerCase();
                   return (
                     <div
@@ -210,8 +195,16 @@ const SearchDetails = ({ history }) => {
                   );
                 })}
             </Row>
-            <div className="loadingTemp" ref={loaderProfile} />
-            {loading && <InlineLoader />}
+            <Row className="">
+              <Col md={9} xs={12} className="pagination">
+                <Pagination
+                  totalCount={500}
+                  limitValue={limit}
+                  currentPage={page}
+                  handlePageClick={handlePageClick}
+                />
+              </Col>
+            </Row>
           </section>
         ) : (
           <p>Hang tight! Genie is searching high and low to find the best results for you. Sit back, relax, and let us do the work. Your wait will be worth it!</p>
@@ -221,22 +214,3 @@ const SearchDetails = ({ history }) => {
   );
 };
 export default SearchDetails;
-
-const InlineLoader = () => {
-  return (
-    <div id="floatingBarsG" style={{ marginBottom: "12px" }}>
-      <div className="blockG" id="rotateG_01"></div>
-      <div className="blockG" id="rotateG_02"></div>
-      <div className="blockG" id="rotateG_03"></div>
-      <div className="blockG" id="rotateG_04"></div>
-      <div className="blockG" id="rotateG_05"></div>
-      <div className="blockG" id="rotateG_06"></div>
-      <div className="blockG" id="rotateG_07"></div>
-      <div className="blockG" id="rotateG_08"></div>
-      <div className="blockG" id="rotateG_09"></div>
-      <div className="blockG" id="rotateG_10"></div>
-      <div className="blockG" id="rotateG_11"></div>
-      <div className="blockG" id="rotateG_12"></div>
-    </div>
-  );
-};
