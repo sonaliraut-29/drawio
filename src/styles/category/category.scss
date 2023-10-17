@@ -1,3 +1,121 @@
 .category-page{
     padding-top: 50px;
 }
+
+.cat-products {
+    .item {
+
+  
+      .item-wrap {
+        background: #fff;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 0 20px #00000014;
+  
+        .item-desc {
+          position: relative;
+          img {
+            width: 60px !important;
+            position: absolute;
+            right: 0;
+            top: -18px;
+            border-radius: 50px;
+            border: 1px solid #0b0e10;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 60px !important;
+            height: 60px;
+            object-fit: contain;    background: #fff;
+
+          }
+          h5 {
+            text-align: left;
+            padding-top: 15px;
+          }
+  
+          p {
+            text-align: left;
+          }
+        }
+        .price {
+          text-align: left;
+          border-top: 1px solid #ddd;
+          padding-top: 5px;
+          span {
+            font-size: 24px;
+            font-weight: 600;
+          }
+          strike {
+            color: #848484;
+          }
+        }
+      }
+      .img-wrap > img {
+        // height: 215px;
+        // min-height: 215px;
+      }
+    }
+  }
+
+.cat-right {
+    .item-wrap {
+        position: relative;
+    }
+    .offer-tag {
+        position: absolute;
+        right: 10px;
+        top: -8px;
+        background: #EE2427;
+        border-radius: 4px;
+        color: white;
+        padding: 4px 8px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+    .img-wrap {
+        height: 200px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+
+
+.cat-left{  
+    h2.accordion-header button {
+        background-color: white !important;
+    }
+    h2.accordion-header button:focus {
+        box-shadow: none;
+    }
+    h2.accordion-header button {
+        font-weight: 700;
+    }
+    .accordion-body {
+        padding-top: 0;
+    }
+    .accordion-body ul {
+        padding-left: 20px;
+    }
+    .accordion-body ul li {
+        line-height: 2;
+        list-style: circle;
+    }
+    h2.accordion-header button {
+        font-weight: 700;
+    }
+
+}
+
+.cat-for-desktop{display: block;}
+.cat-for-mobile{display: none;}
+
+// responsive
+/* Using SCSS variables to store breakpoints */
+$breakpoint-mobile: 767px;
+
+@media (max-width: $breakpoint-mobile) {
+    .cat-for-desktop{display: none;}
+    .cat-for-mobile{display: block;}
+
+}
