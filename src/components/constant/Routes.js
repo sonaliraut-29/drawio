@@ -13,3 +13,4 @@ export const SEARCH_ROUTE = "/search";
 export const LEAFLETS = "/leaflets";
 export const BANNERS = "/banners";
 export const CATEGORY = "/category";
+export const LOGIN = "/login";
