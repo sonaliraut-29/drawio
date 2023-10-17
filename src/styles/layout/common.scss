@@ -35,8 +35,30 @@ a:hover {
 
 
 
+ul.pagination li a {
+    padding: 0;
+    width: 35px;
+    display: inline-block;
+    height: 35px;
+    color: #0090d3 !important;
+    border: 1px solid #0090d3;
+    text-decoration: none;
+}
+ul.pagination { line-height: 2;padding: 20px 15px 40px;}
+ul.pagination li { margin: 0 5px; text-align: center;}
+ul.pagination li.active a {  background: #0090d3; color: #fff !important;}
 
-
+ul.pagination li a span.icon-Rightarrow:after {
+    content: "→";
+    color: #0090d3;
+    text-decoration: none;
+    font-weight: 700;
+}
+ul.pagination li a span.icon-Leftarrow:after {
+    content: "←";
+    color: #0090d3;
+    text-decoration: none;
+}
 
 
 
@@ -46,6 +68,7 @@ a:hover {
       padding: 15px;
   
       .main-item-wrap {
+        
         background: #fff;
         padding: 15px;
         border-radius: 20px;
@@ -88,6 +111,10 @@ a:hover {
                         -webkit-line-clamp: 3;
                         -webkit-box-orient: vertical;
                         min-height: 72px;
+                        font-size: 14px;
+                        height: 45px;
+                        display: flex;
+                        align-items: center;
                     }
             }
 
