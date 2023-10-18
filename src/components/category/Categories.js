@@ -140,7 +140,7 @@ const Category = () => {
                                     <Form.Check
                                       type="checkbox"
                                       id="1"
-                                      label="{innerItem}"
+                                      label={innerItem}
                                     />
                                   </li>
                                 );
