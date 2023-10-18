@@ -90,7 +90,7 @@ const Search = ({ history }) => {
       <Container>
         <section id="home__search" className="mt-5">
           <Row>
-            <div className="col-12 text-center s_logo mb-4">
+            <div className="col-12 text-center s_logo mb-5">
               <img src={images.LogoImage} alt="logo" />
             </div>
           </Row>

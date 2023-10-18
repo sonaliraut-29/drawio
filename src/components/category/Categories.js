@@ -85,7 +85,7 @@ const Category = () => {
           </Row>
           {categories && categories.length > 0 ? (
             <Row>
-              <OwlCarousel className="owl-theme" loop margin={30} nav items={5}>
+              <OwlCarousel className="owl-theme" loop margin={30} items={5}>
                 {categories.map((item) => {
                   const imageName = item.Category.replace(",", "")
                     .replace(" ", "_")
