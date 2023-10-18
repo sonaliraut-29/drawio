@@ -18,7 +18,7 @@ const Login = ({ history }) => {
 
   return (
     <>
-      <Container>
+      <Container className="log-reg login-page">
         <Row>
           <div className="col form-title text-center">
             <h2>Login</h2>
@@ -29,12 +29,9 @@ const Login = ({ history }) => {
           <div className="col-sm-3"></div>
           <div className="col-sm-6">
             <Form>
-              <Form.Group className="mb-3" controlId="formBasicEmail">
+              <Form.Group className="mb-4" controlId="formBasicEmail">
                 <Form.Label>Email address</Form.Label>
                 <Form.Control type="email" placeholder="Enter email" />
-                <Form.Text className="text-muted">
-                  We'll never share your email with anyone else.
-                </Form.Text>
               </Form.Group>
 
               <Form.Group className="mb-3" controlId="formBasicPassword">
@@ -42,14 +39,21 @@ const Login = ({ history }) => {
                 <Form.Control type="password" placeholder="Password" />
               </Form.Group>
               <Form.Group
-                className="mb-3 text-right"
+                className="mb-3 text-right forgetpass"
                 controlId="formBasicCheckbox"
               >
-                <Form.Label>Forget Password?</Form.Label>
+                <Form.Label>
+                  <a href="#" className="">
+                    Forget Password?
+                  </a>
+                </Form.Label>
               </Form.Group>
-              <Button variant="primary" type="submit">
-                Login
-              </Button>
+              <center>
+                <Button variant="primary" type="submit">
+                  {" "}
+                  Login{" "}
+                </Button>
+              </center>
             </Form>
           </div>
           <div className="col-sm-3"></div>
@@ -57,9 +61,15 @@ const Login = ({ history }) => {
 
         <section className="orloginwith">
           <Row>
-            <div className="col-sm-5"></div>
-            <div className="col-sm-2">Or Login With</div>
-            <div className="col-sm-5"></div>
+            <div className="col-sm-5">
+              <div className="line before"></div>
+            </div>
+            <div className="col-sm-2 text-center">
+              <p>Or Login With</p>
+            </div>
+            <div className="col-sm-5">
+              <div className="line after"></div>
+            </div>
           </Row>
         </section>
 
@@ -67,10 +77,10 @@ const Login = ({ history }) => {
           <Row>
             <div className="col-12 text-center">
               <a href="#">
-                <img src="" alt="GoogleID"></img>
+                <img src="/dist/assets/images/google.svg" alt="GoogleID"></img>
               </a>
               <a href="#">
-                <img src="" alt="AppleID"></img>
+                <img src="/dist/assets/images/apple.svg" alt="AppleID"></img>
               </a>
             </div>
           </Row>
