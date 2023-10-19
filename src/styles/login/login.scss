@@ -1,0 +1,83 @@
+.log-reg h2 {
+    font-size: 38px;
+    color: #007CC3;
+    font-weight: 700;
+}
+
+.log-reg {
+    margin-top: 50px;
+}
+
+.log-reg .col.form-title.text-center {
+    margin-bottom: 30px;
+}
+
+.log-reg label.form-label {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.log-reg input {
+    border-color: #007cc36e !important;
+    border-radius: 30px !important;
+    height: 40px;
+}
+
+.log-reg button.btn.btn-primary {
+    background: #007CC3;
+    border-radius: 20px;
+    width: 30%;
+}
+
+.log-reg .orloginwith p {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.log-reg .signup-login p {
+    font-size: 16px;
+}
+
+.log-reg .signup-login p a {
+    color: #007cc3;
+    font-weight: 600;
+}
+
+.log-reg .signup-login {
+    margin: 40px;
+}
+
+.log-reg .orloginwith {
+    margin: 60px 0 0;
+}
+
+.log-reg .line {
+    border: 1px solid #848484;
+}
+.log-reg .google-apple-id img {
+    margin: 10px;
+}
+.log-reg .forgetpass {
+    text-align: right;
+}
+.forgetpass label a {
+    color: #848484;
+}
+
+
+
+
+
+
+
+
+// responsive
+/* Using SCSS variables to store breakpoints */
+$breakpoint-mobile: 767px;
+
+@media (max-width: $breakpoint-mobile) {
+    .log-reg .line {
+        margin-top: 11px;
+    }
+}
+

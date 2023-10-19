@@ -39,6 +39,9 @@ const SearchDetails = ({ history }) => {
   const [selectedSubCategories, setSelectedSubCategories] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
 
+  const [OrderBy, setOrderBy] = useState("");
+  const [sort, setSort] = useState("");
+
   useEffect(() => {
     fetchCategories();
     fetchSubcategories();
@@ -231,6 +234,11 @@ const SearchDetails = ({ history }) => {
     const newArray = prevValues.filter((itemIn) => itemIn !== item);
     setSelectedSubCategories(newArray);
   };
+
+  const handleSort = (value, sort) => {
+    setOrderBy(value);
+    setSort(sort);
+  };
   return (
     <main className="search-page test">
       <Container>
@@ -345,10 +353,18 @@ const SearchDetails = ({ history }) => {
                         <Dropdown.Item href="#/action-1">
                           Best Product
                         </Dropdown.Item>
-                        <Dropdown.Item href="#/action-1">
+                        <Dropdown.Item
+                          onClick={() => {
+                            handleSort("Selling_Price", "asc");
+                          }}
+                        >
                           Price Low to High
                         </Dropdown.Item>
-                        <Dropdown.Item href="#/action-1">
+                        <Dropdown.Item
+                          onClick={() => {
+                            handleSort("Selling_Price", "asc");
+                          }}
+                        >
                           Price High to Low
                         </Dropdown.Item>
                         <Dropdown.Item href="#/action-1">
