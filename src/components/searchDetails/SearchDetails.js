@@ -37,6 +37,7 @@ const SearchDetails = ({ history }) => {
 
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedSubCategories, setSelectedSubCategories] = useState([]);
+  const [totalCount, setTotalCount] = useState(0);
 
   useEffect(() => {
     fetchCategories();
@@ -73,6 +74,24 @@ const SearchDetails = ({ history }) => {
     }
   };
 
+  const handleSubcategories = (e, key) => {
+    const prevValues = [...selectedSubCategories];
+    const prevCategories = [...selectedCategories];
+
+    const removeCategory = actualCategories[key];
+
+    if (removeCategory) {
+      const newArray = prevCategories.filter((item) => item !== removeCategory);
+      setSelectedCategories(newArray);
+    }
+    if (e.target.checked) {
+      prevValues.push(e.target.value);
+      setSelectedSubCategories(prevValues);
+    } else {
+      const newArray = prevValues.filter((item) => item !== e.target.value);
+      setSelectedSubCategories(newArray);
+    }
+  };
   const fetchCategories = () => {
     api(baseUrl)
       .get(CATEGORIES)
@@ -143,6 +162,7 @@ const SearchDetails = ({ history }) => {
         setLoading(false);
         if (res.data.success) {
           setProductList(res.data.data);
+          setTotalCount(res.data.totalCount);
         }
       })
       .catch((e) => console.log(e));
@@ -192,11 +212,25 @@ const SearchDetails = ({ history }) => {
         setLoading(false);
         if (res.data.success) {
           setProductList(res.data.data);
+          setTotalCount(res.data.totalCount);
         }
       })
       .catch((e) => console.log(e));
   };
 
+  const handleRemoveCategory = (item) => {
+    const prevValues = [...selectedCategories];
+
+    const newArray = prevValues.filter((itemIn) => itemIn !== item);
+    setSelectedCategories(newArray);
+  };
+
+  const handleRemoveSubCategory = (item) => {
+    const prevValues = [...selectedSubCategories];
+
+    const newArray = prevValues.filter((itemIn) => itemIn !== item);
+    setSelectedSubCategories(newArray);
+  };
   return (
     <main className="search-page test">
       <Container>
@@ -231,7 +265,7 @@ const SearchDetails = ({ history }) => {
             <div className="col-sm-3 cat-left">
               <section className="cat-for-desktop">
                 {actualSubcategories && actualSubcategories.length > 0 ? (
-                  <Accordion defaultActiveKey={["0"]} alwaysOpen>
+                  <Accordion defaultActiveKey={["0"]}>
                     {actualSubcategories.map((item, index) => {
                       return (
                         <Accordion.Item eventKey={index}>
@@ -242,6 +276,9 @@ const SearchDetails = ({ history }) => {
                               label={actualCategories[index]}
                               value={actualCategories[index]}
                               onChange={handleCategories}
+                              checked={selectedCategories.includes(
+                                actualCategories[index]
+                              )}
                             />
                           </Accordion.Header>
                           <Accordion.Body>
@@ -253,6 +290,13 @@ const SearchDetails = ({ history }) => {
                                       type="checkbox"
                                       id={idx}
                                       label={innerItem}
+                                      value={innerItem}
+                                      onChange={(e) =>
+                                        handleSubcategories(e, index)
+                                      }
+                                      checked={selectedSubCategories.includes(
+                                        innerItem
+                                      )}
                                     />
                                   </li>
                                 );
@@ -362,6 +406,28 @@ const SearchDetails = ({ history }) => {
                               type="button"
                               className="close"
                               aria-label="Dismiss"
+                              onClick={() => {
+                                handleRemoveCategory(item);
+                              }}
+                            >
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </span>
+                        );
+                      })
+                    : ""}
+                  {selectedSubCategories && selectedSubCategories.length > 0
+                    ? selectedSubCategories.map((item) => {
+                        return (
+                          <span className="badge badge-primary">
+                            {item}
+                            <button
+                              type="button"
+                              className="close"
+                              aria-label="Dismiss"
+                              onClick={() => {
+                                handleRemoveSubCategory(item);
+                              }}
                             >
                               <span aria-hidden="true">&times;</span>
                             </button>
@@ -436,7 +502,7 @@ const SearchDetails = ({ history }) => {
                   <Row className="">
                     <Col md={9} xs={12} className="pagination">
                       <Pagination
-                        totalCount={500}
+                        totalCount={totalCount}
                         limitValue={limit}
                         currentPage={page}
                         handlePageClick={handlePageClick}

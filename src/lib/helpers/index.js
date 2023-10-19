@@ -1,6 +1,3 @@
-import window from "global";
-import document from "global/document";
-
 /**
  * @author Sonali Raut
  * @description getCookie function.

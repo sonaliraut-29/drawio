@@ -4,3 +4,4 @@ export const SEARCH = "/productList";
 export const POPULAR_PRODUCTS = "/popularItems";
 export const CATEGORIES = "/categories";
 export const SUBCATEGORIES = "/subCategories";
+export const LOGIN = "/login";
