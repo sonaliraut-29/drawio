@@ -7,6 +7,7 @@ import Banner from "./components/banner/Banner";
 import Category from "./components/category/Categories";
 import Login from "./components/login/Login";
 import Register from "./components/register/Register";
+import ProductDetail from "./components/product-detail/Product-detail";
 
 const routesList = [
   {
@@ -47,6 +48,11 @@ const routesList = [
   {
     path: routes.REGISTER,
     component: Register,
+    exact: true,
+  },
+  {
+    path: routes.PRODUCTDETAIL,
+    component: ProductDetail,
     exact: true,
   },
 ];
