@@ -6,3 +6,7 @@ export const CATEGORIES = "/categories";
 export const SUBCATEGORIES = "/subCategories";
 export const LOGIN = "/login";
 export const REGISTER = "/create";
+export const GOVERNATES = "/governate";
+export const CITIES = "/cities";
+export const LOGOUT = "/logout";
+export const COUNTRIES = "/counrties";

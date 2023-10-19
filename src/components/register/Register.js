@@ -5,41 +5,82 @@ import Carousel from "react-bootstrap/Carousel";
 import * as images from "../constant/Assets";
 import * as routes from "../constant/Routes";
 import api from "../../redux/services/api";
-import { REGISTER } from "../../redux/reduxConstants/EndPoints";
+import {
+  REGISTER,
+  GOVERNATES,
+  CITIES,
+  COUNTRIES,
+} from "../../redux/reduxConstants/EndPoints";
 import { setCookie } from "../../lib/helpers";
 import moment from "moment";
-import { cities } from "./cities";
 
-const Login = ({ history }) => {
+const Register = ({ history }) => {
   const baseUrl = process.env.REACT_APP_API_BASEURL;
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
-  const [DOB, setDOB] = useState();
-  const [Area, setArea] = useState();
-  const [Street, setStreet] = useState();
+  const [DOB, setDOB] = useState(null);
+
   const [City, setCity] = useState();
-  const [Nationality, setNationality] = useState();
-  const [YOB, setYob] = useState();
+  const [YOB, setYob] = useState(null);
   const [Gender, setGender] = useState();
 
   const [emailError, setEmailError] = useState();
   const [passwordError, setPasswordError] = useState();
   const [dateError, setDateError] = useState("");
   const [errors, setErrors] = useState();
+  const [governates, setGovernates] = useState([]);
+  const [Governorate, setGovernate] = useState();
+  const [cities, setCities] = useState([]);
+  const [countries, setCountries] = useState([]);
+  const [Country_ID, setCountryId] = useState();
 
+  useEffect(() => {
+    fetchGovernates();
+    fetchCountries();
+  }, []);
+
+  useEffect(() => {
+    Governorate && fetchCities();
+  }, [Governorate]);
+
+  const fetchCountries = () => {
+    api(baseUrl)
+      .get(COUNTRIES)
+      .then((res) => {
+        if (res.data) {
+          setCountries(res.data.data);
+        }
+      })
+      .catch((e) => console.log(e));
+  };
+  const fetchGovernates = () => {
+    api(baseUrl)
+      .get(GOVERNATES)
+      .then((res) => {
+        if (res.data) {
+          setGovernates(res.data.data);
+        }
+      })
+      .catch((e) => console.log(e));
+  };
+
+  const fetchCities = () => {
+    api(baseUrl)
+      .get(CITIES + "/" + Governorate)
+      .then((res) => {
+        if (res.data) {
+          setCities(res.data.data);
+        }
+      })
+      .catch((e) => console.log(e));
+  };
   const handleNationality = (e) => {
-    setNationality(e.target.value);
-  };
-  const handleArea = (e) => {
-    setArea(e.target.value);
+    setCountryId(e.target.value);
   };
 
-  const handleStreet = (e) => {
-    setStreet(e.target.value);
-  };
   const handleGender = (e) => {
     setGender(e.target.value);
   };
@@ -91,19 +132,17 @@ const Login = ({ history }) => {
       password,
       Mobile: phone,
       Name: name,
-      DOB: moment("d-m-y", DOB),
-      Area,
+      DOB: DOB ? moment("d-m-y", DOB) : "",
       City,
-      Street,
-      Nationality,
-      YOB,
+      Country_ID,
+      YOB: YOB ? YOB : "",
       Gender,
     };
     api(baseUrl)
       .post(REGISTER, data)
       .then((res) => {
-        if (res.data.access_token) {
-          setCookie("token", res.data.access_token);
+        if (res.data.data.access_token) {
+          setCookie("token", res.data.data.access_token);
           history.push({ pathname: routes.HOME_ROUTE });
         } else {
           setErrors(res.data);
@@ -112,6 +151,9 @@ const Login = ({ history }) => {
       .catch((e) => console.log(e));
   };
 
+  const handleGovernorate = (e) => {
+    setGovernate(e.target.value);
+  };
   return (
     <>
       <Container className="log-reg login-page">
@@ -195,33 +237,33 @@ const Login = ({ history }) => {
                 </Form.Label>
               </Form.Group>
 
-              <Form.Group className="mb-4" controlId="formBasicArea">
-                <Form.Label>Area</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Enter your Area Name"
-                  name="Area"
-                  value={Area}
-                  onChange={handleArea}
-                />
-                {errors && errors.hasOwnProperty("Area") ? (
-                  <p className="error">{errors.Area[0]}</p>
-                ) : (
-                  ""
-                )}
-              </Form.Group>
+              <Form.Group className="mb-4" controlId="formBasicNationality">
+                <Form.Label>Governorate</Form.Label>
 
-              <Form.Group className="mb-4" controlId="formBasicStreet">
-                <Form.Label>Street</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Enter your Street Name"
-                  name="Street"
-                  value={Street}
-                  onChange={handleStreet}
-                />
-                {errors && errors.hasOwnProperty("Street") ? (
-                  <p className="error">{errors.Street[0]}</p>
+                <Form.Select
+                  aria-label="Default select example"
+                  placeholder="Enter your governate"
+                  name="Governorate"
+                  onChange={handleGovernorate}
+                  value={Governorate}
+                >
+                  {governates && governates.length > 0 && (
+                    <option>Please select governate</option>
+                  )}
+                  {governates && governates.length > 0 ? (
+                    governates.map((item) => {
+                      return (
+                        <option value={item.Governarate}>
+                          {item.Governarate}
+                        </option>
+                      );
+                    })
+                  ) : (
+                    <option value="">No governate found</option>
+                  )}
+                </Form.Select>
+                {errors && errors.hasOwnProperty("Governorate") ? (
+                  <p className="error">{errors.Governorate[0]}</p>
                 ) : (
                   ""
                 )}
@@ -238,15 +280,11 @@ const Login = ({ history }) => {
                   value={City}
                 >
                   {cities && cities.length > 0 && (
-                    <option value="">Please select city</option>
+                    <option>Please select city</option>
                   )}
                   {cities && cities.length > 0 ? (
                     cities.map((item) => {
-                      return (
-                        <option value={item.admin_name}>
-                          {item.admin_name}
-                        </option>
-                      );
+                      return <option value={item.City}>{item.City}</option>;
                     })
                   ) : (
                     <option value="">No citi found</option>
@@ -308,23 +346,38 @@ const Login = ({ history }) => {
                   ""
                 )}
               </Form.Group>
-
               <Form.Group className="mb-4" controlId="formBasicNationality">
                 <Form.Label>Nationality</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder=""
+
+                <Form.Select
+                  aria-label="Default select example"
+                  placeholder="Enter your Country Name"
                   name="Nationality"
-                  value={Nationality}
                   onChange={handleNationality}
-                />
-                {errors && errors.hasOwnProperty("Nationality") ? (
-                  <p className="error">{errors.Nationality[0]}</p>
+                  value={Country_ID}
+                  search
+                >
+                  {countries && countries.length > 0 && (
+                    <option>Please select nationality</option>
+                  )}
+                  {countries && countries.length > 0 ? (
+                    countries.map((item) => {
+                      return (
+                        <option value={item.Country_ID}>
+                          {item.Country_Name}
+                        </option>
+                      );
+                    })
+                  ) : (
+                    <option value="">No nationality found</option>
+                  )}
+                </Form.Select>
+                {errors && errors.hasOwnProperty("Country_ID") ? (
+                  <p className="error">{errors.Country_ID[0]}</p>
                 ) : (
                   ""
                 )}
               </Form.Group>
-
               <center>
                 <Button variant="primary" type="button" onClick={handleSubmit}>
                   Signup
@@ -375,4 +428,4 @@ const Login = ({ history }) => {
     </>
   );
 };
-export default Login;
+export default Register;

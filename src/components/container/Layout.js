@@ -6,9 +6,17 @@ import Header from "../common/header/Header";
 import Footer from "../common/footer/Footer";
 
 const Layout = ({ history }) => {
+  const isLoginOrRegiterRoute =
+    history &&
+    history.location &&
+    history.location.pathname &&
+    (history.location.pathname.includes("/login") ||
+      history.location.pathname.includes("/register"))
+      ? true
+      : false;
   return (
     <React.Fragment>
-      <Header />
+      {!isLoginOrRegiterRoute && <Header />}
 
       <Switch>
         {routesList.map((route) => {
@@ -20,7 +28,7 @@ const Layout = ({ history }) => {
         <Route component={NoPageFound} />
       </Switch>
 
-      <Footer />
+      {!isLoginOrRegiterRoute && <Footer />}
     </React.Fragment>
   );
 };
