@@ -26,7 +26,7 @@ const Header = ({ history }) => {
   const links = [
     {
       name: "Home",
-      link: routes.LEAFLETS,
+      link: routes.HOME_ROUTE,
     },
     {
       name: "Leaflets",

@@ -20,8 +20,7 @@ import {
 import OwlCarousel from "react-owl-carousel";
 import "owl.carousel/dist/assets/owl.carousel.css";
 import "owl.carousel/dist/assets/owl.theme.default.css";
-import "react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css";
-import RangeSlider from "react-bootstrap-range-slider";
+import ReactSlider from "react-slider";
 import api from "../../redux/services/api";
 
 const Category = () => {
@@ -74,6 +73,10 @@ const Category = () => {
         }
       })
       .catch((e) => console.log(e));
+  };
+
+  const handleSlider = (value, index) => {
+    setValue(value);
   };
 
   return (
@@ -157,17 +160,20 @@ const Category = () => {
               </section>
               <section className="cat-price-filter">
                 <h6>Price</h6>
-                <RangeSlider
-                  value={value}
-                  onChange={(changeEvent) => setValue(changeEvent.target.value)}
-                  max="100000"
-                  min="0"
-                  tooltip="on"
+                <ReactSlider
+                  className="horizontal-slider"
+                  thumbClassName="example-thumb"
+                  trackClassName="example-track"
+                  defaultValue={[0, 100000]}
+                  ariaLabel={["Lower thumb", "Upper thumb"]}
+                  ariaValuetext={(state) => `Thumb value ${state.valueNow}`}
+                  renderThumb={(props, state) => (
+                    <div {...props}>{state.valueNow}</div>
+                  )}
+                  pearling
+                  minDistance={10}
+                  onChange={handleSlider}
                 />
-                <div className="range-min-max">
-                  <span>0</span>
-                  <span>100000</span>
-                </div>
               </section>
               <section className="cat-for-mobile"></section>
             </div>

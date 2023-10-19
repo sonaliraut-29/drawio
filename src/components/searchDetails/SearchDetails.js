@@ -19,11 +19,10 @@ import {
 } from "../../redux/reduxConstants/EndPoints";
 import Pagination from "../../uikit/Paginate";
 import CommunityLoaderCircularDash from "../../uikit/CommunityLoaderCircularDash";
-import "react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css";
-import RangeSlider from "react-bootstrap-range-slider";
+import ReactSlider from "react-slider";
 
 const SearchDetails = ({ history }) => {
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState([]);
   const [productList, setProductList] = useState([]);
   const [limit, setLimit] = useState(20);
   const [page, setPage] = useState(1);
@@ -39,8 +38,10 @@ const SearchDetails = ({ history }) => {
   const [selectedSubCategories, setSelectedSubCategories] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
 
-  const [OrderBy, setOrderBy] = useState("");
+  const [OrderBy, setOrderBy] = useState("NEWID()");
   const [sort, setSort] = useState("");
+
+  const [title, setTitle] = useState();
 
   useEffect(() => {
     fetchCategories();
@@ -144,13 +145,16 @@ const SearchDetails = ({ history }) => {
     if (searchText && "" !== searchText) {
       fetchProductList(searchText);
     }
-  }, [searchText]);
+  }, [searchText, OrderBy, sort, value]);
 
   const fetchProductList = (searchText) => {
     setLoading(true);
 
     const offset_rows = (page - 1) * limit;
-
+    let text = "";
+    if (value.length > 0) {
+      text = "&price_from=" + value[0] + "&price_to=" + value[1];
+    }
     api(baseUrl)
       .get(
         SEARCH +
@@ -159,7 +163,12 @@ const SearchDetails = ({ history }) => {
           "&offset_rows=" +
           offset_rows +
           "&page_size=" +
-          limit
+          limit +
+          "&order_by=" +
+          OrderBy +
+          "&sort=" +
+          sort +
+          text
       )
       .then((res) => {
         setLoading(false);
@@ -201,6 +210,11 @@ const SearchDetails = ({ history }) => {
     const offset_rows = (currentPageSelected - 1) * limit;
 
     setLoading(true);
+    let text = "";
+    if (value.length > 0) {
+      text = "&price_from=" + value[0] + "&price_to=" + value[1];
+    }
+
     api(baseUrl)
       .get(
         SEARCH +
@@ -209,7 +223,12 @@ const SearchDetails = ({ history }) => {
           "&offset_rows=" +
           offset_rows +
           "&page_size=" +
-          limit
+          limit +
+          "&order_by=" +
+          OrderBy +
+          "&sort=" +
+          sort +
+          text
       )
       .then((res) => {
         setLoading(false);
@@ -235,9 +254,14 @@ const SearchDetails = ({ history }) => {
     setSelectedSubCategories(newArray);
   };
 
-  const handleSort = (value, sort) => {
+  const handleSort = (value, sort, titleValue) => {
     setOrderBy(value);
     setSort(sort);
+    setTitle(titleValue);
+  };
+
+  const handleSlider = (value, index) => {
+    setValue(value);
   };
   return (
     <main className="search-page test">
@@ -321,15 +345,21 @@ const SearchDetails = ({ history }) => {
               </section>
               <section>
                 <div>Price</div>
-                <RangeSlider
-                  value={value}
-                  onChange={(changeEvent) => setValue(changeEvent.target.value)}
-                  max="100000"
-                  min="0"
-                  tooltip="on"
+
+                <ReactSlider
+                  className="horizontal-slider"
+                  thumbClassName="example-thumb"
+                  trackClassName="example-track"
+                  defaultValue={[0, 100000]}
+                  ariaLabel={["Lower thumb", "Upper thumb"]}
+                  ariaValuetext={(state) => `Thumb value ${state.valueNow}`}
+                  renderThumb={(props, state) => (
+                    <div {...props}>{state.valueNow}</div>
+                  )}
+                  pearling
+                  minDistance={10}
+                  onChange={handleSlider}
                 />
-                <div>0</div>
-                <div>100000</div>
               </section>
               <section className="cat-for-mobile"></section>
             </div>
@@ -346,7 +376,7 @@ const SearchDetails = ({ history }) => {
                   <div className="sort-dropdown">
                     <Dropdown>
                       <Dropdown.Toggle variant="success" id="dropdown-basic">
-                        Sort by
+                        {title ? title : "Sort by"}
                       </Dropdown.Toggle>
 
                       <Dropdown.Menu>
@@ -355,17 +385,47 @@ const SearchDetails = ({ history }) => {
                         </Dropdown.Item>
                         <Dropdown.Item
                           onClick={() => {
-                            handleSort("Selling_Price", "asc");
+                            handleSort(
+                              "Selling_Price",
+                              "asc",
+                              "Price Low to High"
+                            );
                           }}
                         >
                           Price Low to High
                         </Dropdown.Item>
                         <Dropdown.Item
                           onClick={() => {
-                            handleSort("Selling_Price", "asc");
+                            handleSort(
+                              "Selling_Price",
+                              "desc",
+                              "Price High to Low"
+                            );
                           }}
                         >
                           Price High to Low
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          onClick={() => {
+                            handleSort(
+                              "Discount_Percent",
+                              "asc",
+                              "Discount Low to High"
+                            );
+                          }}
+                        >
+                          Discount Low to High
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          onClick={() => {
+                            handleSort(
+                              "Discount_Percent",
+                              "desc",
+                              "Discount High to Low"
+                            );
+                          }}
+                        >
+                          Discount High to Low
                         </Dropdown.Item>
                         <Dropdown.Item href="#/action-1">
                           Newest First
