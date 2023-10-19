@@ -38,7 +38,7 @@ const Login = ({ history }) => {
                 <Form.Control type="number" placeholder="Enter Phone" />
               </Form.Group>
               <Form.Group className="mb-4" controlId="formBasicEmail">
-                <Form.Label>Email address</Form.Label>
+                <Form.Label>Email ID</Form.Label>
                 <Form.Control type="email" placeholder="Enter email" />
               </Form.Group>
 
@@ -56,6 +56,52 @@ const Login = ({ history }) => {
                   </a>
                 </Form.Label>
               </Form.Group>
+
+              <Form.Group className="mb-4" controlId="formBasicArea">
+                <Form.Label>Area</Form.Label>
+                <Form.Control type="text" placeholder="Enter your Area Name" />
+              </Form.Group>
+
+              <Form.Group className="mb-4" controlId="formBasicStreet">
+                <Form.Label>Street</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter your Street Name"
+                />
+              </Form.Group>
+
+              <Form.Group className="mb-4" controlId="formBasicCity">
+                <Form.Label>City</Form.Label>
+                <Form.Control type="text" placeholder="Enter your City Name" />
+              </Form.Group>
+
+              <Form.Group className="mb-4" controlId="formBasicDOB">
+                <Form.Label>DOB</Form.Label>
+                <Form.Control type="date" placeholder="xx/xx/xxxx" />
+              </Form.Group>
+
+              <Form.Group
+                className="mb-4 radio-wrapper"
+                controlId="formBasicGender"
+              >
+                <Form.Label>Gender</Form.Label>
+                <div className="d-flex">
+                  <div className="d-flex radio-option mr-4">
+                    <Form.Check type="radio" aria-label="Male" />
+                    <Form.Check.Label>{` Male`}</Form.Check.Label>
+                  </div>
+                  <div className="d-flex  radio-option">
+                    <Form.Check type="radio" aria-label="Female" />
+                    <Form.Check.Label>{` Female`}</Form.Check.Label>
+                  </div>
+                </div>
+              </Form.Group>
+
+              <Form.Group className="mb-4" controlId="formBasicNationality">
+                <Form.Label>Nationality</Form.Label>
+                <Form.Control type="text" placeholder="" />
+              </Form.Group>
+
               <center>
                 <Button variant="primary" type="submit">
                   {" "}

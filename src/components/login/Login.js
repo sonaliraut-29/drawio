@@ -69,9 +69,6 @@ const Login = ({ history }) => {
                   onChange={handleEmail}
                 />
                 {emailError ? <p className="error">{emailError}</p> : ""}
-                <Form.Text className="text-muted">
-                  We'll never share your email with anyone else.
-                </Form.Text>
               </Form.Group>
 
               <Form.Group className="mb-3" controlId="formBasicPassword">
