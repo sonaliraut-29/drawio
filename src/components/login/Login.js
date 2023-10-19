@@ -91,16 +91,14 @@ const Login = ({ history }) => {
                   </a>
                 </Form.Label>
               </Form.Group>
-              <center>
-                <Button
-                  variant="primary"
-                  type="button"
-                  disabled={"" !== emailError || "" !== passwordError}
-                  onClick={handleSubmit}
-                >
-                  Login
-                </Button>
-              </center>
+              <Button
+                variant="primary"
+                type="button"
+                disabled={"" !== emailError || "" !== passwordError}
+                onClick={handleSubmit}
+              >
+                Login
+              </Button>
             </Form>
           </div>
           <div className="col-sm-3"></div>

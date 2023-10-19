@@ -1,5 +1,13 @@
-.mb-3.pass-criteria a {
+.pass-criteria a {
     font-weight: 300;
     color: #0B0E10;
     text-decoration: none;
+}
+
+.radio-wrapper input {
+    height: 16px;
+    margin-right: 8px;
+}
+.radio-wrapper .radio-option {
+    margin-right: 35px;
 }
