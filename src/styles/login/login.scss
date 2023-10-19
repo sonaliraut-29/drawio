@@ -63,3 +63,21 @@
 .forgetpass label a {
     color: #848484;
 }
+
+
+
+
+
+
+
+
+// responsive
+/* Using SCSS variables to store breakpoints */
+$breakpoint-mobile: 767px;
+
+@media (max-width: $breakpoint-mobile) {
+    .log-reg .line {
+        margin-top: 11px;
+    }
+}
+

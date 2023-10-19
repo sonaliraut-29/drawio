@@ -6,6 +6,7 @@ import Leaflet from "./components/leaflet/Leaflet";
 import Banner from "./components/banner/Banner";
 import Category from "./components/category/Categories";
 import Login from "./components/login/Login";
+import Register from "./components/register/Register";
 
 const routesList = [
   {
@@ -41,6 +42,11 @@ const routesList = [
   {
     path: routes.LOGIN,
     component: Login,
+    exact: true,
+  },
+  {
+    path: routes.REGISTER,
+    component: Register,
     exact: true,
   },
 ];

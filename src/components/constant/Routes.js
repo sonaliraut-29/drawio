@@ -14,3 +14,4 @@ export const LEAFLETS = "/leaflets";
 export const BANNERS = "/banners";
 export const CATEGORY = "/category";
 export const LOGIN = "/login";
+export const REGISTER = "/register";

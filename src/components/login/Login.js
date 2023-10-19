@@ -61,13 +61,13 @@ const Login = ({ history }) => {
 
         <section className="orloginwith">
           <Row>
-            <div className="col-sm-5">
+            <div className="col-sm-5 col-4">
               <div className="line before"></div>
             </div>
-            <div className="col-sm-2 text-center">
+            <div className="col-sm-2 col-4 text-center">
               <p>Or Login With</p>
             </div>
-            <div className="col-sm-5">
+            <div className="col-sm-5 col-4">
               <div className="line after"></div>
             </div>
           </Row>
