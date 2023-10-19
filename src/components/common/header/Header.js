@@ -3,8 +3,40 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 // import NavDropdown from "react-bootstrap/NavDropdown";
+import api from "../../../redux/services/api";
+import { LOGOUT } from "../../../redux/reduxConstants/EndPoints";
+import { deleteCookie } from "../../../lib/helpers";
+import * as routes from "../../constant/Routes";
 
-const Header = () => {
+const Header = ({ history }) => {
+  const baseUrl = process.env.REACT_APP_API_BASEURL;
+
+  const handleLogout = () => {
+    api(baseUrl)
+      .get(LOGOUT)
+      .then((res) => {
+        if (res.data.access_token) {
+          deleteCookie("token");
+          history.push({ pathname: routes.HOME_ROUTE });
+        }
+      })
+      .catch((e) => console.log(e));
+  };
+
+  const links = [
+    {
+      name: "Home",
+      link: routes.HOME_ROUTE,
+    },
+    {
+      name: "Leaflets",
+      link: routes.LEAFLETS,
+    },
+    {
+      name: "Banners",
+      link: routes.BANNERS,
+    },
+  ];
   return (
     <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
       <Container>
@@ -14,18 +46,15 @@ const Header = () => {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link href="/home">Home</Nav.Link>
-            <Nav.Link href="/leaflets">Leaflets</Nav.Link>
-            <Nav.Link href="/banners">Banners</Nav.Link>
-            <Nav.Link href="/search">Search</Nav.Link>
-            <Nav.Link href="/category">Categories</Nav.Link>
-            <Nav.Link href="/login">Login</Nav.Link>
-            <Nav.Link href="/register">Register</Nav.Link>
-            <Nav.Link href="/product-detail">Product Detail</Nav.Link>
+            {links &&
+              links.map((item) => {
+                return <Nav.Link href={item.link}>{item.name}</Nav.Link>;
+              })}
           </Nav>
           <Nav>
-            <Nav.Link href="#">Favourites</Nav.Link>
+            <Nav.Link href={routes.LOGIN}>Login</Nav.Link>
           </Nav>
+          {/* <Nav.Link onClick={handleLogout}>Logout</Nav.Link> */}
         </Navbar.Collapse>
       </Container>
     </Navbar>

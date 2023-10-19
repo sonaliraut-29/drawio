@@ -4,18 +4,156 @@ import Carousel from "react-bootstrap/Carousel";
 
 import * as images from "../constant/Assets";
 import * as routes from "../constant/Routes";
+import api from "../../redux/services/api";
+import {
+  REGISTER,
+  GOVERNATES,
+  CITIES,
+  COUNTRIES,
+} from "../../redux/reduxConstants/EndPoints";
+import { setCookie } from "../../lib/helpers";
+import moment from "moment";
 
-const Login = ({ history }) => {
-  const [banners, setBanners] = useState([]);
-  const [searchValue, setSearchValue] = useState("");
+const Register = ({ history }) => {
+  const baseUrl = process.env.REACT_APP_API_BASEURL;
 
-  const handleSearch = () => {
-    history.push({
-      pathname: `${routes.SEARCH_ROUTE}`,
-      search: `?query=${searchValue}`,
-    });
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [phone, setPhone] = useState("");
+  const [DOB, setDOB] = useState(null);
+
+  const [City, setCity] = useState();
+  const [YOB, setYob] = useState(null);
+  const [Gender, setGender] = useState();
+
+  const [emailError, setEmailError] = useState();
+  const [passwordError, setPasswordError] = useState();
+  const [dateError, setDateError] = useState("");
+  const [errors, setErrors] = useState();
+  const [governates, setGovernates] = useState([]);
+  const [Governorate, setGovernate] = useState();
+  const [cities, setCities] = useState([]);
+  const [countries, setCountries] = useState([]);
+  const [Country_ID, setCountryId] = useState();
+
+  useEffect(() => {
+    fetchGovernates();
+    fetchCountries();
+  }, []);
+
+  useEffect(() => {
+    Governorate && fetchCities();
+  }, [Governorate]);
+
+  const fetchCountries = () => {
+    api(baseUrl)
+      .get(COUNTRIES)
+      .then((res) => {
+        if (res.data) {
+          setCountries(res.data.data);
+        }
+      })
+      .catch((e) => console.log(e));
+  };
+  const fetchGovernates = () => {
+    api(baseUrl)
+      .get(GOVERNATES)
+      .then((res) => {
+        if (res.data) {
+          setGovernates(res.data.data);
+        }
+      })
+      .catch((e) => console.log(e));
   };
 
+  const fetchCities = () => {
+    api(baseUrl)
+      .get(CITIES + "/" + Governorate)
+      .then((res) => {
+        if (res.data) {
+          setCities(res.data.data);
+        }
+      })
+      .catch((e) => console.log(e));
+  };
+  const handleNationality = (e) => {
+    setCountryId(e.target.value);
+  };
+
+  const handleGender = (e) => {
+    setGender(e.target.value);
+  };
+
+  const handleCity = (e) => {
+    setCity(e.target.value);
+  };
+  const handleDob = (e) => {
+    const date = moment(e.target.value);
+    let year = "";
+    if (!date.isValid()) {
+      setDateError("Date is not valid");
+    } else {
+      year = moment(e.target.value).year();
+      setYob(year);
+    }
+    setDOB(e.target.value);
+  };
+  const handleEmail = (e) => {
+    let emailRegex = /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/;
+    if (!emailRegex.test(e.target.value)) {
+      setEmailError("Invalid Email");
+    } else {
+      setEmailError("");
+    }
+    setEmail(e.target.value);
+  };
+
+  const handlePassword = (e) => {
+    if (e.target.value.length < 4) {
+      setPasswordError("Password  should content 8 chars.");
+    } else {
+      setPasswordError("");
+    }
+    setPassword(e.target.value);
+  };
+
+  const handleName = (e) => {
+    setName(e.target.value);
+  };
+
+  const handlePhone = (e) => {
+    setPhone(e.target.value);
+  };
+
+  const handleSubmit = () => {
+    const data = {
+      email,
+      password,
+      Mobile: phone,
+      Name: name,
+      DOB: DOB ? moment("d-m-y", DOB) : "",
+      City,
+      Country_ID,
+      YOB: YOB ? YOB : "",
+      Gender,
+    };
+    api(baseUrl)
+      .post(REGISTER, data)
+      .then((res) => {
+        if (res.data.data.access_token) {
+          setCookie("token", res.data.data.access_token);
+          history.push({ pathname: routes.HOME_ROUTE });
+        } else {
+          setErrors(res.data);
+        }
+      })
+      .catch((e) => console.log(e));
+  };
+
+  const handleGovernorate = (e) => {
+    setGovernate(e.target.value);
+  };
   return (
     <>
       <Container className="log-reg login-page">
@@ -31,20 +169,62 @@ const Login = ({ history }) => {
             <Form>
               <Form.Group className="mb-4" controlId="formBasicName">
                 <Form.Label>Name</Form.Label>
-                <Form.Control type="text" placeholder="Enter Name" />
+                <Form.Control
+                  type="text"
+                  placeholder="Enter Name"
+                  value={name}
+                  onChange={handleName}
+                />
+                {errors && errors.hasOwnProperty("Name") ? (
+                  <p className="error">{errors.Name[0]}</p>
+                ) : (
+                  ""
+                )}
               </Form.Group>
               <Form.Group className="mb-4" controlId="formBasicPhone">
                 <Form.Label>Phone</Form.Label>
-                <Form.Control type="number" placeholder="Enter Phone" />
+                <Form.Control
+                  type="number"
+                  placeholder="Enter Phone"
+                  value={phone}
+                  onChange={handlePhone}
+                />
+                {errors && errors.hasOwnProperty("Mobile") ? (
+                  <p className="error">{errors["Mobile"][0]}</p>
+                ) : (
+                  ""
+                )}
               </Form.Group>
               <Form.Group className="mb-4" controlId="formBasicEmail">
-                <Form.Label>Email ID</Form.Label>
-                <Form.Control type="email" placeholder="Enter email" />
+                <Form.Label>Email address</Form.Label>
+                <Form.Control
+                  type="email"
+                  placeholder="Enter email"
+                  value={email}
+                  onChange={handleEmail}
+                />
+                {emailError ? <p className="error">{emailError}</p> : ""}
+                {errors && errors.hasOwnProperty("email") ? (
+                  <p className="error">{errors.email[0]}</p>
+                ) : (
+                  ""
+                )}
               </Form.Group>
 
               <Form.Group className="mb-3" controlId="formBasicPassword">
                 <Form.Label>Password</Form.Label>
-                <Form.Control type="password" placeholder="Password" />
+                <Form.Control
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={handlePassword}
+                />
+                {passwordError ? <p className="error">{passwordError}</p> : ""}
+                {errors && errors.hasOwnProperty("password") ? (
+                  <p className="error">{errors.password[0]}</p>
+                ) : (
+                  ""
+                )}
               </Form.Group>
               <Form.Group
                 className="mb-3 pass-criteria"
@@ -57,27 +237,80 @@ const Login = ({ history }) => {
                 </Form.Label>
               </Form.Group>
 
-              <Form.Group className="mb-4" controlId="formBasicArea">
-                <Form.Label>Area</Form.Label>
-                <Form.Control type="text" placeholder="Enter your Area Name" />
-              </Form.Group>
+              <Form.Group className="mb-4" controlId="formBasicNationality">
+                <Form.Label>Governorate</Form.Label>
 
-              <Form.Group className="mb-4" controlId="formBasicStreet">
-                <Form.Label>Street</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Enter your Street Name"
-                />
+                <Form.Select
+                  aria-label="Default select example"
+                  placeholder="Enter your governate"
+                  name="Governorate"
+                  onChange={handleGovernorate}
+                  value={Governorate}
+                >
+                  {governates && governates.length > 0 && (
+                    <option>Please select governate</option>
+                  )}
+                  {governates && governates.length > 0 ? (
+                    governates.map((item) => {
+                      return (
+                        <option value={item.Governarate}>
+                          {item.Governarate}
+                        </option>
+                      );
+                    })
+                  ) : (
+                    <option value="">No governate found</option>
+                  )}
+                </Form.Select>
+                {errors && errors.hasOwnProperty("Governorate") ? (
+                  <p className="error">{errors.Governorate[0]}</p>
+                ) : (
+                  ""
+                )}
               </Form.Group>
 
               <Form.Group className="mb-4" controlId="formBasicCity">
                 <Form.Label>City</Form.Label>
-                <Form.Control type="text" placeholder="Enter your City Name" />
+
+                <Form.Select
+                  aria-label="Default select example"
+                  placeholder="Enter your City Name"
+                  name="City"
+                  onChange={handleCity}
+                  value={City}
+                >
+                  {cities && cities.length > 0 && (
+                    <option>Please select city</option>
+                  )}
+                  {cities && cities.length > 0 ? (
+                    cities.map((item) => {
+                      return <option value={item.City}>{item.City}</option>;
+                    })
+                  ) : (
+                    <option value="">No citi found</option>
+                  )}
+                </Form.Select>
+                {errors && errors.hasOwnProperty("City") ? (
+                  <p className="error">{errors.City[0]}</p>
+                ) : (
+                  ""
+                )}
               </Form.Group>
 
               <Form.Group className="mb-4" controlId="formBasicDOB">
                 <Form.Label>DOB</Form.Label>
-                <Form.Control type="date" placeholder="xx/xx/xxxx" />
+                <Form.Control
+                  type="date"
+                  placeholder="xx/xx/xxxx"
+                  value={DOB}
+                  onChange={handleDob}
+                />
+                {dateError ? <p className="error">{dateError}</p> : ""}
+                {errors && errors.hasOwnProperty("DOB") ? (
+                  <p className="error">{errors.DOB[0]}</p>
+                ) : (
+                  ""
+                )}
               </Form.Group>
 
               <Form.Group
@@ -87,25 +320,67 @@ const Login = ({ history }) => {
                 <Form.Label>Gender</Form.Label>
                 <div className="d-flex">
                   <div className="d-flex radio-option mr-4">
-                    <Form.Check type="radio" aria-label="Male" />
+                    <Form.Check
+                      type="radio"
+                      aria-label="Male"
+                      value="male"
+                      name="gender"
+                      onClick={handleGender}
+                    />
                     <Form.Check.Label>{` Male`}</Form.Check.Label>
                   </div>
                   <div className="d-flex  radio-option">
-                    <Form.Check type="radio" aria-label="Female" />
+                    <Form.Check
+                      type="radio"
+                      aria-label="Female"
+                      value="female"
+                      name="gender"
+                      onClick={handleGender}
+                    />
                     <Form.Check.Label>{` Female`}</Form.Check.Label>
                   </div>
                 </div>
+                {errors && errors.hasOwnProperty("Gender") ? (
+                  <p className="error">{errors.Gender[0]}</p>
+                ) : (
+                  ""
+                )}
               </Form.Group>
-
               <Form.Group className="mb-4" controlId="formBasicNationality">
                 <Form.Label>Nationality</Form.Label>
-                <Form.Control type="text" placeholder="" />
-              </Form.Group>
 
+                <Form.Select
+                  aria-label="Default select example"
+                  placeholder="Enter your Country Name"
+                  name="Nationality"
+                  onChange={handleNationality}
+                  value={Country_ID}
+                  search
+                >
+                  {countries && countries.length > 0 && (
+                    <option>Please select nationality</option>
+                  )}
+                  {countries && countries.length > 0 ? (
+                    countries.map((item) => {
+                      return (
+                        <option value={item.Country_ID}>
+                          {item.Country_Name}
+                        </option>
+                      );
+                    })
+                  ) : (
+                    <option value="">No nationality found</option>
+                  )}
+                </Form.Select>
+                {errors && errors.hasOwnProperty("Country_ID") ? (
+                  <p className="error">{errors.Country_ID[0]}</p>
+                ) : (
+                  ""
+                )}
+              </Form.Group>
               <center>
-                <Button variant="primary" type="submit">
-                  {" "}
-                  Signup{" "}
+                <Button variant="primary" type="button" onClick={handleSubmit}>
+                  Signup
                 </Button>
               </center>
             </Form>
@@ -144,7 +419,7 @@ const Login = ({ history }) => {
           <Row>
             <div className="col-sm-12 text-center">
               <p>
-                Already a user? <a href="">Sign In</a>
+                Already a user? <a href={routes.LOGIN}>Sign In</a>
               </p>
             </div>
           </Row>
@@ -153,4 +428,4 @@ const Login = ({ history }) => {
     </>
   );
 };
-export default Login;
+export default Register;
