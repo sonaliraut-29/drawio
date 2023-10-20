@@ -15,4 +15,4 @@ export const BANNERS = "/banners";
 export const CATEGORY = "/category";
 export const LOGIN = "/login";
 export const REGISTER = "/register";
-export const PRODUCTDETAIL = "/product-detail";
+export const PRODUCTDETAIL = "/productDetail";

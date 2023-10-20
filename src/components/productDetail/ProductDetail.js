@@ -7,7 +7,7 @@ import { BANNERS } from "../../redux/reduxConstants/EndPoints";
 import * as images from "../constant/Assets";
 import * as routes from "../constant/Routes";
 
-const Search = ({ history }) => {
+const ProductDetail = ({ history }) => {
   const [banners, setBanners] = useState([]);
   const [searchValue, setSearchValue] = useState("");
 
@@ -136,4 +136,4 @@ const Search = ({ history }) => {
     </>
   );
 };
-export default Search;
+export default ProductDetail;

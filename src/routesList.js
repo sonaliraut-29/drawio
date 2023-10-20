@@ -7,7 +7,7 @@ import Banner from "./components/banner/Banner";
 import Category from "./components/category/Categories";
 import Login from "./components/login/Login";
 import Register from "./components/register/Register";
-import ProductDetail from "./components/product-detail/Product-detail";
+import ProductDetail from "./components/productDetail/ProductDetail";
 
 const routesList = [
   {
