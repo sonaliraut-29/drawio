@@ -440,14 +440,14 @@ const SearchDetails = ({ history }) => {
                         </Dropdown.Item>
                         <Dropdown.Item
                           onClick={() => {
-                            handleSort("Item_name", "asc", "Item_name");
+                            handleSort("Item_name", "asc", "Title");
                           }}
                         >
                           Title Asc
                         </Dropdown.Item>
                         <Dropdown.Item
                           onClick={() => {
-                            handleSort("Item_name", "desc", "Item_name");
+                            handleSort("Item_name", "desc", "Title");
                           }}
                         >
                           Title Desc
