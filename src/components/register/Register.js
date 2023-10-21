@@ -11,11 +11,13 @@ import {
   CITIES,
   COUNTRIES,
 } from "../../redux/reduxConstants/EndPoints";
-import { setCookie } from "../../lib/helpers";
+import { getCookie, setCookie } from "../../lib/helpers";
 import moment from "moment";
 
 const Register = ({ history }) => {
   const baseUrl = process.env.REACT_APP_API_BASEURL;
+
+  const token = getCookie("token");
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -38,8 +40,12 @@ const Register = ({ history }) => {
   const [Country_ID, setCountryId] = useState();
 
   useEffect(() => {
-    fetchGovernates();
-    fetchCountries();
+    if (!token) {
+      fetchGovernates();
+      fetchCountries();
+    } else {
+      history.push({ pathname: routes.HOME_ROUTE });
+    }
   }, []);
 
   useEffect(() => {
@@ -134,15 +140,18 @@ const Register = ({ history }) => {
       Name: name,
       DOB: DOB ? moment("d-m-y", DOB) : "",
       City,
-      Country_ID,
+      Nationality: Country_ID,
       YOB: YOB ? YOB : "",
       Gender,
+      Area: Governorate,
     };
     api(baseUrl)
       .post(REGISTER, data)
       .then((res) => {
         if (res.data.data.access_token) {
           setCookie("token", res.data.data.access_token);
+          setCookie("user_id", res.data.user.User_ID);
+          setCookie("email", res.data.user.email);
           history.push({ pathname: routes.HOME_ROUTE });
         } else {
           setErrors(res.data);
@@ -156,275 +165,290 @@ const Register = ({ history }) => {
   };
   return (
     <>
-      <Container className="log-reg login-page">
-        <Row>
-          <div className="col form-title text-center">
-            <h2>Register</h2>
-          </div>
-        </Row>
+      {!token ? (
+        <Container className="log-reg login-page">
+          <Row>
+            <div className="col form-title text-center">
+              <h2>Register</h2>
+            </div>
+          </Row>
 
-        <Row>
-          <div className="col-sm-3"></div>
-          <div className="col-sm-6">
-            <Form>
-              <Form.Group className="mb-4" controlId="formBasicName">
-                <Form.Label>Name</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Enter Name"
-                  value={name}
-                  onChange={handleName}
-                />
-                {errors && errors.hasOwnProperty("Name") ? (
-                  <p className="error">{errors.Name[0]}</p>
-                ) : (
-                  ""
-                )}
-              </Form.Group>
-              <Form.Group className="mb-4" controlId="formBasicPhone">
-                <Form.Label>Phone</Form.Label>
-                <Form.Control
-                  type="number"
-                  placeholder="Enter Phone"
-                  value={phone}
-                  onChange={handlePhone}
-                />
-                {errors && errors.hasOwnProperty("Mobile") ? (
-                  <p className="error">{errors["Mobile"][0]}</p>
-                ) : (
-                  ""
-                )}
-              </Form.Group>
-              <Form.Group className="mb-4" controlId="formBasicEmail">
-                <Form.Label>Email address</Form.Label>
-                <Form.Control
-                  type="email"
-                  placeholder="Enter email"
-                  value={email}
-                  onChange={handleEmail}
-                />
-                {emailError ? <p className="error">{emailError}</p> : ""}
-                {errors && errors.hasOwnProperty("email") ? (
-                  <p className="error">{errors.email[0]}</p>
-                ) : (
-                  ""
-                )}
-              </Form.Group>
-
-              <Form.Group className="mb-3" controlId="formBasicPassword">
-                <Form.Label>Password</Form.Label>
-                <Form.Control
-                  type="password"
-                  placeholder="Password"
-                  value={password}
-                  onChange={handlePassword}
-                />
-                {passwordError ? <p className="error">{passwordError}</p> : ""}
-                {errors && errors.hasOwnProperty("password") ? (
-                  <p className="error">{errors.password[0]}</p>
-                ) : (
-                  ""
-                )}
-              </Form.Group>
-              <Form.Group
-                className="mb-3 pass-criteria"
-                controlId="formBasicPassCriteria"
-              >
-                <Form.Label>
-                  <a href="#" className="">
-                    Password criteria
-                  </a>
-                </Form.Label>
-              </Form.Group>
-
-              <Form.Group className="mb-4" controlId="formBasicNationality">
-                <Form.Label>Governorate</Form.Label>
-
-                <Form.Select
-                  aria-label="Default select example"
-                  placeholder="Enter your governate"
-                  name="Governorate"
-                  onChange={handleGovernorate}
-                  value={Governorate}
-                >
-                  {governates && governates.length > 0 && (
-                    <option>Please select governate</option>
-                  )}
-                  {governates && governates.length > 0 ? (
-                    governates.map((item) => {
-                      return (
-                        <option value={item.Governarate}>
-                          {item.Governarate}
-                        </option>
-                      );
-                    })
+          <Row>
+            <div className="col-sm-3"></div>
+            <div className="col-sm-6">
+              <Form>
+                <Form.Group className="mb-4" controlId="formBasicName">
+                  <Form.Label>Name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Enter Name"
+                    value={name}
+                    onChange={handleName}
+                  />
+                  {errors && errors.hasOwnProperty("Name") ? (
+                    <p className="error">{errors.Name[0]}</p>
                   ) : (
-                    <option value="">No governate found</option>
+                    ""
                   )}
-                </Form.Select>
-                {errors && errors.hasOwnProperty("Governorate") ? (
-                  <p className="error">{errors.Governorate[0]}</p>
-                ) : (
-                  ""
-                )}
-              </Form.Group>
-
-              <Form.Group className="mb-4" controlId="formBasicCity">
-                <Form.Label>City</Form.Label>
-
-                <Form.Select
-                  aria-label="Default select example"
-                  placeholder="Enter your City Name"
-                  name="City"
-                  onChange={handleCity}
-                  value={City}
-                >
-                  {cities && cities.length > 0 && (
-                    <option>Please select city</option>
-                  )}
-                  {cities && cities.length > 0 ? (
-                    cities.map((item) => {
-                      return <option value={item.City}>{item.City}</option>;
-                    })
+                </Form.Group>
+                <Form.Group className="mb-4" controlId="formBasicPhone">
+                  <Form.Label>Phone</Form.Label>
+                  <Form.Control
+                    type="number"
+                    placeholder="Enter Phone"
+                    value={phone}
+                    onChange={handlePhone}
+                  />
+                  {errors && errors.hasOwnProperty("Mobile") ? (
+                    <p className="error">{errors["Mobile"][0]}</p>
                   ) : (
-                    <option value="">No citi found</option>
+                    ""
                   )}
-                </Form.Select>
-                {errors && errors.hasOwnProperty("City") ? (
-                  <p className="error">{errors.City[0]}</p>
-                ) : (
-                  ""
-                )}
-              </Form.Group>
+                </Form.Group>
+                <Form.Group className="mb-4" controlId="formBasicEmail">
+                  <Form.Label>Email address</Form.Label>
+                  <Form.Control
+                    type="email"
+                    placeholder="Enter email"
+                    value={email}
+                    onChange={handleEmail}
+                  />
+                  {emailError ? <p className="error">{emailError}</p> : ""}
+                  {errors && errors.hasOwnProperty("email") ? (
+                    <p className="error">{errors.email[0]}</p>
+                  ) : (
+                    ""
+                  )}
+                </Form.Group>
 
-              <Form.Group className="mb-4" controlId="formBasicDOB">
-                <Form.Label>DOB</Form.Label>
-                <Form.Control
-                  type="date"
-                  placeholder="xx/xx/xxxx"
-                  value={DOB}
-                  onChange={handleDob}
-                />
-                {dateError ? <p className="error">{dateError}</p> : ""}
-                {errors && errors.hasOwnProperty("DOB") ? (
-                  <p className="error">{errors.DOB[0]}</p>
-                ) : (
-                  ""
-                )}
-              </Form.Group>
+                <Form.Group className="mb-3" controlId="formBasicPassword">
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={handlePassword}
+                  />
+                  {passwordError ? (
+                    <p className="error">{passwordError}</p>
+                  ) : (
+                    ""
+                  )}
+                  {errors && errors.hasOwnProperty("password") ? (
+                    <p className="error">{errors.password[0]}</p>
+                  ) : (
+                    ""
+                  )}
+                </Form.Group>
+                <Form.Group
+                  className="mb-3 pass-criteria"
+                  controlId="formBasicPassCriteria"
+                >
+                  <Form.Label>
+                    <a href="#" className="">
+                      Password criteria
+                    </a>
+                  </Form.Label>
+                </Form.Group>
 
-              <Form.Group
-                className="mb-4 radio-wrapper"
-                controlId="formBasicGender"
-              >
-                <Form.Label>Gender</Form.Label>
-                <div className="d-flex">
-                  <div className="d-flex radio-option mr-4">
-                    <Form.Check
-                      type="radio"
-                      aria-label="Male"
-                      value="male"
-                      name="gender"
-                      onClick={handleGender}
-                    />
-                    <Form.Check.Label>{` Male`}</Form.Check.Label>
+                <Form.Group className="mb-4" controlId="formBasicNationality">
+                  <Form.Label>Governorate</Form.Label>
+
+                  <Form.Select
+                    aria-label="Default select example"
+                    placeholder="Enter your governate"
+                    name="Governorate"
+                    onChange={handleGovernorate}
+                    value={Governorate}
+                  >
+                    {governates && governates.length > 0 && (
+                      <option>Please select governate</option>
+                    )}
+                    {governates && governates.length > 0 ? (
+                      governates.map((item) => {
+                        return (
+                          <option value={item.Governarate}>
+                            {item.Governarate}
+                          </option>
+                        );
+                      })
+                    ) : (
+                      <option value="">No governate found</option>
+                    )}
+                  </Form.Select>
+                  {errors && errors.hasOwnProperty("Governorate") ? (
+                    <p className="error">{errors.Governorate[0]}</p>
+                  ) : (
+                    ""
+                  )}
+                </Form.Group>
+
+                <Form.Group className="mb-4" controlId="formBasicCity">
+                  <Form.Label>City</Form.Label>
+
+                  <Form.Select
+                    aria-label="Default select example"
+                    placeholder="Enter your City Name"
+                    name="City"
+                    onChange={handleCity}
+                    value={City}
+                  >
+                    {cities && cities.length > 0 && (
+                      <option>Please select city</option>
+                    )}
+                    {cities && cities.length > 0 ? (
+                      cities.map((item) => {
+                        return <option value={item.City}>{item.City}</option>;
+                      })
+                    ) : (
+                      <option value="">No citi found</option>
+                    )}
+                  </Form.Select>
+                  {errors && errors.hasOwnProperty("City") ? (
+                    <p className="error">{errors.City[0]}</p>
+                  ) : (
+                    ""
+                  )}
+                </Form.Group>
+
+                <Form.Group className="mb-4" controlId="formBasicDOB">
+                  <Form.Label>DOB</Form.Label>
+                  <Form.Control
+                    type="date"
+                    placeholder="xx/xx/xxxx"
+                    value={DOB}
+                    onChange={handleDob}
+                  />
+                  {dateError ? <p className="error">{dateError}</p> : ""}
+                  {errors && errors.hasOwnProperty("DOB") ? (
+                    <p className="error">{errors.DOB[0]}</p>
+                  ) : (
+                    ""
+                  )}
+                </Form.Group>
+
+                <Form.Group
+                  className="mb-4 radio-wrapper"
+                  controlId="formBasicGender"
+                >
+                  <Form.Label>Gender</Form.Label>
+                  <div className="d-flex">
+                    <div className="d-flex radio-option mr-4">
+                      <Form.Check
+                        type="radio"
+                        aria-label="Male"
+                        value="male"
+                        name="gender"
+                        onClick={handleGender}
+                      />
+                      <Form.Check.Label>{` Male`}</Form.Check.Label>
+                    </div>
+                    <div className="d-flex  radio-option">
+                      <Form.Check
+                        type="radio"
+                        aria-label="Female"
+                        value="female"
+                        name="gender"
+                        onClick={handleGender}
+                      />
+                      <Form.Check.Label>{` Female`}</Form.Check.Label>
+                    </div>
                   </div>
-                  <div className="d-flex  radio-option">
-                    <Form.Check
-                      type="radio"
-                      aria-label="Female"
-                      value="female"
-                      name="gender"
-                      onClick={handleGender}
-                    />
-                    <Form.Check.Label>{` Female`}</Form.Check.Label>
-                  </div>
-                </div>
-                {errors && errors.hasOwnProperty("Gender") ? (
-                  <p className="error">{errors.Gender[0]}</p>
-                ) : (
-                  ""
-                )}
-              </Form.Group>
-              <Form.Group className="mb-4" controlId="formBasicNationality">
-                <Form.Label>Nationality</Form.Label>
-
-                <Form.Select
-                  aria-label="Default select example"
-                  placeholder="Enter your Country Name"
-                  name="Nationality"
-                  onChange={handleNationality}
-                  value={Country_ID}
-                  search
-                >
-                  {countries && countries.length > 0 && (
-                    <option>Please select nationality</option>
-                  )}
-                  {countries && countries.length > 0 ? (
-                    countries.map((item) => {
-                      return (
-                        <option value={item.Country_ID}>
-                          {item.Country_Name}
-                        </option>
-                      );
-                    })
+                  {errors && errors.hasOwnProperty("Gender") ? (
+                    <p className="error">{errors.Gender[0]}</p>
                   ) : (
-                    <option value="">No nationality found</option>
+                    ""
                   )}
-                </Form.Select>
-                {errors && errors.hasOwnProperty("Country_ID") ? (
-                  <p className="error">{errors.Country_ID[0]}</p>
-                ) : (
-                  ""
-                )}
-              </Form.Group>
-              <center>
-                <Button variant="primary" type="button" onClick={handleSubmit}>
-                  Signup
-                </Button>
-              </center>
-            </Form>
-          </div>
-          <div className="col-sm-3"></div>
-        </Row>
+                </Form.Group>
+                <Form.Group className="mb-4" controlId="formBasicNationality">
+                  <Form.Label>Nationality</Form.Label>
 
-        <section className="orloginwith">
-          <Row>
-            <div className="col-sm-5 col-4">
-              <div className="line before"></div>
+                  <Form.Select
+                    aria-label="Default select example"
+                    placeholder="Enter your Country Name"
+                    name="Nationality"
+                    onChange={handleNationality}
+                    value={Country_ID}
+                    search
+                  >
+                    {countries && countries.length > 0 && (
+                      <option>Please select nationality</option>
+                    )}
+                    {countries && countries.length > 0 ? (
+                      countries.map((item) => {
+                        return (
+                          <option value={item.Country_ID}>
+                            {item.Country_Name}
+                          </option>
+                        );
+                      })
+                    ) : (
+                      <option value="">No nationality found</option>
+                    )}
+                  </Form.Select>
+                  {errors && errors.hasOwnProperty("Country_ID") ? (
+                    <p className="error">{errors.Country_ID[0]}</p>
+                  ) : (
+                    ""
+                  )}
+                </Form.Group>
+                <center>
+                  <Button
+                    variant="primary"
+                    type="button"
+                    onClick={handleSubmit}
+                  >
+                    Signup
+                  </Button>
+                </center>
+              </Form>
             </div>
-            <div className="col-sm-2 col-4 text-center">
-              <p>Or Login With</p>
-            </div>
-            <div className="col-sm-5 col-4">
-              <div className="line after"></div>
-            </div>
+            <div className="col-sm-3"></div>
           </Row>
-        </section>
 
-        <section className="google-apple-id">
-          <Row>
-            <div className="col-12 text-center">
-              <a href="#">
-                <img src="/dist/assets/images/google.svg" alt="GoogleID"></img>
-              </a>
-              <a href="#">
-                <img src="/dist/assets/images/apple.svg" alt="AppleID"></img>
-              </a>
-            </div>
-          </Row>
-        </section>
+          <section className="orloginwith">
+            <Row>
+              <div className="col-sm-5 col-4">
+                <div className="line before"></div>
+              </div>
+              <div className="col-sm-2 col-4 text-center">
+                <p>Or Login With</p>
+              </div>
+              <div className="col-sm-5 col-4">
+                <div className="line after"></div>
+              </div>
+            </Row>
+          </section>
 
-        <section className="signup-login">
-          <Row>
-            <div className="col-sm-12 text-center">
-              <p>
-                Already a user? <a href={routes.LOGIN}>Sign In</a>
-              </p>
-            </div>
-          </Row>
-        </section>
-      </Container>
+          <section className="google-apple-id">
+            <Row>
+              <div className="col-12 text-center">
+                <a href="#">
+                  <img
+                    src="/dist/assets/images/google.svg"
+                    alt="GoogleID"
+                  ></img>
+                </a>
+                <a href="#">
+                  <img src="/dist/assets/images/apple.svg" alt="AppleID"></img>
+                </a>
+              </div>
+            </Row>
+          </section>
+
+          <section className="signup-login">
+            <Row>
+              <div className="col-sm-12 text-center">
+                <p>
+                  Already a user? <a href={routes.LOGIN}>Sign In</a>
+                </p>
+              </div>
+            </Row>
+          </section>
+        </Container>
+      ) : (
+        ""
+      )}
     </>
   );
 };

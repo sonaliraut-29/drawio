@@ -16,3 +16,6 @@ export const CATEGORY = "/category";
 export const LOGIN = "/login";
 export const REGISTER = "/register";
 export const PRODUCTDETAIL = "/productDetail";
+export const FAVOURITES = "/favourites";
+export const MY_PROFILE = "/profile";
+export const CHANGE_PASSWORD = "/changePassword";

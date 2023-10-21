@@ -4,20 +4,46 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 // import NavDropdown from "react-bootstrap/NavDropdown";
 import api from "../../../redux/services/api";
-import { LOGOUT } from "../../../redux/reduxConstants/EndPoints";
-import { deleteCookie } from "../../../lib/helpers";
+import {
+  LOGOUT,
+  DELETE_ACCOUNT,
+} from "../../../redux/reduxConstants/EndPoints";
+import { deleteCookie, getCookie } from "../../../lib/helpers";
 import * as routes from "../../constant/Routes";
 
 const Header = ({ history }) => {
   const baseUrl = process.env.REACT_APP_API_BASEURL;
+  const token = getCookie("token");
+  const email = getCookie("email");
 
+  const deleteAccount = () => {
+    const headers = {
+      Authorization: "bearer " + token,
+    };
+    api(baseUrl, headers)
+      .post(DELETE_ACCOUNT, { email })
+      .then((res) => {
+        if (res.data.success) {
+          deleteCookie("token");
+          deleteCookie("user_id");
+          deleteCookie("email");
+          window.location.replace(routes.HOME_ROUTE);
+        }
+      })
+      .catch((e) => console.log(e));
+  };
   const handleLogout = () => {
-    api(baseUrl)
+    const headers = {
+      Authorization: "bearer " + token,
+    };
+    api(baseUrl, headers)
       .get(LOGOUT)
       .then((res) => {
-        if (res.data.access_token) {
+        if (res.data.success) {
           deleteCookie("token");
-          history.push({ pathname: routes.HOME_ROUTE });
+          deleteCookie("user_id");
+          deleteCookie("email");
+          window.location.replace(routes.HOME_ROUTE);
         }
       })
       .catch((e) => console.log(e));
@@ -52,7 +78,14 @@ const Header = ({ history }) => {
               })}
           </Nav>
           <Nav>
-            <Nav.Link href={routes.LOGIN}>Login</Nav.Link>
+            {token ? (
+              <>
+                <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
+                <Nav.Link onClick={deleteAccount}>Delete Account</Nav.Link>
+              </>
+            ) : (
+              <Nav.Link href={routes.LOGIN}>Login</Nav.Link>
+            )}
           </Nav>
           {/* <Nav.Link onClick={handleLogout}>Logout</Nav.Link> */}
         </Navbar.Collapse>
