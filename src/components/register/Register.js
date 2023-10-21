@@ -150,8 +150,8 @@ const Register = ({ history }) => {
       .then((res) => {
         if (res.data.data.access_token) {
           setCookie("token", res.data.data.access_token);
-          setCookie("user_id", res.data.user.User_ID);
-          setCookie("email", res.data.user.email);
+          setCookie("user_id", res.data.data.user.User_ID);
+          setCookie("email", res.data.data.user.email);
           history.push({ pathname: routes.HOME_ROUTE });
         } else {
           setErrors(res.data);

@@ -77,7 +77,7 @@ const Header = ({ history }) => {
     return (
       <>
         <div className="d-user">
-          <div className="user_initial">{email.charAt(0)}</div>
+          <div className="user_initial">{email ? email.charAt(0) : "U"}</div>
           <span></span>
         </div>
       </>
