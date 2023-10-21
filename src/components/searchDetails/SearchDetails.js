@@ -380,9 +380,6 @@ const SearchDetails = ({ history }) => {
                       </Dropdown.Toggle>
 
                       <Dropdown.Menu>
-                        <Dropdown.Item href="#/action-1">
-                          Best Product
-                        </Dropdown.Item>
                         <Dropdown.Item
                           onClick={() => {
                             handleSort(
@@ -414,7 +411,7 @@ const SearchDetails = ({ history }) => {
                             );
                           }}
                         >
-                          Discount Low to High
+                          Discount % Low to High
                         </Dropdown.Item>
                         <Dropdown.Item
                           onClick={() => {
@@ -425,10 +422,49 @@ const SearchDetails = ({ history }) => {
                             );
                           }}
                         >
-                          Discount High to Low
+                          Discount % High to Low
                         </Dropdown.Item>
-                        <Dropdown.Item href="#/action-1">
-                          Newest First
+                        <Dropdown.Item
+                          onClick={() => {
+                            handleSort("Category", "asc", "Category");
+                          }}
+                        >
+                          Category Asc
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          onClick={() => {
+                            handleSort("Category", "desc", "Category");
+                          }}
+                        >
+                          Category Desc
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          onClick={() => {
+                            handleSort("Item_name", "asc", "Item_name");
+                          }}
+                        >
+                          Title Asc
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          onClick={() => {
+                            handleSort("Item_name", "desc", "Item_name");
+                          }}
+                        >
+                          Title Desc
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          onClick={() => {
+                            handleSort("Brand", "asc", "Brand");
+                          }}
+                        >
+                          Brand Asc
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          onClick={() => {
+                            handleSort("Brand", "desc", "Brand");
+                          }}
+                        >
+                          Brand Desc
                         </Dropdown.Item>
                       </Dropdown.Menu>
                     </Dropdown>

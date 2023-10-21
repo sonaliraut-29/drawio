@@ -142,6 +142,7 @@ const Home = ({ history }) => {
                             ? item.Banner_Link
                             : "#"
                         }
+                        target="_blank"
                       >
                         <img
                           src={

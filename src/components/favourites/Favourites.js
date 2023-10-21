@@ -25,7 +25,11 @@ const Favourites = ({ history }) => {
   const [totalCount, setTotalCount] = useState(0);
 
   useEffect(() => {
-    fetchFavourites();
+    if (token) {
+      fetchFavourites();
+    } else {
+      history.push({ pathname: routes.HOME_ROUTE });
+    }
   }, []);
 
   const fetchFavourites = () => {
