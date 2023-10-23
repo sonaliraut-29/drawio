@@ -1,6 +1,5 @@
 // Banner
 
-
 #home__banner {
   padding-bottom: 40px;
   img {
@@ -71,13 +70,13 @@
     position: absolute;
     right: 15px;
     top: 4px;
-        img {
-          width: 20px;
-      }
+    img {
+      width: 20px;
+    }
   }
 }
 
-#home__search form.d-flex{
+#home__search form.d-flex {
   position: relative;
 }
 
@@ -123,19 +122,11 @@
 // Popular Search
 // in common css
 
-
-#home__popular.item-design {
-  .item {
-    padding: 15px;}
-  }
-
-
 // Leaflet
 
 #home__leaflet {
   .item {
     .main-item-wrap {
-
       .img-wrap {
         height: 300px;
       }
@@ -145,33 +136,29 @@
         border-top: 1px solid #ddd;
         padding-top: 12px;
 
-          span {
+        span {
+          font-size: 14px;
+          font-weight: 600;
+          display: flex;
+
+          a {
+            color: #0b0e10;
             font-size: 14px;
             font-weight: 600;
-            display: flex;
-
-              a {
-                color: #0B0E10;
-                font-size: 14px;
-                font-weight: 600;
-                text-decoration: none;
-                transition: 0.5s;
-              }
-              img {
-                width: 6px;
-                margin-left: 6px;
-                position: relative;
-                top: 5px;
-              }
+            text-decoration: none;
+            transition: 0.5s;
           }
+          img {
+            width: 6px;
+            margin-left: 6px;
+            position: relative;
+            top: 5px;
+          }
+        }
       }
     }
   }
 }
-
-
-   
-
 
 #home__leaflet .item .main-item-wrap .view a:hover {
   color: #0090d3;
@@ -200,19 +187,47 @@
   }
 }
 
+.user_initial {
+  text-align: center;
+  font: 900 20px/20px "Lexend", sans-serif;
+  letter-spacing: 0;
+  color: #ffffff;
+  border-radius: 50%;
+  background: #007cc3;
+  padding: 10px;
+  text-transform: uppercase;
+  width: 38px;
+  margin-right: 10px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
+.d-user {
+  // box-shadow: 0 4px 8px #0000001a;
+  // border: 1px solid #007cc3;
+  // border-radius: 10px;
+  padding: 7px 10px;
+  display: flex;
+  align-items: center;
+}
 
-
-
-
-
-
-
-
-
-
-
-
+.d-user span {
+  width: 0;
+  height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 7px solid #007cc3;
+  margin-left: 0;
+  -webkit-transition: ease-in 0.5s;
+  transition: ease-in 0.5s;
+}
+.popopen .d-user span {
+  transform: rotate(180deg);
+  -webkit-transition: ease-in 0.5s;
+  transition: ease-in 0.5s;
+}
 
 // responsive
 /* Using SCSS variables to store breakpoints */

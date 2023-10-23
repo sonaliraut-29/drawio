@@ -2,138 +2,92 @@ import React, { useEffect, useState } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import Carousel from "react-bootstrap/Carousel";
 import api from "../../redux/services/api";
-import { BANNERS } from "../../redux/reduxConstants/EndPoints";
+import { PRODUCT } from "../../redux/reduxConstants/EndPoints";
 
 import * as images from "../constant/Assets";
 import * as routes from "../constant/Routes";
 
 const ProductDetail = ({ history }) => {
-  const [banners, setBanners] = useState([]);
-  const [searchValue, setSearchValue] = useState("");
+  const [product, setProduct] = useState([]);
+
+  const Vendor =
+    history &&
+    history.location &&
+    history.location.state &&
+    history.location.state.Vendor;
+
+  const ItemKey =
+    history &&
+    history.location &&
+    history.location.state &&
+    history.location.state.ItemKey;
 
   useEffect(() => {
-    fetchBanners();
-  }, []);
+    Vendor && ItemKey && fetchProduct();
+  }, [Vendor, ItemKey]);
 
   const baseUrl = process.env.REACT_APP_API_BASEURL;
 
-  const fetchBanners = () => {
+  const fetchProduct = () => {
     api(baseUrl)
-      .get(BANNERS + "?days_tolerance=-10&num_of_rows_required=10")
+      .get(PRODUCT + "/" + Vendor + "/" + ItemKey)
       .then((res) => {
         if (res.data.success) {
-          setBanners(res.data.data);
+          setProduct(
+            res.data.data && res.data.data.length > 0 ? res.data.data[0] : {}
+          );
         }
       })
       .catch((e) => console.log(e));
   };
 
-  const handleChange = (e) => {
-    if (e.target.value) {
-      setSearchValue(e.target.value);
-    } else {
-      setSearchValue("");
-    }
-  };
-
-  const handleSearch = () => {
-    history.push({
-      pathname: `${routes.SEARCH_ROUTE}`,
-      search: `?query=${searchValue}`,
-    });
-  };
-
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter" && searchValue.trim().length > 0) {
-      history.push({
-        pathname: `${routes.SEARCH_ROUTE}`,
-        search: `?query=${searchValue}`,
-      });
-    }
-  };
-
   return (
-    <>
-      <section id="home__banner">
-        <Row>
-          {banners && banners.length > 0 ? (
-            <Carousel>
-              {banners.map((item) => {
-                return (
-                  <Carousel.Item>
-                    <a
-                      href={
-                        item.Banner_Link && "" !== item.Banner_Link
-                          ? item.Banner_Link
-                          : "#"
-                      }
-                    >
-                      <img
-                        src={
-                          item.Banner_Image && "" !== item.Banner_Image
-                            ? item.Banner_Image
-                            : images.homeBannerImage
-                        }
-                        alt="banner"
-                      />
-                    </a>
-                  </Carousel.Item>
-                );
-              })}
-            </Carousel>
-          ) : (
-            ""
-          )}
-        </Row>
-      </section>
-
+    <main className="search-page test">
       <Container>
-        <section id="home__search" className="mt-5">
+        <section className="pt-0 pt-sm-5 pb-5">
           <Row>
-            <div className="col-12 text-center s_logo mb-5">
-              <img src={images.LogoImage} alt="logo" />
-            </div>
-          </Row>
-          <Row>
-            <Col sm={2}></Col>
-            <Col sm={8}>
-              <Form className="d-flex">
-                <Form.Control
-                  type="Find the best offer products"
-                  placeholder="Find the best offer products"
-                  className=""
-                  aria-label="Find the best offer products"
-                  onChange={(e) => handleChange(e)}
-                  onKeyDown={(e) => handleKeyDown(e)}
-                  value={searchValue}
-                />
-                <Button disabled={"" !== searchValue ? false : true}>
-                  <img src={images.searchImage} alt="search" />
-                </Button>
-              </Form>
-            </Col>
-            <Col sm={2}></Col>
-          </Row>
-        </section>
-
-        <section>
-          <Row>
-            <div className="col-12 text-center mt-5">
-              <button className="btn btn-search" onClick={handleSearch}>
-                Search
-              </button>
-            </div>
-
-            <div className="col-12 text-center mt-5 pt-5 home-link">
-              <a href="/home" className="mt-5">
-                Go to Home Page
-              </a>
-              <p>Explore the best delas </p>
+            <div
+              className="col-6 col-sm-3 mb-4"
+              // onClick={() => handleLink(item.Item_URL)}
+              style={{
+                cursor: "pointer",
+              }}
+              key={"result"}
+            >
+              <div className="item">
+                <div className="item-wrap">
+                  <img
+                    src={product.Item_Image_URL}
+                    alt="img"
+                    className="img-fluid"
+                  />
+                  <div className="item-desc">
+                    <img
+                      src={
+                        product.Vendor
+                          ? images[
+                              product.Vendor.replace(" ", "-").toLowerCase()
+                            ]
+                          : "./dist/assets/images/default-logo-sm.png"
+                      }
+                      alt="img"
+                    />
+                    <h5>{product.Brand}</h5>
+                    <p>{product.Item_name}</p>
+                  </div>
+                  <div className="price">
+                    <span>KD {product.Regular_Price} </span>
+                    <small>
+                      <strike>Old Price</strike>
+                    </small>
+                  </div>
+                </div>
+              </div>
             </div>
           </Row>
         </section>
       </Container>
-    </>
+    </main>
   );
 };
 export default ProductDetail;

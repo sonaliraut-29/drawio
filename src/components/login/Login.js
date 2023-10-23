@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
-import Carousel from "react-bootstrap/Carousel";
 
 import * as images from "../constant/Assets";
 import * as routes from "../constant/Routes";
@@ -42,6 +41,8 @@ const Login = ({ history }) => {
       .then((res) => {
         if (res.data.access_token) {
           setCookie("token", res.data.access_token);
+          setCookie("user_id", res.data.user.User_ID);
+          setCookie("email", res.data.user.email);
           history.push({ pathname: routes.HOME_ROUTE });
         }
       })

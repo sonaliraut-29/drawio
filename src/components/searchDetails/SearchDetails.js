@@ -548,7 +548,7 @@ const SearchDetails = ({ history }) => {
                               <div className="main-item-wrap">
                                 <div className="img-wrap">
                                   <div className="heart-icon">
-                                    <i></i>
+                                    <i className="test"></i>
                                   </div>
                                   <img
                                     src={item.Item_Image_URL}

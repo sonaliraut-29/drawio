@@ -8,6 +8,9 @@ import Category from "./components/category/Categories";
 import Login from "./components/login/Login";
 import Register from "./components/register/Register";
 import ProductDetail from "./components/productDetail/ProductDetail";
+import Favourites from "./components/favourites/Favourites";
+import Profile from "./components/profile/Profile";
+import ChangePassword from "./components/changePassword/ChangePassword";
 
 const routesList = [
   {
@@ -53,6 +56,21 @@ const routesList = [
   {
     path: routes.PRODUCTDETAIL,
     component: ProductDetail,
+    exact: true,
+  },
+  {
+    path: routes.FAVOURITES,
+    component: Favourites,
+    exact: true,
+  },
+  {
+    path: routes.MY_PROFILE,
+    component: Profile,
+    exact: true,
+  },
+  {
+    path: routes.CHANGE_PASSWORD,
+    component: ChangePassword,
     exact: true,
   },
 ];

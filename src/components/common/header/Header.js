@@ -1,23 +1,53 @@
-import React from "react";
-import Container from "react-bootstrap/Container";
-import Nav from "react-bootstrap/Nav";
-import Navbar from "react-bootstrap/Navbar";
-// import NavDropdown from "react-bootstrap/NavDropdown";
+import React, { useState } from "react";
+import { Button, Container, Modal, Nav, Navbar } from "react-bootstrap";
+
+import NavDropdown from "react-bootstrap/NavDropdown";
 import api from "../../../redux/services/api";
-import { LOGOUT } from "../../../redux/reduxConstants/EndPoints";
-import { deleteCookie } from "../../../lib/helpers";
+import {
+  LOGOUT,
+  DELETE_ACCOUNT,
+} from "../../../redux/reduxConstants/EndPoints";
+import { deleteCookie, getCookie } from "../../../lib/helpers";
 import * as routes from "../../constant/Routes";
 
 const Header = ({ history }) => {
   const baseUrl = process.env.REACT_APP_API_BASEURL;
+  const token = getCookie("token");
+  const email = getCookie("email");
 
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const deleteAccount = () => {
+    handleClose();
+    const headers = {
+      Authorization: "bearer " + token,
+    };
+    api(baseUrl, headers)
+      .post(DELETE_ACCOUNT, { email })
+      .then((res) => {
+        if (res.data.success) {
+          deleteCookie("token");
+          deleteCookie("user_id");
+          deleteCookie("email");
+          window.location.replace(routes.HOME_ROUTE);
+        }
+      })
+      .catch((e) => console.log(e));
+  };
   const handleLogout = () => {
-    api(baseUrl)
+    const headers = {
+      Authorization: "bearer " + token,
+    };
+    api(baseUrl, headers)
       .get(LOGOUT)
       .then((res) => {
-        if (res.data.access_token) {
+        if (res.data.success) {
           deleteCookie("token");
-          history.push({ pathname: routes.HOME_ROUTE });
+          deleteCookie("user_id");
+          deleteCookie("email");
+          window.location.replace(routes.HOME_ROUTE);
         }
       })
       .catch((e) => console.log(e));
@@ -29,6 +59,10 @@ const Header = ({ history }) => {
       link: routes.HOME_ROUTE,
     },
     {
+      name: "Search",
+      link: routes.SEARCH_ROUTE,
+    },
+    {
       name: "Leaflets",
       link: routes.LEAFLETS,
     },
@@ -37,27 +71,74 @@ const Header = ({ history }) => {
       link: routes.BANNERS,
     },
   ];
+
+  const getAccountName = () => {
+    const email = getCookie("email");
+    return (
+      <>
+        <div className="d-user">
+          <div className="user_initial">{email ? email.charAt(0) : "U"}</div>
+          <span></span>
+        </div>
+      </>
+    );
+  };
   return (
-    <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
-      <Container>
-        <Navbar.Brand href="/">
-          <img src="./dist/assets/images/logo.png" alt="logo" />
-        </Navbar.Brand>
-        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-        <Navbar.Collapse id="responsive-navbar-nav">
-          <Nav className="me-auto">
-            {links &&
-              links.map((item) => {
-                return <Nav.Link href={item.link}>{item.name}</Nav.Link>;
-              })}
-          </Nav>
-          <Nav>
-            <Nav.Link href={routes.LOGIN}>Login</Nav.Link>
-          </Nav>
-          {/* <Nav.Link onClick={handleLogout}>Logout</Nav.Link> */}
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
+    <>
+      <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
+        <Container>
+          <Navbar.Brand href="/">
+            <img src="./dist/assets/images/logo.png" alt="logo" />
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+          <Navbar.Collapse id="responsive-navbar-nav">
+            <Nav className="me-auto">
+              {links &&
+                links.map((item) => {
+                  return <Nav.Link href={item.link}>{item.name}</Nav.Link>;
+                })}
+            </Nav>
+            <Nav>
+              {token ? (
+                <NavDropdown title={getAccountName()} id="basic-nav-dropdown">
+                  <NavDropdown.Item href={routes.MY_PROFILE}>
+                    My Profile
+                  </NavDropdown.Item>
+                  <NavDropdown.Item href={routes.CHANGE_PASSWORD}>
+                    Change Password
+                  </NavDropdown.Item>
+                  <NavDropdown.Item onClick={handleShow}>
+                    Unregister
+                  </NavDropdown.Item>
+                  <NavDropdown.Item onClick={handleLogout}>
+                    Logout
+                  </NavDropdown.Item>
+                </NavDropdown>
+              ) : (
+                <Nav.Link href={routes.LOGIN}>Login</Nav.Link>
+              )}
+            </Nav>
+            {/* <Nav.Link onClick={handleLogout}>Logout</Nav.Link> */}
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+      <Modal show={show} onHide={handleClose} className="postFullscreen">
+        <Modal.Header closeButton>
+          <Modal.Title>Delete Account</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div>Are you sure to delete account?</div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={deleteAccount}>
+            Delete
+          </Button>
+          <Button variant="secondary" onClick={handleClose}>
+            Cancel
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
   );
 };
 
