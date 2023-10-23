@@ -1,0 +1,26 @@
+.leaflet-list {
+    padding-left: 30px !important;
+}
+
+.catfilter-mob {
+    text-align: right;
+}
+
+
+
+
+
+
+// responsive
+/* Using SCSS variables to store breakpoints */
+$breakpoint-mobile: 767px;
+
+@media (max-width: $breakpoint-mobile) {
+    #home__leaflet.leaflet-detail .item .main-item-wrap .img-wrap {
+        height: 160px;
+    }
+
+    .item-design.leaflet-detail .item .main-item-wrap .item-desc p{    min-height: 35px;}
+    .item-design .item .main-item-wrap .item-desc img{    width: 30px !important;  height: 30px;}
+    .item-design .item .main-item-wrap .item-desc h5 { font-size: 14px; }
+}

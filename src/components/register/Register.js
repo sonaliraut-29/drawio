@@ -166,7 +166,17 @@ const Register = ({ history }) => {
   return (
     <>
       {!token ? (
-        <Container className="log-reg login-page">
+        <Container className="log-reg register-page">
+          <Row>
+            <div className="col form-title text-center my-5">
+              <a href="http://localhost:3000/">
+                <img
+                  src="/dist/assets/images/logo.png"
+                  alt="Genie Saves Logo image"
+                ></img>
+              </a>
+            </div>
+          </Row>
           <Row>
             <div className="col form-title text-center">
               <h2>Register</h2>

@@ -548,7 +548,14 @@ const SearchDetails = ({ history }) => {
                               <div className="main-item-wrap">
                                 <div className="img-wrap">
                                   <div className="heart-icon">
-                                    <i className="test"></i>
+                                    <i
+                                      class="fa fa-heart-o"
+                                      aria-hidden="true"
+                                    ></i>
+                                    {/* <i
+                                      class="fa fa-heart"
+                                      aria-hidden="true"
+                                    ></i> */}
                                   </div>
                                   <img
                                     src={item.Item_Image_URL}

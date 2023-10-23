@@ -52,6 +52,16 @@ const Login = ({ history }) => {
     <>
       <Container className="log-reg login-page">
         <Row>
+          <div className="col form-title text-center my-5">
+            <a href="http://localhost:3000/">
+              <img
+                src="/dist/assets/images/logo.png"
+                alt="Genie Saves Logo image"
+              ></img>
+            </a>
+          </div>
+        </Row>
+        <Row>
           <div className="col form-title text-center">
             <h2>Login</h2>
           </div>
@@ -92,14 +102,16 @@ const Login = ({ history }) => {
                   </a>
                 </Form.Label>
               </Form.Group>
-              <Button
-                variant="primary"
-                type="button"
-                disabled={"" !== emailError || "" !== passwordError}
-                onClick={handleSubmit}
-              >
-                Login
-              </Button>
+              <Form.Group className="mb-3 text-center">
+                <Button
+                  variant="primary"
+                  type="button"
+                  disabled={"" !== emailError || "" !== passwordError}
+                  onClick={handleSubmit}
+                >
+                  Login
+                </Button>
+              </Form.Group>
             </Form>
           </div>
           <div className="col-sm-3"></div>

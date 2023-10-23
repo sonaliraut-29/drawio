@@ -6,7 +6,10 @@
 
 .log-reg {
     margin-top: 50px;
+    padding-bottom: 70px;
+    background: #F5F5F5;
 }
+
 
 .log-reg .col.form-title.text-center {
     margin-bottom: 30px;
@@ -21,12 +24,20 @@
     border-color: #007cc36e !important;
     border-radius: 30px !important;
     height: 40px;
+    background: white !important;
+}
+.log-reg select {
+    border-color: rgba(0, 124, 195, 0.431372549) !important;
+    border-radius: 30px !important;
+    height: 40px;
+    background: white !important;
 }
 
-.log-reg button.btn.btn-primary {
+.log-reg button.btn {
     background: #007CC3;
     border-radius: 20px;
     width: 30%;
+    margin-top: 10px;
 }
 
 .log-reg .orloginwith p {
@@ -63,6 +74,10 @@
 .forgetpass label a {
     color: #848484;
 }
+
+
+
+
 
 
 

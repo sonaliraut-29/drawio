@@ -138,7 +138,19 @@ main.search-page {
 }
 
 
+.img-wrap {
+    position: relative;
+}
 
+.img-wrap .heart-icon {
+    position: absolute;
+    right: 0;
+    top: -9px;
+}
+
+.img-wrap .heart-icon i {
+    color: #f00;
+}
 
 
 

@@ -94,14 +94,16 @@ const ChangePassword = ({ history }) => {
               )}
             </Form.Group>
 
-            <Button
-              variant="primary"
-              type="button"
-              disabled={"" !== passwordError || "" !== confirmPasswordError}
-              onClick={handleSubmit}
-            >
-              Submit
-            </Button>
+            <Form.Group className="mb-3 text-center">
+              <Button
+                variant="primary"
+                type="button"
+                disabled={"" !== passwordError || "" !== confirmPasswordError}
+                onClick={handleSubmit}
+              >
+                Submit
+              </Button>
+            </Form.Group>
           </Form>
         </div>
         <div className="col-sm-3"></div>
