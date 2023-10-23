@@ -65,7 +65,7 @@ ul.pagination li a span.icon-Leftarrow:after {
 
 .item-design {
     .item {
-      padding: 15px;
+    //   padding: 15px;
   
       .main-item-wrap {
         
@@ -89,15 +89,16 @@ ul.pagination li a span.icon-Leftarrow:after {
             .item-desc {
                 position: relative;
                     img {
-                        width: 60px !important;
-                        height: 60px;;
+                        width: 50px !important;
+                        height: 50px;;
                         position: absolute;
-                        right: 0;
-                        top: -18px;
+                        right: -4px;
+                        top: -20px;
                         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
                         border: 1px solid #0b0e10;
                         border-radius: 50%;
                         object-fit: contain;
+                        background: #fff;
                     }
                     h5 {
                         text-align: left;

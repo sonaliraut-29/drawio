@@ -343,13 +343,13 @@ const SearchDetails = ({ history }) => {
                   ""
                 )}
               </section>
-              <section>
-                <div>Price</div>
+              <section className="price-range-slider mt-4">
+                <h6>Price</h6>
 
                 <ReactSlider
                   className="horizontal-slider"
-                  thumbClassName="example-thumb"
-                  trackClassName="example-track"
+                  thumbClassName="thumb"
+                  trackClassName="track"
                   defaultValue={[0, 100000]}
                   ariaLabel={["Lower thumb", "Upper thumb"]}
                   ariaValuetext={(state) => `Thumb value ${state.valueNow}`}
@@ -527,7 +527,7 @@ const SearchDetails = ({ history }) => {
                 </div>
               </Row>
               {productList && productList.length > 0 ? (
-                <section className="cat-products">
+                <section className="cat-products item-design">
                   <Row>
                     {productList &&
                       productList.map((item, index) => {
@@ -545,12 +545,17 @@ const SearchDetails = ({ history }) => {
                             key={"result" + index}
                           >
                             <div className="item">
-                              <div className="item-wrap">
-                                <img
-                                  src={item.Item_Image_URL}
-                                  alt="img"
-                                  className="img-fluid"
-                                />
+                              <div className="main-item-wrap">
+                                <div className="img-wrap">
+                                  <div className="heart-icon">
+                                    <i></i>
+                                  </div>
+                                  <img
+                                    src={item.Item_Image_URL}
+                                    alt="img"
+                                    className="img-fluid"
+                                  />
+                                </div>
                                 <div className="item-desc">
                                   <img
                                     src={
