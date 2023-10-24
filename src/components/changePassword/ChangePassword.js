@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import * as images from "../constant/Assets";
 import * as routes from "../constant/Routes";
@@ -15,6 +15,13 @@ const ChangePassword = ({ history }) => {
   const [passwordError, setPasswordError] = useState();
   const [confirmPasswordError, setConfirmPasswordError] = useState();
 
+  const token = getCookie("token");
+
+  useEffect(() => {
+    if (!token) {
+      history.push({ pathname: routes.HOME_ROUTE });
+    }
+  }, []);
   const handlePassword = (e) => {
     if (e.target.value.length < 8) {
       setPasswordError("Password  should content 8 chars.");
