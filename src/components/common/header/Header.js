@@ -104,6 +104,9 @@ const Header = ({ history }) => {
                   <NavDropdown.Item href={routes.MY_PROFILE}>
                     My Profile
                   </NavDropdown.Item>
+                  <NavDropdown.Item href={routes.FAVOURITES}>
+                    My Favourites
+                  </NavDropdown.Item>
                   <NavDropdown.Item href={routes.CHANGE_PASSWORD}>
                     Change Password
                   </NavDropdown.Item>

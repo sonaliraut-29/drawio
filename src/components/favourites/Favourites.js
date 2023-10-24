@@ -147,6 +147,15 @@ const Favourites = ({ history }) => {
                             >
                               <div className="item">
                                 <div className="item-wrap">
+                                  <div
+                                    className="heart-icon"
+                                    onClick={() => removeFavourites(item)}
+                                  >
+                                    <i
+                                      class="fa fa-heart"
+                                      aria-hidden="true"
+                                    ></i>
+                                  </div>
                                   <img
                                     src={item.Item_Image_URL}
                                     alt="img"
@@ -172,11 +181,6 @@ const Favourites = ({ history }) => {
                                     </small>
                                   </div>
                                 </div>
-                              </div>
-                              <div>
-                                <button onClick={() => removeFavourites(item)}>
-                                  Remvove
-                                </button>
                               </div>
                             </div>
                           );

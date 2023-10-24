@@ -17,3 +17,6 @@ export const UPDATE_PROFILE = "/updateProfile";
 export const PROFILE = "/userDetails";
 export const CHANGE_PASSWORD = "/changePassword";
 export const PRODUCT = "/product";
+export const ADD_FAVOURITES = "/addToFavourites";
+export const ALL_LEAFLETS = "/leafletsPaginate";
+export const ALL_BANNERS = "/BannersPaginate";

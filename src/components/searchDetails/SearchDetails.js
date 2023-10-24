@@ -16,10 +16,15 @@ import {
   SEARCH,
   CATEGORIES,
   SUBCATEGORIES,
+  ADD_FAVOURITES,
+  REMOVE_FAVOURITES,
 } from "../../redux/reduxConstants/EndPoints";
 import Pagination from "../../uikit/Paginate";
 import CommunityLoaderCircularDash from "../../uikit/CommunityLoaderCircularDash";
 import ReactSlider from "react-slider";
+import { getCookie } from "../../lib/helpers";
+
+import * as routes from "../constant/Routes";
 
 const SearchDetails = ({ history }) => {
   const [value, setValue] = useState([]);
@@ -42,6 +47,7 @@ const SearchDetails = ({ history }) => {
   const [sort, setSort] = useState("");
 
   const [title, setTitle] = useState();
+  const token = getCookie("token");
 
   useEffect(() => {
     fetchCategories();
@@ -155,11 +161,15 @@ const SearchDetails = ({ history }) => {
     if (value.length > 0) {
       text = "&price_from=" + value[0] + "&price_to=" + value[1];
     }
+
+    const textTemp =
+      searchValue && "" !== searchValue ? searchValue : searchText;
+
     api(baseUrl)
       .get(
         SEARCH +
           "?search_text=" +
-          searchText +
+          textTemp +
           "&offset_rows=" +
           offset_rows +
           "&page_size=" +
@@ -215,11 +225,13 @@ const SearchDetails = ({ history }) => {
       text = "&price_from=" + value[0] + "&price_to=" + value[1];
     }
 
+    const textTemp =
+      searchValue && "" !== searchValue ? searchValue : searchText;
     api(baseUrl)
       .get(
         SEARCH +
           "?search_text=" +
-          searchText +
+          textTemp +
           "&offset_rows=" +
           offset_rows +
           "&page_size=" +
@@ -262,6 +274,80 @@ const SearchDetails = ({ history }) => {
 
   const handleSlider = (value, index) => {
     setValue(value);
+  };
+
+  const handleAddToFavourites = (item) => {
+    if (!token) {
+      history.push({ pathname: routes.LOGIN });
+    } else {
+      const user_id = getCookie("user_id");
+      const data = {
+        Country_ID: 1,
+        User_ID: user_id,
+        Vendor: item.Vendor,
+        Item_Key: item.Item_Key,
+        Price: item.Selling_Price,
+      };
+
+      const headers = {
+        Authorization: "bearer " + token,
+      };
+
+      api(baseUrl, headers)
+        .post(ADD_FAVOURITES, data)
+        .then((res) => {
+          if (res.data.success) {
+            let prevProductList = [...productList];
+
+            prevProductList = prevProductList.map((itemIn) => {
+              if (
+                itemIn.Vendor == item.Vendor &&
+                itemIn.Item_Key == item.Item_Key
+              ) {
+                itemIn.is_Item_Favourites = true;
+              }
+              return itemIn;
+            });
+            setProductList(prevProductList);
+          }
+        })
+        .catch((e) => console.log(e));
+    }
+  };
+
+  const handleRemoveFavourites = (item) => {
+    const COUNTRY_ID = 1;
+    const user_id = getCookie("user_id");
+    const headers = {
+      Authorization: "bearer " + token,
+    };
+
+    const data = {
+      Country_ID: COUNTRY_ID,
+      User_ID: user_id,
+      Vendor: item.Vendor,
+      Item_Key: item.Item_Key,
+    };
+
+    api(baseUrl, headers)
+      .post(REMOVE_FAVOURITES, data)
+      .then((res) => {
+        if (res.data.success) {
+          const prevProductList = [...productList];
+
+          prevProductList.map((itemIn) => {
+            if (
+              itemIn.Vendor == item.Vendor &&
+              itemIn.Item_Key == item.Item_Key
+            ) {
+              itemIn.is_Item_Favourites = false;
+            }
+            return itemIn;
+          });
+          setProductList(prevProductList);
+        }
+      })
+      .catch((e) => console.log(e));
   };
   return (
     <main className="search-page test">
@@ -538,7 +624,6 @@ const SearchDetails = ({ history }) => {
                         return (
                           <div
                             className="col-6 col-sm-3 mb-4"
-                            onClick={() => handleLink(item.Item_URL)}
                             style={{
                               cursor: "pointer",
                             }}
@@ -547,20 +632,35 @@ const SearchDetails = ({ history }) => {
                             <div className="item">
                               <div className="main-item-wrap">
                                 <div className="img-wrap">
-                                  <div className="heart-icon">
-                                    <i
-                                      class="fa fa-heart-o"
-                                      aria-hidden="true"
-                                    ></i>
-                                    {/* <i
-                                      class="fa fa-heart"
-                                      aria-hidden="true"
-                                    ></i> */}
+                                  <div
+                                    className="heart-icon"
+                                    onClick={() =>
+                                      item.hasOwnProperty(
+                                        "is_Item_Favourites"
+                                      ) && item.is_Item_Favourites
+                                        ? handleRemoveFavourites(item)
+                                        : handleAddToFavourites(item)
+                                    }
+                                  >
+                                    {item.hasOwnProperty(
+                                      "is_Item_Favourites"
+                                    ) && item.is_Item_Favourites ? (
+                                      <i
+                                        class="fa fa-heart"
+                                        aria-hidden="true"
+                                      ></i>
+                                    ) : (
+                                      <i
+                                        class="fa fa-heart-o"
+                                        aria-hidden="true"
+                                      ></i>
+                                    )}
                                   </div>
                                   <img
                                     src={item.Item_Image_URL}
                                     alt="img"
                                     className="img-fluid"
+                                    onClick={() => handleLink(item.Item_URL)}
                                   />
                                 </div>
                                 <div className="item-desc">
@@ -572,8 +672,12 @@ const SearchDetails = ({ history }) => {
                                     }
                                     alt="img"
                                   />
-                                  <h5>{item.Brand}</h5>
-                                  <p>{item.Item_name}</p>
+                                  <h5 onClick={() => handleLink(item.Item_URL)}>
+                                    {item.Brand}
+                                  </h5>
+                                  <p onClick={() => handleLink(item.Item_URL)}>
+                                    {item.Item_name}
+                                  </p>
                                 </div>
                                 <div className="price">
                                   <span>KD {item.Selling_Price} </span>

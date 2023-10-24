@@ -1,74 +1,139 @@
 import React, { useEffect, useState, useRef } from "react";
 import api from "../../redux/services/api";
-import { LEAFLETS } from "../../redux/reduxConstants/EndPoints";
 
 import * as images from "../constant/Assets";
 import moment from "moment";
-import {
-  Button,
-  Col,
-  Container,
-  Form,
-  Row,
-  Dropdown,
-  Accordion,
-  Nav,
-  NavDropdown,
-  Navbar,
-} from "react-bootstrap";
+import { Col, Container, Form, Row, Accordion } from "react-bootstrap";
 import {
   CATEGORIES,
   SUBCATEGORIES,
+  ALL_LEAFLETS,
 } from "../../redux/reduxConstants/EndPoints";
+import Pagination from "../../uikit/Paginate";
 
 const Leaflet = () => {
   const [leaflets, setLeaflets] = useState([]);
-  const [leafletList, setLeafletsList] = useState({ list: [] });
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(12);
   const [loading, setLoading] = useState(false);
-  const loaderProfile = useRef(null);
+
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubcategories] = useState([]);
   const [actualSubcategories, setActualSubCategories] = useState([]);
   const [actualCategories, setActualCategories] = useState([]);
 
-  useEffect(() => {
-    fetchLeafts();
-  }, []);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedSubCategories, setSelectedSubCategories] = useState([]);
+
+  const [totalCount, setTotalCount] = useState(100);
 
   useEffect(() => {
-    if (leafletList && leafletList.list.length > 0) {
-      var options = {
-        root: null,
-        rootMargin: "20px",
-        threshold: 1.0,
-      };
+    const subCategoriesTemp = [];
+    if (subCategories && subCategories.length > 0) {
+      subCategories.forEach((item) => {
+        const Category = item.Category;
+        subCategoriesTemp[Category] = subCategoriesTemp[Category] || [];
+        subCategoriesTemp[Category].push(item.Sub_Category);
+      });
+      const resultKeys = Object.keys(subCategoriesTemp);
+      const resultArray = Object.values(subCategoriesTemp);
 
-      const observer = new IntersectionObserver(handleObserver, options);
-      if (loaderProfile.current) {
-        observer.observe(loaderProfile.current);
-      }
+      setActualSubCategories(resultArray);
+      setActualCategories(resultKeys);
     }
-  }, [leafletList]);
+  }, [subCategories]);
 
-  const handleObserver = (entities) => {
-    const target = entities[0];
-    if (target.isIntersecting) {
-      setPage((page) => page + 1);
+  const handleCategories = (e) => {
+    const prevValues = [...selectedCategories];
+
+    if (e.target.checked) {
+      prevValues.push(e.target.value);
+      setSelectedCategories(prevValues);
+    } else {
+      const newArray = prevValues.filter((item) => item !== e.target.value);
+      setSelectedCategories(newArray);
+    }
+  };
+
+  const handleSubcategories = (e, key) => {
+    const prevValues = [...selectedSubCategories];
+    const prevCategories = [...selectedCategories];
+
+    const removeCategory = actualCategories[key];
+
+    if (removeCategory) {
+      const newArray = prevCategories.filter((item) => item !== removeCategory);
+      setSelectedCategories(newArray);
+    }
+    if (e.target.checked) {
+      prevValues.push(e.target.value);
+      setSelectedSubCategories(prevValues);
+    } else {
+      const newArray = prevValues.filter((item) => item !== e.target.value);
+      setSelectedSubCategories(newArray);
     }
   };
 
   useEffect(() => {
-    page > 1 && fetchLeafts();
-  }, [page]);
+    fetchLeafts();
+  }, []);
 
   const baseUrl = process.env.REACT_APP_API_BASEURL;
 
   const fetchLeafts = () => {
     setLoading(true);
+
+    const offset_rows = (page - 1) * limit;
+    const tempCategories =
+      selectedSubCategories && selectedSubCategories.length > 0
+        ? selectedSubCategories.join(",")
+        : "*";
+    setLoading(true);
+
     api(baseUrl)
-      .get(LEAFLETS + "?days_tolerance=-35&num_of_rows_required=10")
+      .get(
+        ALL_LEAFLETS +
+          "?days_tolerance=-35&num_of_rows_required=" +
+          limit +
+          "&Start_offset=" +
+          offset_rows +
+          "&Category=" +
+          tempCategories +
+          "&Vendor=*"
+      )
+      .then((res) => {
+        setLoading(false);
+        if (res.data.success) {
+          setLeaflets(res.data.data);
+        }
+      })
+      .catch((e) => console.log(e));
+  };
+
+  const handlePageClick = (currentpage) => {
+    window.scroll(0, 0);
+
+    setPage(currentpage.selected + 1);
+    const currentPageSelected = currentpage.selected + 1;
+    const offset_rows = (currentPageSelected - 1) * limit;
+
+    setLoading(true);
+    const tempCategories =
+      selectedSubCategories && selectedSubCategories.length > 0
+        ? selectedSubCategories.join(",")
+        : "*";
+
+    api(baseUrl)
+      .get(
+        ALL_LEAFLETS +
+          "?days_tolerance=-35&num_of_rows_required=" +
+          limit +
+          "&Start_offset=" +
+          offset_rows +
+          "&Category=" +
+          tempCategories +
+          "&Vendor=*"
+      )
       .then((res) => {
         setLoading(false);
         if (res.data.success) {
@@ -121,6 +186,9 @@ const Leaflet = () => {
       .catch((e) => console.log(e));
   };
 
+  const handleClick = (item) => {
+    window.open(item.leaflet_link, "_blank");
+  };
   return (
     <div className="Leaflet">
       <Container className="mb-5 mt-4">
@@ -140,22 +208,39 @@ const Leaflet = () => {
               <section className="col-sm-3 cat-left">
                 <section className="cat-for-desktop">
                   {actualSubcategories && actualSubcategories.length > 0 ? (
-                    <Accordion defaultActiveKey={["0"]} alwaysOpen>
+                    <Accordion defaultActiveKey={["0"]}>
                       {actualSubcategories.map((item, index) => {
                         return (
                           <Accordion.Item eventKey={index}>
                             <Accordion.Header>
+                              {/* <Form.Check
+                                type="checkbox"
+                                id={index}
+                                label={actualCategories[index]}
+                                value={actualCategories[index]}
+                                onChange={handleCategories}
+                                checked={selectedCategories.includes(
+                                  actualCategories[index]
+                                )}
+                              /> */}
                               {actualCategories[index]}
                             </Accordion.Header>
                             <Accordion.Body>
                               <ul>
-                                {item.map((innerItem) => {
+                                {item.map((innerItem, idx) => {
                                   return (
                                     <li>
                                       <Form.Check
                                         type="checkbox"
-                                        id="1"
+                                        id={idx}
                                         label={innerItem}
+                                        value={innerItem}
+                                        onChange={(e) =>
+                                          handleSubcategories(e, index)
+                                        }
+                                        checked={selectedSubCategories.includes(
+                                          innerItem
+                                        )}
                                       />
                                     </li>
                                   );
@@ -192,7 +277,10 @@ const Leaflet = () => {
                       return (
                         <div className="item col-sm-4 col-6 pb-4">
                           <div className="main-item-wrap">
-                            <div className="item-wrap">
+                            <div
+                              className="item-wrap"
+                              onClick={() => handleClick(item)}
+                            >
                               <div className="img-wrap">
                                 <img
                                   src={
@@ -239,36 +327,25 @@ const Leaflet = () => {
                       );
                     })}
                 </Row>
+                <Row className="">
+                  <Col md={9} xs={12} className="pagination">
+                    <Pagination
+                      totalCount={totalCount}
+                      limitValue={limit}
+                      currentPage={page}
+                      handlePageClick={handlePageClick}
+                    />
+                  </Col>
+                </Row>
               </section>
             </Row>
           </section>
         ) : (
           ""
         )}
-        <div className="loadingTemp" ref={loaderProfile} />
-        {loading && <InlineLoader />}
       </Container>
     </div>
   );
 };
 
 export default Leaflet;
-
-const InlineLoader = () => {
-  return (
-    <div id="floatingBarsG" style={{ marginBottom: "12px" }}>
-      <div className="blockG" id="rotateG_01"></div>
-      <div className="blockG" id="rotateG_02"></div>
-      <div className="blockG" id="rotateG_03"></div>
-      <div className="blockG" id="rotateG_04"></div>
-      <div className="blockG" id="rotateG_05"></div>
-      <div className="blockG" id="rotateG_06"></div>
-      <div className="blockG" id="rotateG_07"></div>
-      <div className="blockG" id="rotateG_08"></div>
-      <div className="blockG" id="rotateG_09"></div>
-      <div className="blockG" id="rotateG_10"></div>
-      <div className="blockG" id="rotateG_11"></div>
-      <div className="blockG" id="rotateG_12"></div>
-    </div>
-  );
-};
