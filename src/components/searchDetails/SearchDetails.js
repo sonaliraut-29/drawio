@@ -22,7 +22,7 @@ import {
 import Pagination from "../../uikit/Paginate";
 import CommunityLoaderCircularDash from "../../uikit/CommunityLoaderCircularDash";
 import ReactSlider from "react-slider";
-import { getCookie } from "../../lib/helpers";
+import { deleteCookie, getCookie } from "../../lib/helpers";
 
 import * as routes from "../constant/Routes";
 
@@ -309,6 +309,11 @@ const SearchDetails = ({ history }) => {
               return itemIn;
             });
             setProductList(prevProductList);
+          } else if ("Unauthorized." == res.data) {
+            deleteCookie("user_id");
+            deleteCookie("email");
+            deleteCookie("token");
+            history.push({ pathname: routes.LOGIN });
           }
         })
         .catch((e) => console.log(e));
