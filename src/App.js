@@ -29,6 +29,11 @@ function App() {
           deleteCookie("user_id");
           deleteCookie("email");
           window.location.replace(routes.HOME_ROUTE);
+        } else {
+          deleteCookie("token");
+          deleteCookie("user_id");
+          deleteCookie("email");
+          window.location.replace(routes.HOME_ROUTE);
         }
       })
       .catch((e) => console.log(e));
