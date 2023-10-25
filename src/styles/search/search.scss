@@ -12,6 +12,17 @@ button.btn.btn-search {
     }
     p {color: #0B0E10;font-size: 12px;}
 }
+#home__banner .banner-vendor-logo {
+    position: absolute;
+    left: 0 !important;
+    top: 0;
+    height: 50px !important;
+}
+
+#home__banner .banner-vendor-logo img {
+    height: 80px !important;
+    min-height: 80px !important;
+}
 
 
 @media only screen and (max-width: 767px){
