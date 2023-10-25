@@ -285,8 +285,8 @@ const Banner = () => {
                   ""
                 )}
               </section>
-              <section className="mt-4">
-                <div>Vendors</div>
+              <section className="mt-4 vendors-filter">
+                <h6>Vendors</h6>
                 {vendorsAll && vendorsAll.length > 0
                   ? vendorsAll.map((item, index) => {
                       return (
@@ -318,7 +318,7 @@ const Banner = () => {
                     <div className="inner-wrapper mb-4">
                       <Row>
                         <div className="seller-name text-left mb-3">
-                          <h4>{ve}</h4>
+                          <h3>{ve}</h3>
                         </div>
                       </Row>
                       <Row>
