@@ -18,6 +18,7 @@ import {
   SUBCATEGORIES,
   ADD_FAVOURITES,
   REMOVE_FAVOURITES,
+  VENDORS,
 } from "../../redux/reduxConstants/EndPoints";
 import Pagination from "../../uikit/Paginate";
 import CommunityLoaderCircularDash from "../../uikit/CommunityLoaderCircularDash";
@@ -48,12 +49,15 @@ const SearchDetails = ({ history }) => {
   const [OrderBy, setOrderBy] = useState("NEWID()");
   const [sort, setSort] = useState("");
 
+  const [vendors, setVendors] = useState();
+  const [selectedVendors, setSelectedVendors] = useState([]);
   const [title, setTitle] = useState();
   const token = getCookie("token");
 
   useEffect(() => {
     fetchCategories();
     fetchSubcategories();
+    fetchVendors();
   }, []);
 
   useEffect(() => {
@@ -74,10 +78,21 @@ const SearchDetails = ({ history }) => {
 
   useEffect(() => {
     fetchProductList(searchText);
-  }, [selectedCategories]);
+  }, [selectedCategories, selectedVendors]);
 
   const baseUrl = process.env.REACT_APP_API_BASEURL;
 
+  const handleVendor = (e) => {
+    const prevValues = [...selectedVendors];
+
+    if (e.target.checked) {
+      prevValues.push(e.target.value);
+      setSelectedVendors(prevValues);
+    } else {
+      const newArray = prevValues.filter((item) => item !== e.target.value);
+      setSelectedVendors(newArray);
+    }
+  };
   const handleCategories = (e) => {
     const prevValues = [...selectedCategories];
 
@@ -130,6 +145,17 @@ const SearchDetails = ({ history }) => {
       .catch((e) => console.log(e));
   };
 
+  const fetchVendors = () => {
+    api(baseUrl)
+      .get(VENDORS)
+      .then((res) => {
+        if (res.data.success) {
+          setVendors(res.data.data);
+        }
+      })
+      .catch((e) => console.log(e));
+  };
+
   let fullSlug = "";
   let slugString = "";
   let slug = "";
@@ -173,6 +199,10 @@ const SearchDetails = ({ history }) => {
       category = selectedCategories.join(",");
     }
 
+    let vendor = "";
+    if (selectedVendors && selectedVendors.length > 0) {
+      vendor = selectedVendors.join(",");
+    }
     const textTemp =
       searchValue && "" !== searchValue ? searchValue : searchText;
 
@@ -191,7 +221,9 @@ const SearchDetails = ({ history }) => {
           sort +
           text +
           "&category=" +
-          category
+          category +
+          "&vendor=" +
+          vendor
       )
       .then((res) => {
         setLoading(false);
@@ -239,6 +271,15 @@ const SearchDetails = ({ history }) => {
     if (value.length > 0) {
       text = "&price_from=" + value[0] + "&price_to=" + value[1];
     }
+    let category = "";
+    if (selectedCategories && selectedCategories.length > 0) {
+      category = selectedCategories.join(",");
+    }
+
+    let vendor = "";
+    if (selectedVendors && selectedVendors.length > 0) {
+      vendor = selectedVendors.join(",");
+    }
 
     const textTemp =
       searchValue && "" !== searchValue ? searchValue : searchText;
@@ -255,7 +296,11 @@ const SearchDetails = ({ history }) => {
           OrderBy +
           "&sort=" +
           sort +
-          text
+          text +
+          "&category=" +
+          category +
+          "&vendor=" +
+          vendor
       )
       .then((res) => {
         setLoading(false);
@@ -470,6 +515,23 @@ const SearchDetails = ({ history }) => {
                   // minDistance={10}
                   onChange={handleSlider}
                 />
+              </section>
+              <section className="mt-4">
+                <div>Vendors</div>
+                {vendors && vendors.length > 0
+                  ? vendors.map((item, index) => {
+                      return (
+                        <Form.Check
+                          type="checkbox"
+                          id={index}
+                          label={item.Vendor}
+                          value={item.Vendor}
+                          onChange={handleVendor}
+                          checked={selectedVendors.includes(item.Vendor)}
+                        />
+                      );
+                    })
+                  : ""}
               </section>
               <section className="cat-for-mobile"></section>
             </div>

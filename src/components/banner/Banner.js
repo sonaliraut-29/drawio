@@ -6,6 +6,7 @@ import {
   CATEGORIES,
   SUBCATEGORIES,
   ALL_BANNERS,
+  VENDORS,
 } from "../../redux/reduxConstants/EndPoints";
 import api from "../../redux/services/api";
 import Pagination from "../../uikit/Paginate";
@@ -26,6 +27,9 @@ const Banner = () => {
 
   const [totalCount, setTotalCount] = useState(100);
   const [vendors, setVendors] = useState([]);
+
+  const [vendorsAll, setVendorsAll] = useState([]);
+  const [selectedVendors, setSelectedVendors] = useState([]);
 
   useEffect(() => {
     const subCategoriesTemp = [];
@@ -77,14 +81,25 @@ const Banner = () => {
     fetchCategories();
     fetchSubcategories();
     fetchBanners();
+    fetchVendors();
   }, []);
 
   useEffect(() => {
-    selectedSubCategories && selectedSubCategories.length > 0 && fetchBanners();
-  }, [selectedSubCategories]);
+    fetchBanners();
+  }, [selectedSubCategories, selectedVendors]);
 
   const baseUrl = process.env.REACT_APP_API_BASEURL;
 
+  const fetchVendors = () => {
+    api(baseUrl)
+      .get(VENDORS)
+      .then((res) => {
+        if (res.data.success) {
+          setVendorsAll(res.data.data);
+        }
+      })
+      .catch((e) => console.log(e));
+  };
   const fetchCategories = () => {
     api(baseUrl)
       .get(CATEGORIES)
@@ -117,6 +132,11 @@ const Banner = () => {
         : "*";
     setLoading(true);
 
+    let vendor = "*";
+    if (selectedVendors && selectedVendors.length > 0) {
+      vendor = selectedVendors.join(",");
+    }
+
     api(baseUrl)
       .get(
         ALL_BANNERS +
@@ -126,7 +146,8 @@ const Banner = () => {
           offset_rows +
           "&Category=" +
           tempCategories +
-          "&Vendor=*"
+          "&Vendor=" +
+          vendor
       )
       .then((res) => {
         setLoading(false);
@@ -154,6 +175,10 @@ const Banner = () => {
       selectedSubCategories && selectedSubCategories.length > 0
         ? selectedSubCategories.join(",")
         : "*";
+    let vendor = "*";
+    if (selectedVendors && selectedVendors.length > 0) {
+      vendor = selectedVendors.join(",");
+    }
 
     api(baseUrl)
       .get(
@@ -164,7 +189,8 @@ const Banner = () => {
           offset_rows +
           "&Category=" +
           tempCategories +
-          "&Vendor=*"
+          "&Vendor=" +
+          vendor
       )
       .then((res) => {
         setLoading(false);
@@ -178,6 +204,19 @@ const Banner = () => {
         }
       })
       .catch((e) => console.log(e));
+  };
+
+  const handleVendor = (e) => {
+    setSelectedVendors([e.target.value]);
+    // const prevValues = [...selectedVendors];
+
+    // if (e.target.checked) {
+    //   prevValues.push(e.target.value);
+    //   setSelectedVendors(prevValues);
+    // } else {
+    //   const newArray = prevValues.filter((item) => item !== e.target.value);
+    //   setSelectedVendors(newArray);
+    // }
   };
 
   const handleLink = (item) => {
@@ -244,6 +283,23 @@ const Banner = () => {
                 ) : (
                   ""
                 )}
+              </section>
+              <section className="mt-4">
+                <div>Vendors</div>
+                {vendorsAll && vendorsAll.length > 0
+                  ? vendorsAll.map((item, index) => {
+                      return (
+                        <Form.Check
+                          type="radio"
+                          id={index}
+                          label={item.Vendor}
+                          value={item.Vendor}
+                          onChange={handleVendor}
+                          checked={selectedVendors.includes(item.Vendor)}
+                        />
+                      );
+                    })
+                  : ""}
               </section>
 
               <section className="cat-for-mobile">
