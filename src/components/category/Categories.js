@@ -245,21 +245,33 @@ const Category = () => {
               </Row>
               <Row>
                 <div className="col-sm-12 mb-4 mt-sm-0 mt-4 category-tags">
-                  <span class="badge badge-primary">
+                  <span className="badge badge-primary">
                     Category
-                    <button type="button" class="close" aria-label="Dismiss">
+                    <button
+                      type="button"
+                      className="close"
+                      aria-label="Dismiss"
+                    >
                       <span aria-hidden="true">&times;</span>
                     </button>
                   </span>
-                  <span class="badge badge-primary">
+                  <span className="badge badge-primary">
                     Category
-                    <button type="button" class="close" aria-label="Dismiss">
+                    <button
+                      type="button"
+                      className="close"
+                      aria-label="Dismiss"
+                    >
                       <span aria-hidden="true">&times;</span>
                     </button>
                   </span>
-                  <span class="badge badge-primary">
+                  <span className="badge badge-primary">
                     Category
-                    <button type="button" class="close" aria-label="Dismiss">
+                    <button
+                      type="button"
+                      className="close"
+                      aria-label="Dismiss"
+                    >
                       <span aria-hidden="true">&times;</span>
                     </button>
                   </span>
@@ -271,7 +283,7 @@ const Category = () => {
               <section className="cat-products">
                 <Row>
                   <div className="col-6 col-sm-3 mb-4">
-                    <div class="item">
+                    <div className="item">
                       <div className="item-wrap">
                         <div className="offer-tag">30% OFF</div>
                         <div className="img-wrap">
@@ -300,7 +312,7 @@ const Category = () => {
                     </div>
                   </div>
                   <div className="col-6 col-sm-3 mb-4">
-                    <div class="item">
+                    <div className="item">
                       <div className="item-wrap">
                         {/* <div className="offer-tag">30% OFF</div> */}
                         <div className="img-wrap">
@@ -329,7 +341,7 @@ const Category = () => {
                     </div>
                   </div>
                   <div className="col-6 col-sm-3 mb-4">
-                    <div class="item">
+                    <div className="item">
                       <div className="item-wrap">
                         <div className="offer-tag">30% OFF</div>
                         <div className="img-wrap">
@@ -358,7 +370,7 @@ const Category = () => {
                     </div>
                   </div>
                   <div className="col-6 col-sm-3 mb-4">
-                    <div class="item">
+                    <div className="item">
                       <div className="item-wrap">
                         <div className="offer-tag">30% OFF</div>
                         <div className="img-wrap">
@@ -388,7 +400,7 @@ const Category = () => {
                   </div>
 
                   <div className="col-6 col-sm-3 mb-4">
-                    <div class="item">
+                    <div className="item">
                       <div className="item-wrap">
                         {/* <div className="offer-tag">30% OFF</div> */}
                         <div className="img-wrap">
@@ -417,7 +429,7 @@ const Category = () => {
                     </div>
                   </div>
                   <div className="col-6 col-sm-3 mb-4">
-                    <div class="item">
+                    <div className="item">
                       <div className="item-wrap">
                         {/* <div className="offer-tag">30% OFF</div> */}
                         <div className="img-wrap">
@@ -446,7 +458,7 @@ const Category = () => {
                     </div>
                   </div>
                   <div className="col-6 col-sm-3 mb-4">
-                    <div class="item">
+                    <div className="item">
                       <div className="item-wrap">
                         <div className="offer-tag">30% OFF</div>
                         <div className="img-wrap">
@@ -475,7 +487,7 @@ const Category = () => {
                     </div>
                   </div>
                   <div className="col-6 col-sm-3 mb-4">
-                    <div class="item">
+                    <div className="item">
                       <div className="item-wrap">
                         <div className="offer-tag">30% OFF</div>
                         <div className="img-wrap">

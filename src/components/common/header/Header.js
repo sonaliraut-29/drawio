@@ -60,7 +60,7 @@ const Header = ({ history }) => {
     },
     {
       name: "Search",
-      link: routes.SEARCH_ROUTE,
+      link: routes.ROOT_ROUTE,
     },
     {
       name: "Leaflets",
@@ -95,7 +95,11 @@ const Header = ({ history }) => {
             <Nav className="me-auto">
               {links &&
                 links.map((item) => {
-                  return <Nav.Link href={item.link}>{item.name}</Nav.Link>;
+                  return (
+                    <Nav.Link href={item.link} key={item.name}>
+                      {item.name}
+                    </Nav.Link>
+                  );
                 })}
             </Nav>
             <Nav>

@@ -42,6 +42,8 @@ const SearchDetails = ({ history }) => {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedSubCategories, setSelectedSubCategories] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
+  const [minPrice, setMinPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(2000);
 
   const [OrderBy, setOrderBy] = useState("NEWID()");
   const [sort, setSort] = useState("");
@@ -69,6 +71,10 @@ const SearchDetails = ({ history }) => {
       setActualCategories(resultKeys);
     }
   }, [subCategories]);
+
+  useEffect(() => {
+    fetchProductList(searchText);
+  }, [selectedCategories]);
 
   const baseUrl = process.env.REACT_APP_API_BASEURL;
 
@@ -162,6 +168,11 @@ const SearchDetails = ({ history }) => {
       text = "&price_from=" + value[0] + "&price_to=" + value[1];
     }
 
+    let category = "";
+    if (selectedCategories && selectedCategories.length > 0) {
+      category = selectedCategories.join(",");
+    }
+
     const textTemp =
       searchValue && "" !== searchValue ? searchValue : searchText;
 
@@ -178,13 +189,17 @@ const SearchDetails = ({ history }) => {
           OrderBy +
           "&sort=" +
           sort +
-          text
+          text +
+          "&category=" +
+          category
       )
       .then((res) => {
         setLoading(false);
         if (res.data.success) {
           setProductList(res.data.data);
           setTotalCount(res.data.totalCount);
+          // setMinPrice(res.data.min_price);
+          // setMaxPrice(res.data.man_price);
         }
       })
       .catch((e) => console.log(e));
@@ -247,6 +262,8 @@ const SearchDetails = ({ history }) => {
         if (res.data.success) {
           setProductList(res.data.data);
           setTotalCount(res.data.totalCount);
+          // setMinPrice(res.data.min_price);
+          // setMaxPrice(res.data.man_price);
         }
       })
       .catch((e) => console.log(e));
@@ -441,14 +458,16 @@ const SearchDetails = ({ history }) => {
                   className="horizontal-slider"
                   thumbClassName="thumb"
                   trackClassName="track"
-                  defaultValue={[0, 100000]}
+                  defaultValue={[minPrice, maxPrice]}
                   ariaLabel={["Lower thumb", "Upper thumb"]}
                   ariaValuetext={(state) => `Thumb value ${state.valueNow}`}
                   renderThumb={(props, state) => (
                     <div {...props}>{state.valueNow}</div>
                   )}
-                  pearling
-                  minDistance={10}
+                  min={Math.floor(minPrice)}
+                  max={Math.floor(maxPrice)}
+                  // pearling
+                  // minDistance={10}
                   onChange={handleSlider}
                 />
               </section>
@@ -471,13 +490,10 @@ const SearchDetails = ({ history }) => {
                       </Dropdown.Toggle>
 
                       <Dropdown.Menu>
-                        <Dropdown.Item href="#/action-1">
-                          Best Product
-                        </Dropdown.Item>
                         <Dropdown.Item
                           onClick={() => {
                             handleSort(
-                              "Selling_Price",
+                              "Discount_Price",
                               "asc",
                               "Price Low to High"
                             );
@@ -488,7 +504,7 @@ const SearchDetails = ({ history }) => {
                         <Dropdown.Item
                           onClick={() => {
                             handleSort(
-                              "Selling_Price",
+                              "Discount_Price",
                               "desc",
                               "Price High to Low"
                             );
@@ -505,7 +521,7 @@ const SearchDetails = ({ history }) => {
                             );
                           }}
                         >
-                          Discount Low to High
+                          Discount % Low to High
                         </Dropdown.Item>
                         <Dropdown.Item
                           onClick={() => {
@@ -516,10 +532,49 @@ const SearchDetails = ({ history }) => {
                             );
                           }}
                         >
-                          Discount High to Low
+                          Discount % High to Low
                         </Dropdown.Item>
-                        <Dropdown.Item href="#/action-1">
-                          Newest First
+                        <Dropdown.Item
+                          onClick={() => {
+                            handleSort("Category", "asc", "Category");
+                          }}
+                        >
+                          Category Asc
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          onClick={() => {
+                            handleSort("Category", "desc", "Category");
+                          }}
+                        >
+                          Category Desc
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          onClick={() => {
+                            handleSort("Item_name", "asc", "Item_name");
+                          }}
+                        >
+                          Title Asc
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          onClick={() => {
+                            handleSort("Item_name", "desc", "Item_name");
+                          }}
+                        >
+                          Title Desc
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          onClick={() => {
+                            handleSort("Brand", "asc", "Brand");
+                          }}
+                        >
+                          Brand Asc
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          onClick={() => {
+                            handleSort("Brand", "desc", "Brand");
+                          }}
+                        >
+                          Brand Desc
                         </Dropdown.Item>
                       </Dropdown.Menu>
                     </Dropdown>
@@ -539,17 +594,91 @@ const SearchDetails = ({ history }) => {
                             </Dropdown.Toggle>
 
                             <Dropdown.Menu>
-                              <Dropdown.Item href="#/action-1">
-                                Best Product
-                              </Dropdown.Item>
-                              <Dropdown.Item href="#/action-1">
+                              <Dropdown.Item
+                                onClick={() => {
+                                  handleSort(
+                                    "Discounted_Price",
+                                    "asc",
+                                    "Price Low to High"
+                                  );
+                                }}
+                              >
                                 Price Low to High
                               </Dropdown.Item>
-                              <Dropdown.Item href="#/action-1">
+                              <Dropdown.Item
+                                onClick={() => {
+                                  handleSort(
+                                    "Discounted_Price",
+                                    "desc",
+                                    "Price High to Low"
+                                  );
+                                }}
+                              >
                                 Price High to Low
                               </Dropdown.Item>
-                              <Dropdown.Item href="#/action-1">
-                                Newest First
+                              <Dropdown.Item
+                                onClick={() => {
+                                  handleSort(
+                                    "Discount_Percent",
+                                    "asc",
+                                    "Discount Low to High"
+                                  );
+                                }}
+                              >
+                                Discount % Low to High
+                              </Dropdown.Item>
+                              <Dropdown.Item
+                                onClick={() => {
+                                  handleSort(
+                                    "Discount_Percent",
+                                    "desc",
+                                    "Discount High to Low"
+                                  );
+                                }}
+                              >
+                                Discount % High to Low
+                              </Dropdown.Item>
+                              <Dropdown.Item
+                                onClick={() => {
+                                  handleSort("Category", "asc", "Category");
+                                }}
+                              >
+                                Category Asc
+                              </Dropdown.Item>
+                              <Dropdown.Item
+                                onClick={() => {
+                                  handleSort("Category", "desc", "Category");
+                                }}
+                              >
+                                Category Desc
+                              </Dropdown.Item>
+                              <Dropdown.Item
+                                onClick={() => {
+                                  handleSort("Item_name", "asc", "Item_name");
+                                }}
+                              >
+                                Title Asc
+                              </Dropdown.Item>
+                              <Dropdown.Item
+                                onClick={() => {
+                                  handleSort("Item_name", "desc", "Item_name");
+                                }}
+                              >
+                                Title Desc
+                              </Dropdown.Item>
+                              <Dropdown.Item
+                                onClick={() => {
+                                  handleSort("Brand", "asc", "Brand");
+                                }}
+                              >
+                                Brand Asc
+                              </Dropdown.Item>
+                              <Dropdown.Item
+                                onClick={() => {
+                                  handleSort("Brand", "desc", "Brand");
+                                }}
+                              >
+                                Brand Desc
                               </Dropdown.Item>
                             </Dropdown.Menu>
                           </Dropdown>
@@ -637,6 +766,16 @@ const SearchDetails = ({ history }) => {
                             <div className="item">
                               <div className="main-item-wrap">
                                 <div className="img-wrap">
+                                  {item.Discount_Percent > 0 ? (
+                                    <div className="offer-tag">
+                                      {item.Discount_Percent > 0
+                                        ? Math.floor(item.Discount_Percent)
+                                        : 0}
+                                      % OFF
+                                    </div>
+                                  ) : (
+                                    ""
+                                  )}
                                   <div
                                     className="heart-icon"
                                     onClick={() =>

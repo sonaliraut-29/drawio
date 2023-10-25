@@ -152,7 +152,7 @@ const Favourites = ({ history }) => {
                                     onClick={() => removeFavourites(item)}
                                   >
                                     <i
-                                      class="fa fa-heart"
+                                      className="fa fa-heart"
                                       aria-hidden="true"
                                     ></i>
                                   </div>
