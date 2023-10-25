@@ -77,6 +77,12 @@ const Search = ({ history }) => {
                         }
                         alt="banner"
                       />
+                      <span className="banner-vendor-logo">
+                        <img
+                          src="/dist/assets/images/VendorLogos/Lulu.jpg"
+                          alt="image"
+                        ></img>
+                      </span>
                     </a>
                   </Carousel.Item>
                 );
