@@ -8,6 +8,7 @@ import {
   CATEGORIES,
   SUBCATEGORIES,
   ALL_LEAFLETS,
+  VENDORS,
 } from "../../redux/reduxConstants/EndPoints";
 import Pagination from "../../uikit/Paginate";
 
@@ -26,6 +27,9 @@ const Leaflet = () => {
   const [selectedSubCategories, setSelectedSubCategories] = useState([]);
 
   const [totalCount, setTotalCount] = useState(100);
+
+  const [vendors, setVendors] = useState([]);
+  const [selectedVendors, setSelectedVendors] = useState([]);
 
   useEffect(() => {
     const subCategoriesTemp = [];
@@ -76,7 +80,23 @@ const Leaflet = () => {
 
   useEffect(() => {
     fetchLeafts();
+    fetchVendors();
   }, []);
+
+  useEffect(() => {
+    fetchLeafts();
+  }, [selectedVendors]);
+
+  const fetchVendors = () => {
+    api(baseUrl)
+      .get(VENDORS)
+      .then((res) => {
+        if (res.data.success) {
+          setVendors(res.data.data);
+        }
+      })
+      .catch((e) => console.log(e));
+  };
 
   const baseUrl = process.env.REACT_APP_API_BASEURL;
 
@@ -88,6 +108,12 @@ const Leaflet = () => {
       selectedSubCategories && selectedSubCategories.length > 0
         ? selectedSubCategories.join(",")
         : "*";
+
+    let vendor = "*";
+    if (selectedVendors && selectedVendors.length > 0) {
+      vendor = selectedVendors.join(",");
+    }
+
     setLoading(true);
 
     api(baseUrl)
@@ -99,7 +125,8 @@ const Leaflet = () => {
           offset_rows +
           "&Category=" +
           tempCategories +
-          "&Vendor=*"
+          "&Vendor=" +
+          vendor
       )
       .then((res) => {
         setLoading(false);
@@ -123,6 +150,11 @@ const Leaflet = () => {
         ? selectedSubCategories.join(",")
         : "*";
 
+    let vendor = "*";
+    if (selectedVendors && selectedVendors.length > 0) {
+      vendor = selectedVendors.join(",");
+    }
+
     api(baseUrl)
       .get(
         ALL_LEAFLETS +
@@ -132,7 +164,8 @@ const Leaflet = () => {
           offset_rows +
           "&Category=" +
           tempCategories +
-          "&Vendor=*"
+          "&Vendor=" +
+          vendor
       )
       .then((res) => {
         setLoading(false);
@@ -186,34 +219,46 @@ const Leaflet = () => {
       .catch((e) => console.log(e));
   };
 
+  const handleVendor = (e) => {
+    setSelectedVendors([e.target.value]);
+    // const prevValues = [...selectedVendors];
+
+    // if (e.target.checked) {
+    //   prevValues.push(e.target.value);
+    //   setSelectedVendors(prevValues);
+    // } else {
+    //   const newArray = prevValues.filter((item) => item !== e.target.value);
+    //   setSelectedVendors(newArray);
+    // }
+  };
+
   const handleClick = (item) => {
     window.open(item.leaflet_link, "_blank");
   };
   return (
     <div className="Leaflet">
       <Container className="mb-5 mt-4">
-        {leaflets && leaflets.length > 0 ? (
-          <section
-            id="home__leaflet"
-            className="mt-5 text-center item-design leaflet-detail"
-          >
-            <Row>
-              <Col className="d-flex justify-content-center align-items-center title-wrap mt-sm-5 mt-2 mb-sm-4 mb-0 col col">
-                <h2 className="section-title mb-1">Leaflets</h2>
-                <span></span>
-              </Col>
-            </Row>
+        <section
+          id="home__leaflet"
+          className="mt-5 text-center item-design leaflet-detail"
+        >
+          <Row>
+            <Col className="d-flex justify-content-center align-items-center title-wrap mt-sm-5 mt-2 mb-sm-4 mb-0 col col">
+              <h2 className="section-title mb-1">Leaflets</h2>
+              <span></span>
+            </Col>
+          </Row>
 
-            <Row className="mt-4">
-              <section className="col-sm-3 cat-left">
-                <section className="cat-for-desktop">
-                  {actualSubcategories && actualSubcategories.length > 0 ? (
-                    <Accordion defaultActiveKey={["0"]}>
-                      {actualSubcategories.map((item, index) => {
-                        return (
-                          <Accordion.Item eventKey={index}>
-                            <Accordion.Header>
-                              {/* <Form.Check
+          <Row className="mt-4">
+            <section className="col-sm-3 cat-left">
+              <section className="cat-for-desktop">
+                {actualSubcategories && actualSubcategories.length > 0 ? (
+                  <Accordion defaultActiveKey={["0"]}>
+                    {actualSubcategories.map((item, index) => {
+                      return (
+                        <Accordion.Item eventKey={index}>
+                          <Accordion.Header>
+                            {/* <Form.Check
                                 type="checkbox"
                                 id={index}
                                 label={actualCategories[index]}
@@ -223,53 +268,69 @@ const Leaflet = () => {
                                   actualCategories[index]
                                 )}
                               /> */}
-                              {actualCategories[index]}
-                            </Accordion.Header>
-                            <Accordion.Body>
-                              <ul>
-                                {item.map((innerItem, idx) => {
-                                  return (
-                                    <li>
-                                      <Form.Check
-                                        type="checkbox"
-                                        id={idx}
-                                        label={innerItem}
-                                        value={innerItem}
-                                        onChange={(e) =>
-                                          handleSubcategories(e, index)
-                                        }
-                                        checked={selectedSubCategories.includes(
-                                          innerItem
-                                        )}
-                                      />
-                                    </li>
-                                  );
-                                })}
-                              </ul>
-                            </Accordion.Body>
-                          </Accordion.Item>
-                        );
-                      })}
-                    </Accordion>
-                  ) : (
-                    ""
-                  )}
-                </section>
-
-                <section className="cat-for-mobile">
-                  <div className="catfilter-mob mb-4">
-                    <button className="btn">
-                      <img src="dist/assets/images/filter.png"></img> Filter
-                    </button>
-                  </div>
-                </section>
+                            {actualCategories[index]}
+                          </Accordion.Header>
+                          <Accordion.Body>
+                            <ul>
+                              {item.map((innerItem, idx) => {
+                                return (
+                                  <li>
+                                    <Form.Check
+                                      type="checkbox"
+                                      id={idx}
+                                      label={innerItem}
+                                      value={innerItem}
+                                      onChange={(e) =>
+                                        handleSubcategories(e, index)
+                                      }
+                                      checked={selectedSubCategories.includes(
+                                        innerItem
+                                      )}
+                                    />
+                                  </li>
+                                );
+                              })}
+                            </ul>
+                          </Accordion.Body>
+                        </Accordion.Item>
+                      );
+                    })}
+                  </Accordion>
+                ) : (
+                  ""
+                )}
+              </section>
+              <section className="mt-4">
+                <div>Vendors</div>
+                {vendors && vendors.length > 0
+                  ? vendors.map((item, index) => {
+                      return (
+                        <Form.Check
+                          type="radio"
+                          id={index}
+                          label={item.Vendor}
+                          value={item.Vendor}
+                          onChange={handleVendor}
+                          checked={selectedVendors.includes(item.Vendor)}
+                        />
+                      );
+                    })
+                  : ""}
               </section>
 
-              <section className="col-sm-9 leaflet-list">
-                <Row>
-                  {leaflets &&
-                    leaflets.length > 0 &&
-                    leaflets.map((item) => {
+              <section className="cat-for-mobile">
+                <div className="catfilter-mob mb-4">
+                  <button className="btn">
+                    <img src="dist/assets/images/filter.png"></img> Filter
+                  </button>
+                </div>
+              </section>
+            </section>
+
+            <section className="col-sm-9 leaflet-list">
+              <Row>
+                {leaflets && leaflets.length > 0
+                  ? leaflets.map((item) => {
                       let vendorName = item.vendor
                         .replace(" ", "-")
                         .toLowerCase();
@@ -325,24 +386,22 @@ const Leaflet = () => {
                           </div>
                         </div>
                       );
-                    })}
-                </Row>
-                <Row className="">
-                  <Col md={9} xs={12} className="pagination">
-                    <Pagination
-                      totalCount={totalCount}
-                      limitValue={limit}
-                      currentPage={page}
-                      handlePageClick={handlePageClick}
-                    />
-                  </Col>
-                </Row>
-              </section>
-            </Row>
-          </section>
-        ) : (
-          ""
-        )}
+                    })
+                  : "No data found"}
+              </Row>
+              <Row className="">
+                <Col md={9} xs={12} className="pagination">
+                  <Pagination
+                    totalCount={totalCount}
+                    limitValue={limit}
+                    currentPage={page}
+                    handlePageClick={handlePageClick}
+                  />
+                </Col>
+              </Row>
+            </section>
+          </Row>
+        </section>
       </Container>
     </div>
   );
