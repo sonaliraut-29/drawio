@@ -13,7 +13,7 @@ export const Pagination = ({
   handlePageClick,
   currentPage,
 }) => {
-  const pageCountValue = Math.floor(totalCount / limitValue);
+  const pageCountValue = Math.ceil(totalCount / limitValue);
   const totalPageCount = pageCountValue;
   const pageCount = totalPageCount === 1 ? 2 : totalPageCount;
   const [activepage, setactivePage] = useState(currentPage);
