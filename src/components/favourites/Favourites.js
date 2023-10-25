@@ -138,7 +138,7 @@ const Favourites = ({ history }) => {
                           ).toLowerCase();
                           return (
                             <div
-                              className="col-6 col-sm-3 mb-4"
+                              className="col-6 col-sm-3 mb-4 item-design"
                               // onClick={() => handleLink(item.Item_URL)}
                               style={{
                                 cursor: "pointer",
@@ -146,41 +146,48 @@ const Favourites = ({ history }) => {
                               key={"result" + index}
                             >
                               <div className="item">
-                                <div className="item-wrap">
-                                  <div
-                                    className="heart-icon"
-                                    onClick={() => removeFavourites(item)}
-                                  >
-                                    <i
-                                      className="fa fa-heart"
-                                      aria-hidden="true"
-                                    ></i>
+                                <div className="main-item-wrap">
+                                  <div className="item-wrap">
+                                    <div className="img-wrap">
+                                      <div
+                                        className="heart-icon"
+                                        onClick={() => removeFavourites(item)}
+                                      >
+                                        <i
+                                          className="fa fa-heart"
+                                          aria-hidden="true"
+                                        ></i>
+                                      </div>
+
+                                      <img
+                                        src={item.Item_Image_URL}
+                                        alt="img"
+                                        className="img-fluid"
+                                        onClick={() =>
+                                          handleProductDetail(item)
+                                        }
+                                      />
+                                    </div>
+                                    <div className="item-desc">
+                                      <img
+                                        src={
+                                          item.Vendor
+                                            ? images[vendorName]
+                                            : "./dist/assets/images/default-logo-sm.png"
+                                        }
+                                        alt="img"
+                                      />
+                                      <h5>{item.Brand}</h5>
+                                      <p>{item.Item_name}</p>
+                                    </div>
+                                    <div className="price">
+                                      <span>KD {item.Latest_Price} </span>
+                                      <small>
+                                        <strike>Old Price</strike>
+                                      </small>
+                                    </div>
                                   </div>
-                                  <img
-                                    src={item.Item_Image_URL}
-                                    alt="img"
-                                    className="img-fluid"
-                                    onClick={() => handleProductDetail(item)}
-                                  />
-                                  <div className="item-desc">
-                                    <img
-                                      src={
-                                        item.Vendor
-                                          ? images[vendorName]
-                                          : "./dist/assets/images/default-logo-sm.png"
-                                      }
-                                      alt="img"
-                                    />
-                                    <h5>{item.Brand}</h5>
-                                    <p>{item.Item_name}</p>
-                                  </div>
-                                  <div className="price">
-                                    <span>KD {item.Latest_Price} </span>
-                                    <small>
-                                      <strike>Old Price</strike>
-                                    </small>
-                                  </div>
-                                </div>
+                                </div>{" "}
                               </div>
                             </div>
                           );
@@ -198,7 +205,7 @@ const Favourites = ({ history }) => {
                     </Row>
                   </section>
                 ) : (
-                  <p className="loading-msg">You don't have any faourites.</p>
+                  <p className="loading-msg">You don't have any favourites.</p>
                 )}
               </Row>
             </section>
