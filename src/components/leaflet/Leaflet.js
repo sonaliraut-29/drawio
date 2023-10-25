@@ -300,8 +300,8 @@ const Leaflet = () => {
                   ""
                 )}
               </section>
-              <section className="mt-4">
-                <div>Vendors</div>
+              <section className="mt-4 vendors-filter">
+                <h6>Vendors</h6>
                 {vendors && vendors.length > 0
                   ? vendors.map((item, index) => {
                       return (
