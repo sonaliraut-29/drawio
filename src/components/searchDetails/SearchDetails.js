@@ -83,6 +83,7 @@ const SearchDetails = ({ history }) => {
   const baseUrl = process.env.REACT_APP_API_BASEURL;
 
   const handleVendor = (e) => {
+    setPage(1);
     const prevValues = [...selectedVendors];
 
     if (e.target.checked) {
@@ -332,10 +333,12 @@ const SearchDetails = ({ history }) => {
     setOrderBy(value);
     setSort(sort);
     setTitle(titleValue);
+    setPage(1);
   };
 
   const handleSlider = (value, index) => {
     setValue(value);
+    setPage(1);
   };
 
   const handleAddToFavourites = (item) => {

@@ -221,6 +221,7 @@ const Leaflet = () => {
 
   const handleVendor = (e) => {
     setSelectedVendors([e.target.value]);
+    setPage(1);
     // const prevValues = [...selectedVendors];
 
     // if (e.target.checked) {
