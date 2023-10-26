@@ -151,7 +151,7 @@ a#basic-nav-dropdown:after {
 }
 
 
-.mt-4.vendors-filter {
+.vendors-filter {
     background: #fff;
     padding: 15px 15px 50px;
     border: 1px solid #dee2e6;
@@ -159,6 +159,15 @@ a#basic-nav-dropdown:after {
     text-align: left;
 }
 
-.mt-4.vendors-filter h6 {
+.vendors-filter h6 {
     margin-bottom: 13px;
+}
+
+.horizontal-slider .track.track-0, .horizontal-slider .track.track-2 {
+    background: #0090d3;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    top: -3px;
+    background: #000;
 }
