@@ -104,10 +104,14 @@ const Leaflet = () => {
     setLoading(true);
 
     const offset_rows = (page - 1) * limit;
-    const tempCategories =
-      selectedCategories && selectedCategories.length > 0
-        ? selectedCategories.join(",")
-        : "*";
+    let category = "*";
+    if (selectedCategories && selectedCategories.length > 0) {
+      const newselectedCategories = selectedCategories.map((item) => {
+        return item.replace(/ & /g, "_and_").replace(/&/g, "and");
+      });
+
+      category = newselectedCategories.join("|");
+    }
 
     let vendor = "*";
     if (selectedVendors && selectedVendors.length > 0) {
@@ -124,7 +128,7 @@ const Leaflet = () => {
           "&Start_offset=" +
           offset_rows +
           "&Category=" +
-          tempCategories +
+          category +
           "&Vendor=" +
           vendor
       )
@@ -145,10 +149,13 @@ const Leaflet = () => {
     const offset_rows = (currentPageSelected - 1) * limit;
 
     setLoading(true);
-    const tempCategories =
-      selectedCategories && selectedCategories.length > 0
-        ? selectedCategories.join(",")
-        : "*";
+    let category = "*";
+    if (selectedCategories && selectedCategories.length > 0) {
+      const newselectedCategories = selectedCategories.map((item) => {
+        return item.replace(/ & /g, "_and_").replace(/&/g, "and");
+      });
+      category = newselectedCategories.join("|");
+    }
 
     let vendor = "*";
     if (selectedVendors && selectedVendors.length > 0) {
@@ -163,7 +170,7 @@ const Leaflet = () => {
           "&Start_offset=" +
           offset_rows +
           "&Category=" +
-          tempCategories +
+          category +
           "&Vendor=" +
           vendor
       )

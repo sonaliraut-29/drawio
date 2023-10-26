@@ -53,7 +53,7 @@ const Login = ({ history }) => {
       <Container className="log-reg login-page">
         <Row>
           <div className="col form-title text-center my-5">
-            <a href="http://localhost:3000/">
+            <a href={routes.ROOT_ROUTE}>
               <img
                 src="/dist/assets/images/logo.png"
                 alt="Genie Saves Logo image"

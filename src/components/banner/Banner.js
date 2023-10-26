@@ -86,7 +86,7 @@ const Banner = () => {
 
   useEffect(() => {
     fetchBanners();
-  }, [selectedSubCategories, selectedVendors]);
+  }, [selectedCategories, selectedVendors]);
 
   const baseUrl = process.env.REACT_APP_API_BASEURL;
 
@@ -126,10 +126,14 @@ const Banner = () => {
     setLoading(true);
 
     const offset_rows = (page - 1) * limit;
-    const tempCategories =
-      selectedSubCategories && selectedSubCategories.length > 0
-        ? selectedSubCategories.join(",")
-        : "*";
+    let category = "*";
+    if (selectedCategories && selectedCategories.length > 0) {
+      const newselectedCategories = selectedCategories.map((item) => {
+        return item.replace(/ & /g, "_and_").replace(/&/g, "and");
+      });
+      category = newselectedCategories.join("|");
+    }
+
     setLoading(true);
 
     let vendor = "*";
@@ -145,7 +149,7 @@ const Banner = () => {
           "&Start_offset=" +
           offset_rows +
           "&Category=" +
-          tempCategories +
+          category +
           "&Vendor=" +
           vendor
       )
@@ -171,10 +175,13 @@ const Banner = () => {
     const offset_rows = (currentPageSelected - 1) * limit;
 
     setLoading(true);
-    const tempCategories =
-      selectedSubCategories && selectedSubCategories.length > 0
-        ? selectedSubCategories.join(",")
-        : "*";
+    let category = "*";
+    if (selectedCategories && selectedCategories.length > 0) {
+      const newselectedCategories = selectedCategories.map((item) => {
+        return item.replace(/ & /g, "_and_").replace(/&/g, "and");
+      });
+      category = newselectedCategories.join("|");
+    }
     let vendor = "*";
     if (selectedVendors && selectedVendors.length > 0) {
       vendor = selectedVendors.join(",");
@@ -188,7 +195,7 @@ const Banner = () => {
           "&Start_offset=" +
           offset_rows +
           "&Category=" +
-          tempCategories +
+          category +
           "&Vendor=" +
           vendor
       )
@@ -237,50 +244,23 @@ const Banner = () => {
           <Row className="mt-4">
             <section className="col-sm-3 cat-left">
               <section className="cat-for-desktop">
-                {actualSubcategories && actualSubcategories.length > 0 ? (
-                  <Accordion defaultActiveKey={["0"]}>
-                    {actualSubcategories.map((item, index) => {
+                {categories && categories.length > 0 ? (
+                  <>
+                    {categories.map((item, index) => {
                       return (
-                        <Accordion.Item eventKey={index}>
-                          <Accordion.Header>
-                            {/* <Form.Check
-                                type="checkbox"
-                                id={index}
-                                label={actualCategories[index]}
-                                value={actualCategories[index]}
-                                onChange={handleCategories}
-                                checked={selectedCategories.includes(
-                                  actualCategories[index]
-                                )}
-                              /> */}
-                            {actualCategories[index]}
-                          </Accordion.Header>
-                          <Accordion.Body>
-                            <ul>
-                              {item.map((innerItem, idx) => {
-                                return (
-                                  <li>
-                                    <Form.Check
-                                      type="checkbox"
-                                      id={idx}
-                                      label={innerItem}
-                                      value={innerItem}
-                                      onChange={(e) =>
-                                        handleSubcategories(e, index)
-                                      }
-                                      checked={selectedSubCategories.includes(
-                                        innerItem
-                                      )}
-                                    />
-                                  </li>
-                                );
-                              })}
-                            </ul>
-                          </Accordion.Body>
-                        </Accordion.Item>
+                        <>
+                          <Form.Check
+                            type="checkbox"
+                            id={index}
+                            label={item.Category}
+                            value={item.Category}
+                            onChange={handleCategories}
+                            checked={selectedCategories.includes(item.Category)}
+                          />
+                        </>
                       );
                     })}
-                  </Accordion>
+                  </>
                 ) : (
                   ""
                 )}
