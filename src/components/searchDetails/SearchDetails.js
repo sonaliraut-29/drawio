@@ -469,6 +469,16 @@ const SearchDetails = ({ history }) => {
       setAvailableOnly(0);
     }
   };
+
+  const handleReset = () => {
+    setPage(1);
+    setAvailableOnly(0);
+    setOnlyDiscounted(0);
+    setExcludeAccessory(0);
+    setSelectedCategories([]);
+    setSelectedSubCategories([]);
+    setSelectedVendors([]);
+  };
   return (
     <main className="search-page test">
       <Container>
@@ -635,6 +645,15 @@ const SearchDetails = ({ history }) => {
                       ? searchValue
                       : searchText}
                   </h4>
+                  <div>
+                    <button
+                      className="btn btn-primary"
+                      type="button"
+                      onClick={handleReset}
+                    >
+                      Reset
+                    </button>
+                  </div>
                   <div className="sort-dropdown">
                     <Dropdown>
                       <Dropdown.Toggle variant="success" id="dropdown-basic">
