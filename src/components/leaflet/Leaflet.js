@@ -48,6 +48,7 @@ const Leaflet = () => {
   }, [subCategories]);
 
   const handleCategories = (e) => {
+    setPage(1);
     const prevValues = [...selectedCategories];
 
     if (e.target.checked) {
@@ -227,17 +228,16 @@ const Leaflet = () => {
   };
 
   const handleVendor = (e) => {
-    setSelectedVendors([e.target.value]);
     setPage(1);
-    // const prevValues = [...selectedVendors];
+    const prevValues = [...selectedVendors];
 
-    // if (e.target.checked) {
-    //   prevValues.push(e.target.value);
-    //   setSelectedVendors(prevValues);
-    // } else {
-    //   const newArray = prevValues.filter((item) => item !== e.target.value);
-    //   setSelectedVendors(newArray);
-    // }
+    if (e.target.checked) {
+      prevValues.push(e.target.value);
+      setSelectedVendors(prevValues);
+    } else {
+      const newArray = prevValues.filter((item) => item !== e.target.value);
+      setSelectedVendors(newArray);
+    }
   };
 
   const handleClick = (item) => {
@@ -287,7 +287,7 @@ const Leaflet = () => {
                   ? vendors.map((item, index) => {
                       return (
                         <Form.Check
-                          type="radio"
+                          type="checkbox"
                           id={index}
                           label={item.Vendor}
                           value={item.Vendor}
