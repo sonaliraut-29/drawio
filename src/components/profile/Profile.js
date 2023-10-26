@@ -112,7 +112,7 @@ const Profile = ({ history }) => {
       year = moment(e.target.value).year();
       setYob(year);
     }
-    setDOB(e.target.value);
+    setDOB(date);
   };
   const handleEmail = (e) => {
     let emailRegex = /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/;
@@ -146,7 +146,7 @@ const Profile = ({ history }) => {
           setName(profile.Name);
           setEmail(profile.email);
           setPhone(profile.Mobile);
-          setDOB(profile.DOB);
+          setDOB(moment(profile.DOB).format("DD/MM/YYYY"));
           setGovernate(profile.Area);
           setCountryId(profile.Nationality);
           setCity(profile.City);
@@ -234,6 +234,7 @@ const Profile = ({ history }) => {
       fade: "fade-out",
     });
   };
+  console.log(DOB);
   return (
     <>
       {successMessage && (
@@ -361,7 +362,7 @@ const Profile = ({ history }) => {
                       return <option value={item.City}>{item.City}</option>;
                     })
                   ) : (
-                    <option value="">No citi found</option>
+                    <option value="">No city found</option>
                   )}
                 </Form.Select>
                 {errors && errors.hasOwnProperty("City") ? (
@@ -375,7 +376,7 @@ const Profile = ({ history }) => {
                 <Form.Label>DOB</Form.Label>
                 <Form.Control
                   type="date"
-                  placeholder="xx/xx/xxxx"
+                  placeholder={DOB ? DOB : "xx/xx/xxxx"}
                   value={DOB}
                   onChange={handleDob}
                   disabled={isEdit}
@@ -402,7 +403,7 @@ const Profile = ({ history }) => {
                       name="gender"
                       onChange={handleGender}
                       disabled={isEdit}
-                      checked={Gender == "M"}
+                      checked={Gender === "M"}
                     />
                     <Form.Check.Label>{` Male`}</Form.Check.Label>
                   </div>
@@ -414,7 +415,7 @@ const Profile = ({ history }) => {
                       name="gender"
                       onChange={handleGender}
                       disabled={isEdit}
-                      checked={Gender == "F"}
+                      checked={Gender === "F"}
                     />
                     <Form.Check.Label>{` Female`}</Form.Check.Label>
                   </div>

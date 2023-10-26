@@ -65,6 +65,15 @@ const SearchDetails = ({ history }) => {
   }, []);
 
   useEffect(() => {
+    history &&
+      history.location &&
+      history.location.state &&
+      history.location.state !== undefined &&
+      history.location.state.selectedCategory &&
+      setSelectedCategories([history.location.state.selectedCategory]);
+  }, [history]);
+
+  useEffect(() => {
     const subCategoriesTemp = [];
     if (subCategories && subCategories.length > 0) {
       subCategories.forEach((item) => {
@@ -81,13 +90,19 @@ const SearchDetails = ({ history }) => {
   }, [subCategories]);
 
   useEffect(() => {
-    fetchProductList(searchText);
+    fetchProductList(
+      searchValue && "" !== searchValue ? searchValue : searchText
+    );
   }, [
     selectedCategories,
+    selectedSubCategories,
     selectedVendors,
     exclude_accessory,
     only_discounted,
     available_only,
+    OrderBy,
+    sort,
+    value,
   ]);
 
   const baseUrl = process.env.REACT_APP_API_BASEURL;
@@ -193,8 +208,9 @@ const SearchDetails = ({ history }) => {
   useEffect(() => {
     if (searchText && "" !== searchText) {
       fetchProductList(searchText);
+      setSearchValue(searchText.replace("%20", " "));
     }
-  }, [searchText, OrderBy, sort, value]);
+  }, [searchText]);
 
   const fetchProductList = (searchText) => {
     setLoading(true);
@@ -208,21 +224,34 @@ const SearchDetails = ({ history }) => {
 
     let category = "";
     if (selectedCategories && selectedCategories.length > 0) {
-      category = selectedCategories.join(",");
+      const newselectedCategories = selectedCategories.map((item) => {
+        return item.replace(/ & /g, "_and_").replace(/&/g, "and");
+      });
+
+      category = newselectedCategories.join("|");
+    }
+
+    let subcategory = "";
+    if (selectedSubCategories && selectedSubCategories.length > 0) {
+      const newselectedSubCategories = selectedSubCategories.map((item) => {
+        return item.replace(/ & /g, "_and_").replace(/&/g, "and");
+      });
+
+      subcategory = newselectedSubCategories.join("|");
     }
 
     let vendor = "";
     if (selectedVendors && selectedVendors.length > 0) {
       vendor = selectedVendors.join(",");
     }
-    const textTemp =
-      searchValue && "" !== searchValue ? searchValue : searchText;
+    // const textTemp =
+    //   searchValue && "" !== searchValue ? searchValue : searchText;
 
     api(baseUrl)
       .get(
         SEARCH +
           "?search_text=" +
-          textTemp +
+          searchText +
           "&offset_rows=" +
           offset_rows +
           "&page_size=" +
@@ -241,7 +270,9 @@ const SearchDetails = ({ history }) => {
           "&only_discounted=" +
           only_discounted +
           "&available_only=" +
-          available_only
+          available_only +
+          "&sub_category=" +
+          subcategory
       )
       .then((res) => {
         setLoading(false);
@@ -260,20 +291,17 @@ const SearchDetails = ({ history }) => {
   };
 
   const handleChange = (e) => {
-    if (e.target.value) {
-      setPage(1);
-      setSearchValue(e.target.value);
-      if (e.target.value.length >= 2) {
-        fetchProductList(e.target.value);
-      }
-    } else {
-      setSearchValue("");
-    }
+    setPage(1);
+    setSearchValue(e.target.value);
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
+    if (e.key === "Enter" && e.target.value.trim().length > 2) {
+      handleReset();
+      history.push({
+        pathname: `${routes.SEARCH_ROUTE}`,
+        search: `?query=${e.target.value}`,
+      });
     }
   };
 
@@ -289,9 +317,23 @@ const SearchDetails = ({ history }) => {
     if (value.length > 0) {
       text = "&price_from=" + value[0] + "&price_to=" + value[1];
     }
+
     let category = "";
     if (selectedCategories && selectedCategories.length > 0) {
-      category = selectedCategories.join(",");
+      const newselectedCategories = selectedCategories.map((item) => {
+        return item.replace(/ & /g, "_and_").replace(/&/g, "and");
+      });
+
+      category = newselectedCategories.join("|");
+    }
+
+    let subcategory = "";
+    if (selectedSubCategories && selectedSubCategories.length > 0) {
+      const newselectedSubCategories = selectedSubCategories.map((item) => {
+        return item.replace(/ & /g, "_and_").replace(/&/g, "and");
+      });
+
+      subcategory = newselectedSubCategories.join("|");
     }
 
     let vendor = "";
@@ -324,7 +366,9 @@ const SearchDetails = ({ history }) => {
           "&only_discounted=" +
           only_discounted +
           "&available_only=" +
-          available_only
+          available_only +
+          "&sub_category=" +
+          subcategory
       )
       .then((res) => {
         setLoading(false);
@@ -487,7 +531,7 @@ const SearchDetails = ({ history }) => {
         <section id="search-bar" className="mb-4 px-0 ">
           <Row>
             <div className="col-10">
-              <Form className="d-flex">
+              <Form className="d-flex" onSubmit={(e) => e.preventDefault()}>
                 <Form.Control
                   type="Search product here"
                   placeholder="Search product here"
@@ -500,6 +544,7 @@ const SearchDetails = ({ history }) => {
                 <Button
                   // onClick={handleSearch}
                   disabled={searchValue && "" !== searchValue ? false : true}
+                  type="button"
                 >
                   <img src={images.SearchBack} alt="searchBack" />
                 </Button>
@@ -516,7 +561,10 @@ const SearchDetails = ({ history }) => {
                   <Accordion defaultActiveKey={["0"]}>
                     {actualSubcategories.map((item, index) => {
                       return (
-                        <Accordion.Item eventKey={index}>
+                        <Accordion.Item
+                          eventKey={index}
+                          onClick={(e) => e.preventDefault()}
+                        >
                           <Accordion.Header>
                             <Form.Check
                               type="checkbox"
@@ -640,10 +688,13 @@ const SearchDetails = ({ history }) => {
               <Row>
                 <div className="col-sm-12 mb-4 mt-sm-0 mt-4 category-title-wrapper">
                   <h4>
-                    Search Result of{" "}
+                    {totalCount}{" "}
+                    {totalCount == 0 || totalCount == 1 ? "Result" : "Results"}{" "}
+                    found
+                    {/* of{" "}
                     {searchValue && "" !== searchValue
                       ? searchValue
-                      : searchText}
+                      : searchText} */}
                   </h4>
                   <div>
                     <button
@@ -661,21 +712,21 @@ const SearchDetails = ({ history }) => {
                       </Dropdown.Toggle>
 
                       <Dropdown.Menu>
-                        <Dropdown.Item
+                        {/* <Dropdown.Item
                           onClick={() => {
                             handleSort(
-                              "Discount_Price",
+                              "Discounted_Price",
                               "asc",
                               "Price Low to High"
                             );
                           }}
                         >
                           Price Low to High
-                        </Dropdown.Item>
+                        </Dropdown.Item> */}
                         <Dropdown.Item
                           onClick={() => {
                             handleSort(
-                              "Discount_Price",
+                              "Discounted_Price",
                               "desc",
                               "Price High to Low"
                             );
@@ -721,14 +772,14 @@ const SearchDetails = ({ history }) => {
                         </Dropdown.Item>
                         <Dropdown.Item
                           onClick={() => {
-                            handleSort("Item_name", "asc", "Item_name");
+                            handleSort("item_name", "asc", "Title");
                           }}
                         >
                           Title Asc
                         </Dropdown.Item>
                         <Dropdown.Item
                           onClick={() => {
-                            handleSort("Item_name", "desc", "Item_name");
+                            handleSort("item_name", "desc", "Title");
                           }}
                         >
                           Title Desc
@@ -765,7 +816,7 @@ const SearchDetails = ({ history }) => {
                             </Dropdown.Toggle>
 
                             <Dropdown.Menu>
-                              <Dropdown.Item
+                              {/* <Dropdown.Item
                                 onClick={() => {
                                   handleSort(
                                     "Discounted_Price",
@@ -775,7 +826,7 @@ const SearchDetails = ({ history }) => {
                                 }}
                               >
                                 Price Low to High
-                              </Dropdown.Item>
+                              </Dropdown.Item> */}
                               <Dropdown.Item
                                 onClick={() => {
                                   handleSort(
@@ -825,14 +876,14 @@ const SearchDetails = ({ history }) => {
                               </Dropdown.Item>
                               <Dropdown.Item
                                 onClick={() => {
-                                  handleSort("Item_name", "asc", "Item_name");
+                                  handleSort("item_name", "asc", "Title");
                                 }}
                               >
                                 Title Asc
                               </Dropdown.Item>
                               <Dropdown.Item
                                 onClick={() => {
-                                  handleSort("Item_name", "desc", "Item_name");
+                                  handleSort("item_name", "desc", "Title");
                                 }}
                               >
                                 Title Desc
@@ -996,9 +1047,13 @@ const SearchDetails = ({ history }) => {
                                 </div>
                                 <div className="price">
                                   <span>KD {item.Selling_Price} </span>
-                                  <small>
-                                    <strike>Old Price</strike>
-                                  </small>
+                                  {item.Discount_Percent > 0 ? (
+                                    <small>
+                                      <strike>{item.Regular_Price}</strike>
+                                    </small>
+                                  ) : (
+                                    ""
+                                  )}
                                 </div>
                               </div>
                             </div>

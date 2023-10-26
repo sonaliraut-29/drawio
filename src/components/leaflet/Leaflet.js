@@ -85,7 +85,7 @@ const Leaflet = () => {
 
   useEffect(() => {
     fetchLeafts();
-  }, [selectedVendors]);
+  }, [selectedVendors, selectedCategories]);
 
   const fetchVendors = () => {
     api(baseUrl)
@@ -105,8 +105,8 @@ const Leaflet = () => {
 
     const offset_rows = (page - 1) * limit;
     const tempCategories =
-      selectedSubCategories && selectedSubCategories.length > 0
-        ? selectedSubCategories.join(",")
+      selectedCategories && selectedCategories.length > 0
+        ? selectedCategories.join(",")
         : "*";
 
     let vendor = "*";
@@ -146,8 +146,8 @@ const Leaflet = () => {
 
     setLoading(true);
     const tempCategories =
-      selectedSubCategories && selectedSubCategories.length > 0
-        ? selectedSubCategories.join(",")
+      selectedCategories && selectedCategories.length > 0
+        ? selectedCategories.join(",")
         : "*";
 
     let vendor = "*";
@@ -253,50 +253,23 @@ const Leaflet = () => {
           <Row className="mt-4">
             <section className="col-sm-3 cat-left">
               <section className="cat-for-desktop">
-                {actualSubcategories && actualSubcategories.length > 0 ? (
-                  <Accordion defaultActiveKey={["0"]}>
-                    {actualSubcategories.map((item, index) => {
+                {categories && categories.length > 0 ? (
+                  <>
+                    {categories.map((item, index) => {
                       return (
-                        <Accordion.Item eventKey={index}>
-                          <Accordion.Header>
-                            {/* <Form.Check
-                                type="checkbox"
-                                id={index}
-                                label={actualCategories[index]}
-                                value={actualCategories[index]}
-                                onChange={handleCategories}
-                                checked={selectedCategories.includes(
-                                  actualCategories[index]
-                                )}
-                              /> */}
-                            {actualCategories[index]}
-                          </Accordion.Header>
-                          <Accordion.Body>
-                            <ul>
-                              {item.map((innerItem, idx) => {
-                                return (
-                                  <li>
-                                    <Form.Check
-                                      type="checkbox"
-                                      id={idx}
-                                      label={innerItem}
-                                      value={innerItem}
-                                      onChange={(e) =>
-                                        handleSubcategories(e, index)
-                                      }
-                                      checked={selectedSubCategories.includes(
-                                        innerItem
-                                      )}
-                                    />
-                                  </li>
-                                );
-                              })}
-                            </ul>
-                          </Accordion.Body>
-                        </Accordion.Item>
+                        <>
+                          <Form.Check
+                            type="checkbox"
+                            id={index}
+                            label={item.Category}
+                            value={item.Category}
+                            onChange={handleCategories}
+                            checked={selectedCategories.includes(item.Category)}
+                          />
+                        </>
                       );
                     })}
-                  </Accordion>
+                  </>
                 ) : (
                   ""
                 )}

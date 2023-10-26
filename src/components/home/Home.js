@@ -126,6 +126,14 @@ const Home = ({ history }) => {
     },
   };
 
+  const handleCategorySearch = (item) => {
+    history.push({
+      pathname: routes.SEARCH_ROUTE,
+      state: {
+        selectedCategory: item.Category,
+      },
+    });
+  };
   return (
     <div className="Home">
       <Container className="mt-5">
@@ -204,7 +212,10 @@ const Home = ({ history }) => {
                     .replace(" ", "_");
 
                   return (
-                    <div className="item">
+                    <div
+                      className="item"
+                      onClick={() => handleCategorySearch(item)}
+                    >
                       <div className="cat-item mobile">
                         <div className="cat-img">
                           <img

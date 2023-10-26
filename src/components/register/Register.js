@@ -138,10 +138,10 @@ const Register = ({ history }) => {
       password,
       Mobile: phone,
       Name: name,
-      DOB: DOB ? moment("d-m-y", DOB) : "",
+      DOB: DOB ? moment("d-m-y", DOB) : null,
       City,
       Nationality: Country_ID,
-      YOB: YOB ? YOB : "",
+      YOB: YOB ? YOB : null,
       Gender,
       Area: Governorate,
     };
@@ -347,9 +347,10 @@ const Register = ({ history }) => {
                       <Form.Check
                         type="radio"
                         aria-label="Male"
-                        value="male"
+                        value="M"
                         name="gender"
                         onClick={handleGender}
+                        checked={"M" == Gender}
                       />
                       <Form.Check.Label>{` Male`}</Form.Check.Label>
                     </div>
@@ -357,9 +358,10 @@ const Register = ({ history }) => {
                       <Form.Check
                         type="radio"
                         aria-label="Female"
-                        value="female"
+                        value="F"
                         name="gender"
                         onClick={handleGender}
+                        checked={"F" == Gender}
                       />
                       <Form.Check.Label>{` Female`}</Form.Check.Label>
                     </div>
