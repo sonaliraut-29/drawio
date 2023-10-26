@@ -52,6 +52,10 @@ const SearchDetails = ({ history }) => {
   const [vendors, setVendors] = useState();
   const [selectedVendors, setSelectedVendors] = useState([]);
   const [title, setTitle] = useState();
+
+  const [exclude_accessory, setExcludeAccessory] = useState(0);
+  const [only_discounted, setOnlyDiscounted] = useState(0);
+  const [available_only, setAvailableOnly] = useState(0);
   const token = getCookie("token");
 
   useEffect(() => {
@@ -78,7 +82,13 @@ const SearchDetails = ({ history }) => {
 
   useEffect(() => {
     fetchProductList(searchText);
-  }, [selectedCategories, selectedVendors]);
+  }, [
+    selectedCategories,
+    selectedVendors,
+    exclude_accessory,
+    only_discounted,
+    available_only,
+  ]);
 
   const baseUrl = process.env.REACT_APP_API_BASEURL;
 
@@ -190,6 +200,7 @@ const SearchDetails = ({ history }) => {
     setLoading(true);
 
     const offset_rows = (page - 1) * limit;
+
     let text = "";
     if (value.length > 0) {
       text = "&price_from=" + value[0] + "&price_to=" + value[1];
@@ -224,7 +235,13 @@ const SearchDetails = ({ history }) => {
           "&category=" +
           category +
           "&vendor=" +
-          vendor
+          vendor +
+          "&exclude_accessory=" +
+          exclude_accessory +
+          "&only_discounted=" +
+          only_discounted +
+          "&available_only=" +
+          available_only
       )
       .then((res) => {
         setLoading(false);
@@ -301,7 +318,13 @@ const SearchDetails = ({ history }) => {
           "&category=" +
           category +
           "&vendor=" +
-          vendor
+          vendor +
+          "&exclude_accessory=" +
+          exclude_accessory +
+          "&only_discounted=" +
+          only_discounted +
+          "&available_only=" +
+          available_only
       )
       .then((res) => {
         setLoading(false);
@@ -418,6 +441,33 @@ const SearchDetails = ({ history }) => {
         }
       })
       .catch((e) => console.log(e));
+  };
+
+  const handleExcludeAccessory = (e) => {
+    setPage(1);
+    if (e.target.checked) {
+      setExcludeAccessory(1);
+    } else {
+      setExcludeAccessory(0);
+    }
+  };
+
+  const handleOnlyDiscounted = (e) => {
+    setPage(1);
+    if (e.target.checked) {
+      setOnlyDiscounted(1);
+    } else {
+      setOnlyDiscounted(0);
+    }
+  };
+
+  const handleOnlyAvailable = (e) => {
+    setPage(1);
+    if (e.target.checked) {
+      setAvailableOnly(1);
+    } else {
+      setAvailableOnly(0);
+    }
   };
   return (
     <main className="search-page test">
@@ -536,6 +586,43 @@ const SearchDetails = ({ history }) => {
                     })
                   : ""}
               </section>
+              <section className="mt-4">
+                <div>
+                  <Form.Check
+                    type="checkbox"
+                    id="exclude_accessory"
+                    label="Exclude Accessory"
+                    value={exclude_accessory}
+                    onChange={handleExcludeAccessory}
+                    checked={exclude_accessory}
+                  />
+                </div>
+              </section>
+              <section className="mt-4">
+                <div>
+                  <Form.Check
+                    type="checkbox"
+                    id="only_discounted"
+                    label="Only Discounted"
+                    value={only_discounted}
+                    onChange={handleOnlyDiscounted}
+                    checked={only_discounted}
+                  />
+                </div>
+              </section>
+              <section className="mt-4">
+                <div>
+                  <Form.Check
+                    type="checkbox"
+                    id="available_only"
+                    label="Available Only"
+                    value={available_only}
+                    onChange={handleOnlyAvailable}
+                    checked={available_only}
+                  />
+                </div>
+              </section>
+
               <section className="cat-for-mobile"></section>
             </div>
 
