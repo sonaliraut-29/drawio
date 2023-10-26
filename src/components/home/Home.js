@@ -299,7 +299,7 @@ const Home = ({ history }) => {
               <Col className="d-flex justify-content-center align-items-center title-wrap mt-5 mb-4">
                 <h2 className="section-title mb-1">Leaflets</h2>
                 <span>
-                  <a href="#">View All</a>
+                  <a href={routes.LEAFLETS}>View All</a>
                 </span>
               </Col>
             </Row>

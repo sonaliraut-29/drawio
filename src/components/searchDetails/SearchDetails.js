@@ -40,7 +40,15 @@ const SearchDetails = ({ history }) => {
   const [actualSubcategories, setActualSubCategories] = useState([]);
   const [actualCategories, setActualCategories] = useState([]);
 
-  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState(
+    history &&
+      history.location &&
+      history.location.state &&
+      history.location.state !== undefined &&
+      history.location.state.selectedCategory
+      ? [history.location.state.selectedCategory]
+      : []
+  );
   const [selectedSubCategories, setSelectedSubCategories] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
   const [minPrice, setMinPrice] = useState(0);
@@ -64,14 +72,14 @@ const SearchDetails = ({ history }) => {
     fetchVendors();
   }, []);
 
-  useEffect(() => {
-    history &&
-      history.location &&
-      history.location.state &&
-      history.location.state !== undefined &&
-      history.location.state.selectedCategory &&
-      setSelectedCategories([history.location.state.selectedCategory]);
-  }, [history]);
+  // useEffect(() => {
+  //   history &&
+  //     history.location &&
+  //     history.location.state &&
+  //     history.location.state !== undefined &&
+  //     history.location.state.selectedCategory &&
+  //     setSelectedCategories([history.location.state.selectedCategory]);
+  // }, [history]);
 
   useEffect(() => {
     const subCategoriesTemp = [];
