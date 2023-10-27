@@ -176,3 +176,14 @@ a#basic-nav-dropdown:after {
     background-color: #007cc3 !important;
     border-color: #007cc3 !important;
 } 
+.react-datepicker-wrapper {
+    width: 100%;
+}
+
+.react-datepicker-wrapper input {
+    width: 100%;
+    outline: none;
+    box-shadow: none;
+    text-indent: 12px;
+
+}

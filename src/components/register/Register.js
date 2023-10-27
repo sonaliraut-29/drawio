@@ -15,6 +15,8 @@ import { getCookie, setCookie } from "../../lib/helpers";
 import moment from "moment";
 import DatePicker from "react-datepicker";
 
+import "react-datepicker/dist/react-datepicker.css";
+
 const Register = ({ history }) => {
   const baseUrl = process.env.REACT_APP_API_BASEURL;
 
@@ -250,16 +252,6 @@ const Register = ({ history }) => {
                   ) : (
                     ""
                   )}
-                </Form.Group>
-                <Form.Group
-                  className="mb-3 pass-criteria"
-                  controlId="formBasicPassCriteria"
-                >
-                  <Form.Label>
-                    <a href="#" className="">
-                      Password criteria
-                    </a>
-                  </Form.Label>
                 </Form.Group>
 
                 <Form.Group className="mb-4" controlId="formBasicNationality">
