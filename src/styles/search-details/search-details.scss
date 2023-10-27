@@ -3,72 +3,6 @@ main.search-page {
     background: #f5f5f5;
 }
 
-
-// .search-products {
-//     .item {
-
-  
-//       .item-wrap {
-//         background: #fff;
-//         padding: 15px;
-//         border-radius: 20px;
-//         box-shadow: 0 0 20px #00000014;
-  
-//         .item-desc {
-//           position: relative;
-//           img {
-//             width: 60px !important;
-//             position: absolute;
-//             right: 0;
-//             top: -18px;
-//             border-radius: 50px;
-//             border: 1px solid #0b0e10;
-//             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-//             width: 60px !important;
-//             height: 60px;
-//             object-fit: contain;
-
-//           }
-//           h5 {
-//             text-align: left;
-//             padding-top: 15px;
-//           }
-  
-//           p {
-
-//             text-align: left;
-//             overflow: hidden;
-//             display: -webkit-box;
-//             -webkit-line-clamp: 3;
-//             -webkit-box-orient: vertical;
-//             min-height: 72px;
-//             font-size: 14px;
-//             height: 72px;
-//             display: flex;
-//             align-items: center;
-//           }
-//         }
-//         .price {
-//           text-align: left;
-//           border-top: 1px solid #ddd;
-//           padding-top: 5px;
-//           span {
-//             font-size: 24px;
-//             font-weight: 600;
-//           }
-//           strike {
-//             color: #848484;
-//           }
-//         }
-//       }
-//       .item-wrap > img {
-//         height: 215px;
-//         min-height: 240px;
-//       }
-//     }
-//   }
-
-
 //  Search
 
 #search-bar {
@@ -116,7 +50,7 @@ main.search-page {
   height: 3px !important;
   background: #333; margin-right: 15px;
 }
-.horizontal-slider .track.track-1 {
+.horizontal-slider .track.track-1, .horizontal-slider .track.track-2 {
   background: #0090d3;
   width: 20px;
   height: 20px;
@@ -126,6 +60,9 @@ main.search-page {
 .horizontal-slider .thumb {
   margin-top: 10px;
   font-weight: 600;
+}
+.horizontal-slider .thumb:focus-visible {
+  outline: none;
 }
 .price-range-slider {
   background: #fff;
@@ -152,7 +89,11 @@ main.search-page {
     color: #f00;
 }
 
-
+button#dropdown-sort {
+  background: transparent !important;
+  color: #3E3E3E !important;
+  border-color: #3E3E3E;
+}
 
 
 
