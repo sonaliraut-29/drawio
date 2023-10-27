@@ -245,43 +245,47 @@ const Banner = () => {
           <Row className="mt-4">
             <section className="col-sm-3 cat-left">
               <section className="cat-for-desktop">
-                {categories && categories.length > 0 ? (
-                  <>
-                    {categories.map((item, index) => {
-                      return (
-                        <>
+                <div className="filter-layout">
+                  {categories && categories.length > 0 ? (
+                    <>
+                      {categories.map((item, index) => {
+                        return (
+                          <>
+                            <Form.Check
+                              type="checkbox"
+                              id={index}
+                              label={item.Category}
+                              value={item.Category}
+                              onChange={handleCategories}
+                              checked={selectedCategories.includes(
+                                item.Category
+                              )}
+                            />
+                          </>
+                        );
+                      })}
+                    </>
+                  ) : (
+                    ""
+                  )}
+                </div>
+                <div className="mt-4 vendors-filter">
+                  <h6>Vendors</h6>
+                  {vendorsAll && vendorsAll.length > 0
+                    ? vendorsAll.map((item, index) => {
+                        return (
                           <Form.Check
                             type="checkbox"
                             id={index}
-                            label={item.Category}
-                            value={item.Category}
-                            onChange={handleCategories}
-                            checked={selectedCategories.includes(item.Category)}
+                            label={item.Vendor}
+                            value={item.Vendor}
+                            onChange={handleVendor}
+                            checked={selectedVendors.includes(item.Vendor)}
                           />
-                        </>
-                      );
-                    })}
-                  </>
-                ) : (
-                  ""
-                )}
-              </section>
-              <section className="mt-4 vendors-filter">
-                <h6>Vendors</h6>
-                {vendorsAll && vendorsAll.length > 0
-                  ? vendorsAll.map((item, index) => {
-                      return (
-                        <Form.Check
-                          type="checkbox"
-                          id={index}
-                          label={item.Vendor}
-                          value={item.Vendor}
-                          onChange={handleVendor}
-                          checked={selectedVendors.includes(item.Vendor)}
-                        />
-                      );
-                    })
-                  : ""}
+                        );
+                      })
+                    : ""}
+                </div>
               </section>
 
               <section className="cat-for-mobile">
