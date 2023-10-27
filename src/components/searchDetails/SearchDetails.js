@@ -40,7 +40,15 @@ const SearchDetails = ({ history }) => {
   const [actualSubcategories, setActualSubCategories] = useState([]);
   const [actualCategories, setActualCategories] = useState([]);
 
-  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState(
+    history &&
+      history.location &&
+      history.location.state &&
+      history.location.state !== undefined &&
+      history.location.state.selectedCategory
+      ? [history.location.state.selectedCategory]
+      : []
+  );
   const [selectedSubCategories, setSelectedSubCategories] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
   const [minPrice, setMinPrice] = useState(0);
@@ -56,6 +64,7 @@ const SearchDetails = ({ history }) => {
   const [exclude_accessory, setExcludeAccessory] = useState(0);
   const [only_discounted, setOnlyDiscounted] = useState(0);
   const [available_only, setAvailableOnly] = useState(0);
+  const [isShowFilter, setIsShowFilter] = useState(false);
   const token = getCookie("token");
 
   useEffect(() => {
@@ -70,7 +79,7 @@ const SearchDetails = ({ history }) => {
       history.location.state &&
       history.location.state !== undefined &&
       history.location.state.selectedCategory &&
-      setSelectedCategories([history.location.state.selectedCategory]);
+      setIsShowFilter(true);
   }, [history]);
 
   useEffect(() => {
@@ -550,12 +559,22 @@ const SearchDetails = ({ history }) => {
                 </Button>
               </Form>
             </div>
-            <div className="col-2 d-flex align-items-center">Filter</div>
+            <div className="col-2 d-flex align-items-center">
+              <button
+                type="button"
+                onClick={() => setIsShowFilter(!isShowFilter)}
+              >
+                {isShowFilter ? "Hide Filter" : "Show Filter"}
+              </button>
+            </div>
           </Row>
         </section>
         <section className="pt-0 pt-sm-5 pb-5">
           <Row>
-            <div className="col-sm-3 cat-left">
+            <div
+              className="col-sm-3 cat-left"
+              style={{ display: isShowFilter ? "block" : "None" }}
+            >
               <section className="cat-for-desktop">
                 {actualSubcategories && actualSubcategories.length > 0 ? (
                   <Accordion defaultActiveKey={["0"]}>

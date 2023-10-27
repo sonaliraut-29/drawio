@@ -48,6 +48,7 @@ const Leaflet = () => {
   }, [subCategories]);
 
   const handleCategories = (e) => {
+    setPage(1);
     const prevValues = [...selectedCategories];
 
     if (e.target.checked) {
@@ -104,10 +105,14 @@ const Leaflet = () => {
     setLoading(true);
 
     const offset_rows = (page - 1) * limit;
-    const tempCategories =
-      selectedCategories && selectedCategories.length > 0
-        ? selectedCategories.join(",")
-        : "*";
+    let category = "*";
+    if (selectedCategories && selectedCategories.length > 0) {
+      const newselectedCategories = selectedCategories.map((item) => {
+        return item.replace(/ & /g, "_and_").replace(/&/g, "and");
+      });
+
+      category = newselectedCategories.join("|");
+    }
 
     let vendor = "*";
     if (selectedVendors && selectedVendors.length > 0) {
@@ -124,7 +129,7 @@ const Leaflet = () => {
           "&Start_offset=" +
           offset_rows +
           "&Category=" +
-          tempCategories +
+          category +
           "&Vendor=" +
           vendor
       )
@@ -145,10 +150,13 @@ const Leaflet = () => {
     const offset_rows = (currentPageSelected - 1) * limit;
 
     setLoading(true);
-    const tempCategories =
-      selectedCategories && selectedCategories.length > 0
-        ? selectedCategories.join(",")
-        : "*";
+    let category = "*";
+    if (selectedCategories && selectedCategories.length > 0) {
+      const newselectedCategories = selectedCategories.map((item) => {
+        return item.replace(/ & /g, "_and_").replace(/&/g, "and");
+      });
+      category = newselectedCategories.join("|");
+    }
 
     let vendor = "*";
     if (selectedVendors && selectedVendors.length > 0) {
@@ -163,7 +171,7 @@ const Leaflet = () => {
           "&Start_offset=" +
           offset_rows +
           "&Category=" +
-          tempCategories +
+          category +
           "&Vendor=" +
           vendor
       )
@@ -220,17 +228,16 @@ const Leaflet = () => {
   };
 
   const handleVendor = (e) => {
-    setSelectedVendors([e.target.value]);
     setPage(1);
-    // const prevValues = [...selectedVendors];
+    const prevValues = [...selectedVendors];
 
-    // if (e.target.checked) {
-    //   prevValues.push(e.target.value);
-    //   setSelectedVendors(prevValues);
-    // } else {
-    //   const newArray = prevValues.filter((item) => item !== e.target.value);
-    //   setSelectedVendors(newArray);
-    // }
+    if (e.target.checked) {
+      prevValues.push(e.target.value);
+      setSelectedVendors(prevValues);
+    } else {
+      const newArray = prevValues.filter((item) => item !== e.target.value);
+      setSelectedVendors(newArray);
+    }
   };
 
   const handleClick = (item) => {
@@ -280,7 +287,7 @@ const Leaflet = () => {
                   ? vendors.map((item, index) => {
                       return (
                         <Form.Check
-                          type="radio"
+                          type="checkbox"
                           id={index}
                           label={item.Vendor}
                           value={item.Vendor}

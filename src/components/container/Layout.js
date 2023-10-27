@@ -11,7 +11,8 @@ const Layout = ({ history }) => {
     history.location &&
     history.location.pathname &&
     (history.location.pathname.includes("/login") ||
-      history.location.pathname.includes("/register"))
+      history.location.pathname.includes("/register") ||
+      history.location.pathname.includes("/forgotPassword"))
       ? true
       : false;
   return (

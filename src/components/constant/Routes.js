@@ -19,3 +19,4 @@ export const PRODUCTDETAIL = "/productDetail";
 export const FAVOURITES = "/favourites";
 export const MY_PROFILE = "/profile";
 export const CHANGE_PASSWORD = "/changePassword";
+export const FORGOT_PASSWORD = "/forgotPassword";

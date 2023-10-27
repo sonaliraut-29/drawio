@@ -14,6 +14,7 @@ const Login = ({ history }) => {
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState();
   const [passwordError, setPasswordError] = useState();
+  const [errors, setErrors] = useState("");
 
   const handleEmail = (e) => {
     let emailRegex = /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/;
@@ -44,6 +45,8 @@ const Login = ({ history }) => {
           setCookie("user_id", res.data.user.User_ID);
           setCookie("email", res.data.user.email);
           history.push({ pathname: routes.HOME_ROUTE });
+        } else {
+          setErrors(res.data.message);
         }
       })
       .catch((e) => console.log(e));
@@ -53,7 +56,7 @@ const Login = ({ history }) => {
       <Container className="log-reg login-page">
         <Row>
           <div className="col form-title text-center my-5">
-            <a href="http://localhost:3000/">
+            <a href={routes.ROOT_ROUTE}>
               <img
                 src="/dist/assets/images/logo.png"
                 alt="Genie Saves Logo image"
@@ -92,12 +95,13 @@ const Login = ({ history }) => {
                 />
                 {passwordError ? <p className="error">{passwordError}</p> : ""}
               </Form.Group>
+              {errors && "" !== errors ? <p className="error">{errors}</p> : ""}
               <Form.Group
                 className="mb-3 text-right forgetpass"
                 controlId="formBasicCheckbox"
               >
                 <Form.Label>
-                  <a href="#" className="">
+                  <a href={routes.FORGOT_PASSWORD} className="">
                     Forget Password?
                   </a>
                 </Form.Label>
