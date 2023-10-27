@@ -142,6 +142,7 @@ const Home = ({ history }) => {
             {banners && banners.length > 0 ? (
               <Carousel>
                 {banners.map((item) => {
+                  let vendorName = item.Vendor.replace(" ", "-").toLowerCase();
                   return (
                     <Carousel.Item>
                       <a
@@ -160,6 +161,16 @@ const Home = ({ history }) => {
                           }
                           alt="banner"
                         />
+                        <span className="banner-vendor-logo">
+                          <img
+                            src={
+                              item.Vendor
+                                ? images[vendorName]
+                                : "./dist/assets/images/default-logo-sm.png"
+                            }
+                            alt="image"
+                          ></img>
+                        </span>
                       </a>
                     </Carousel.Item>
                   );
