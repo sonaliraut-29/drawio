@@ -92,7 +92,7 @@ const Header = ({ history }) => {
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
-            <Nav className="me-auto">
+            <Nav className="mx-auto">
               {links &&
                 links.map((item) => {
                   return (
@@ -122,7 +122,10 @@ const Header = ({ history }) => {
                   </NavDropdown.Item>
                 </NavDropdown>
               ) : (
-                <Nav.Link href={routes.LOGIN}>Login</Nav.Link>
+                <Nav.Link href={routes.LOGIN}>
+                  {" "}
+                  <i class="fa fa-user" aria-hidden="true"></i> Login
+                </Nav.Link>
               )}
             </Nav>
             {/* <Nav.Link onClick={handleLogout}>Logout</Nav.Link> */}

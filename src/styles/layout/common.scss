@@ -31,20 +31,35 @@ a {
 a:hover {
     color: #0090d3;
 }
-button.btn.btn-primary {
-    background: #007CC3;
-    border-color: #007CC3;
+.btn-primary {
+    background: #007CC3 !important;
+    border-color: #007CC3 !important;
+    border-radius: 20px !important;
+    margin-top: 10px;
+    padding: 5px 10px;
 }
 
-button.btn.btn-primary:hover {
+.btn-primary:hover {
     background: #333;
     border-color: #333;
+
 }
 
-button.btn {
+.btn {
     border-radius: 20px;
 }
+.btn-cancel {
+    background-color: #aaa !important;
+    border-color: #aaa !important;
+    margin-left: 15px;
+    color: #fff !important;
+    border-radius: 20px !important;
+    margin-top: 10px;
+}
 
+.btn-cancel:hover {
+    background-color: #000 !important;
+}
 
 
 ul.pagination li a {
@@ -187,3 +202,11 @@ a#basic-nav-dropdown:after {
     text-indent: 12px;
 
 }
+i.fa.fa-exchange {
+    transform: rotate(90deg);
+}
+p.error {
+    color: #da0303;
+    font-size: 14px;
+}
+

@@ -471,7 +471,7 @@ const Profile = ({ history }) => {
                   {!isEdit ? "Save" : "Edit"}
                 </Button>
                 {!isEdit ? (
-                  <a className="btn btn-primary" href={routes.HOME_ROUTE}>
+                  <a className="btn btn-cancel" href={routes.HOME_ROUTE}>
                     Cancel
                   </a>
                 ) : (

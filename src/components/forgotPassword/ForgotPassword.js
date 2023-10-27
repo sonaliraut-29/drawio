@@ -83,6 +83,7 @@ const ForgotPassword = ({ history }) => {
                   Send
                 </Button>
                 <Button
+                  className="btn-cancel"
                   variant="primary"
                   type="button"
                   onClick={() => {

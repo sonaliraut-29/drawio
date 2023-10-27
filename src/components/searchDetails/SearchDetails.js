@@ -534,41 +534,47 @@ const SearchDetails = ({ history }) => {
   };
   return (
     <main className="search-page test">
+      <div className="search-wrap">
+        <section id="search-bar" className="mb-4 px-0 ">
+          <Container>
+            <Row>
+              <div className="col-sm-2"></div>
+              <div className="col-sm-6">
+                <Form className="d-flex" onSubmit={(e) => e.preventDefault()}>
+                  <Form.Control
+                    type="Search product here"
+                    placeholder="Search product here"
+                    className=""
+                    aria-label="Search product here"
+                    value={searchValue}
+                    onChange={(e) => handleChange(e)}
+                    onKeyDown={(e) => handleKeyDown(e)}
+                  />
+                  <Button
+                    // onClick={handleSearch}
+                    disabled={searchValue && "" !== searchValue ? false : true}
+                    type="button"
+                  >
+                    <img src={images.SearchBack} alt="searchBack" />
+                  </Button>
+                </Form>
+              </div>
+              <div className="col-sm-2 d-flex align-items-center">
+                <button
+                  className="btn-simple"
+                  type="button"
+                  onClick={() => setIsShowFilter(!isShowFilter)}
+                >
+                  {isShowFilter ? "Hide Filter" : "Show Filter"}
+                </button>
+              </div>
+            </Row>
+          </Container>
+        </section>
+      </div>
       <Container>
         {loading && <CommunityLoaderCircularDash isbackground={false} />}
 
-        <section id="search-bar" className="mb-4 px-0 ">
-          <Row>
-            <div className="col-10">
-              <Form className="d-flex" onSubmit={(e) => e.preventDefault()}>
-                <Form.Control
-                  type="Search product here"
-                  placeholder="Search product here"
-                  className=""
-                  aria-label="Search product here"
-                  value={searchValue}
-                  onChange={(e) => handleChange(e)}
-                  onKeyDown={(e) => handleKeyDown(e)}
-                />
-                <Button
-                  // onClick={handleSearch}
-                  disabled={searchValue && "" !== searchValue ? false : true}
-                  type="button"
-                >
-                  <img src={images.SearchBack} alt="searchBack" />
-                </Button>
-              </Form>
-            </div>
-            <div className="col-2 d-flex align-items-center">
-              <button
-                type="button"
-                onClick={() => setIsShowFilter(!isShowFilter)}
-              >
-                {isShowFilter ? "Hide Filter" : "Show Filter"}
-              </button>
-            </div>
-          </Row>
-        </section>
         <section className="pt-0 pt-sm-5 pb-5">
           <Row>
             <div
@@ -663,47 +669,53 @@ const SearchDetails = ({ history }) => {
                     })
                   : ""}
               </section>
-              <section className="mt-4">
-                <div>
-                  <Form.Check
-                    type="checkbox"
-                    id="exclude_accessory"
-                    label="Exclude Accessory"
-                    value={exclude_accessory}
-                    onChange={handleExcludeAccessory}
-                    checked={exclude_accessory}
-                  />
+              <section className="mt-4 filter-layout">
+                <div className="mt-0">
+                  <div>
+                    <Form.Check
+                      type="checkbox"
+                      id="exclude_accessory"
+                      label="Exclude Accessory"
+                      value={exclude_accessory}
+                      onChange={handleExcludeAccessory}
+                      checked={exclude_accessory}
+                    />
+                  </div>
                 </div>
-              </section>
-              <section className="mt-4">
-                <div>
-                  <Form.Check
-                    type="checkbox"
-                    id="only_discounted"
-                    label="Only Discounted"
-                    value={only_discounted}
-                    onChange={handleOnlyDiscounted}
-                    checked={only_discounted}
-                  />
+                <div className="mt-4">
+                  <div>
+                    <Form.Check
+                      type="checkbox"
+                      id="only_discounted"
+                      label="Only Discounted"
+                      value={only_discounted}
+                      onChange={handleOnlyDiscounted}
+                      checked={only_discounted}
+                    />
+                  </div>
                 </div>
-              </section>
-              <section className="mt-4">
-                <div>
-                  <Form.Check
-                    type="checkbox"
-                    id="available_only"
-                    label="Available Only"
-                    value={available_only}
-                    onChange={handleOnlyAvailable}
-                    checked={available_only}
-                  />
+                <div className="mt-4">
+                  <div>
+                    <Form.Check
+                      type="checkbox"
+                      id="available_only"
+                      label="Available Only"
+                      value={available_only}
+                      onChange={handleOnlyAvailable}
+                      checked={available_only}
+                    />
+                  </div>
                 </div>
               </section>
 
               <section className="cat-for-mobile"></section>
             </div>
 
-            <div className="col-sm-9 cat-right">
+            <div
+              className={
+                isShowFilter ? "col-sm-9 cat-right" : "col-sm-12 cat-right"
+              }
+            >
               <Row>
                 <div className="col-sm-12 mb-4 mt-sm-0 mt-4 search-title-wrapper">
                   <Row>
@@ -730,6 +742,7 @@ const SearchDetails = ({ history }) => {
                       </button>
                       <Dropdown className="mx-2 d-flex justify-content-end">
                         <Dropdown.Toggle variant="success" id="dropdown-sort">
+                          <i class="fa fa-exchange" aria-hidden="true"></i>{" "}
                           {title ? title : "Sort by"}
                         </Dropdown.Toggle>
 
@@ -754,10 +767,6 @@ const SearchDetails = ({ history }) => {
                               );
                             }}
                           >
-                            <i
-                              class="fa fa-long-arrow-down"
-                              aria-hidden="true"
-                            ></i>{" "}
                             Price High to Low
                           </Dropdown.Item>
                           <Dropdown.Item
@@ -769,10 +778,6 @@ const SearchDetails = ({ history }) => {
                               );
                             }}
                           >
-                            <i
-                              class="fa fa-long-arrow-up"
-                              aria-hidden="true"
-                            ></i>{" "}
                             Discount % Low to High
                           </Dropdown.Item>
                           <Dropdown.Item
@@ -784,10 +789,6 @@ const SearchDetails = ({ history }) => {
                               );
                             }}
                           >
-                            <i
-                              class="fa fa-long-arrow-down"
-                              aria-hidden="true"
-                            ></i>{" "}
                             Discount % High to Low
                           </Dropdown.Item>
                           <Dropdown.Item
