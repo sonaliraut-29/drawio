@@ -734,7 +734,7 @@ const SearchDetails = ({ history }) => {
                     </div>
                     <div className="col-sm-4 d-flex justify-content-end">
                       <button
-                        className="btn btn-primary"
+                        className="btn btn-custom"
                         type="button"
                         onClick={handleReset}
                       >
