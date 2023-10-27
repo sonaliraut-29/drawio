@@ -14,6 +14,7 @@ import {
 } from "../../redux/reduxConstants/EndPoints";
 import { getCookie, setCookie } from "../../lib/helpers";
 import moment from "moment";
+import DatePicker from "react-datepicker";
 
 const Profile = ({ history }) => {
   const baseUrl = process.env.REACT_APP_API_BASEURL;
@@ -146,7 +147,7 @@ const Profile = ({ history }) => {
           setName(profile.Name);
           setEmail(profile.email);
           setPhone(profile.Mobile);
-          setDOB(moment(profile.DOB).format("DD/MM/YYYY"));
+          setDOB(new Date(profile.DOB));
           setGovernate(profile.Area);
           setCountryId(profile.Nationality);
           setCity(profile.City);
@@ -374,12 +375,19 @@ const Profile = ({ history }) => {
 
               <Form.Group className="mb-4" controlId="formBasicDOB">
                 <Form.Label>DOB</Form.Label>
-                <Form.Control
+                {/* <Form.Control
                   type="date"
                   placeholder={DOB ? DOB : "xx/xx/xxxx"}
                   value={DOB}
                   onChange={handleDob}
                   disabled={isEdit}
+                /> */}
+                <DatePicker
+                  placeholderText="xx/xx/xxxx"
+                  selected={DOB ? new Date(DOB) : null}
+                  onChange={(date) => setDOB(date)}
+                  // openToDate={new Date("1993/09/28")}
+                  disabledKeyboardNavigation={isEdit}
                 />
                 {dateError ? <p className="error">{dateError}</p> : ""}
                 {errors && errors.hasOwnProperty("DOB") ? (

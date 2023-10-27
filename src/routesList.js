@@ -11,6 +11,7 @@ import ProductDetail from "./components/productDetail/ProductDetail";
 import Favourites from "./components/favourites/Favourites";
 import Profile from "./components/profile/Profile";
 import ChangePassword from "./components/changePassword/ChangePassword";
+import ForgotPassword from "./components/forgotPassword/ForgotPassword";
 
 const routesList = [
   {
@@ -71,6 +72,11 @@ const routesList = [
   {
     path: routes.CHANGE_PASSWORD,
     component: ChangePassword,
+    exact: true,
+  },
+  {
+    path: routes.FORGOT_PASSWORD,
+    component: ForgotPassword,
     exact: true,
   },
 ];

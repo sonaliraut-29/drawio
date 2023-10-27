@@ -13,6 +13,7 @@ import {
 } from "../../redux/reduxConstants/EndPoints";
 import { getCookie, setCookie } from "../../lib/helpers";
 import moment from "moment";
+import DatePicker from "react-datepicker";
 
 const Register = ({ history }) => {
   const baseUrl = process.env.REACT_APP_API_BASEURL;
@@ -323,11 +324,17 @@ const Register = ({ history }) => {
 
                 <Form.Group className="mb-4" controlId="formBasicDOB">
                   <Form.Label>DOB</Form.Label>
-                  <Form.Control
+                  {/* <Form.Control
                     type="date"
                     placeholder="xx/xx/xxxx"
                     value={DOB}
                     onChange={handleDob}
+                  /> */}
+                  <DatePicker
+                    placeholderText="xx/xx/xxxx"
+                    selected={DOB}
+                    onChange={(date) => setDOB(date)}
+                    openToDate={new Date("1993/09/28")}
                   />
                   {dateError ? <p className="error">{dateError}</p> : ""}
                   {errors && errors.hasOwnProperty("DOB") ? (

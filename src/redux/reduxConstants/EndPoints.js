@@ -21,3 +21,4 @@ export const ADD_FAVOURITES = "/addToFavourites";
 export const ALL_LEAFLETS = "/leafletsPaginate";
 export const ALL_BANNERS = "/BannersPaginate";
 export const VENDORS = "/vendors";
+export const FORGOT_PASSWORD = "/forgotPassword";
