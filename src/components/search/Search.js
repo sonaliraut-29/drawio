@@ -59,6 +59,7 @@ const Search = ({ history }) => {
           {banners && banners.length > 0 ? (
             <Carousel>
               {banners.map((item) => {
+                let vendorName = item.Vendor.replace(" ", "-").toLowerCase();
                 return (
                   <Carousel.Item>
                     <a
@@ -79,7 +80,11 @@ const Search = ({ history }) => {
                       />
                       <span className="banner-vendor-logo">
                         <img
-                          src="/dist/assets/images/VendorLogos/Lulu.jpg"
+                          src={
+                            item.Vendor
+                              ? images[vendorName]
+                              : "./dist/assets/images/default-logo-sm.png"
+                          }
                           alt="image"
                         ></img>
                       </span>
