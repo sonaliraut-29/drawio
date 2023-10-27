@@ -75,6 +75,7 @@ const ForgotPassword = ({ history }) => {
 
               <Form.Group className="mb-3 text-center">
                 <Button
+                  className="btn-custom"
                   variant="primary"
                   type="button"
                   disabled={"" !== emailError}
