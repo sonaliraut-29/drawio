@@ -7,7 +7,7 @@ export const LogoImage = `${imageBasePath}/logo.png`;
 export const SearchBack = `${imageBasePath}/search-black.svg`;
 export const vendor = `${imageBasePath}/vendor.png`;
 
-export const al_hamiki = `${imageBasePath}/Al-Hakimi.png`;
+export const hakim = `${imageBasePath}/Hakim.png`;
 export const best = `${imageBasePath}/Best.png`;
 export const carrefour = `${imageBasePath}/Carrefour.png`;
 export const citycenter = `${imageBasePath}/CityCenter.png`;

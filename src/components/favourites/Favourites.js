@@ -183,7 +183,7 @@ const Favourites = ({ history }) => {
                                     <div className="price">
                                       <span>KD {item.Latest_Price} </span>
                                       <small>
-                                        <strike>Old Price</strike>
+                                        <strike>{item.Price_when_Added}</strike>
                                       </small>
                                     </div>
                                   </div>

@@ -226,6 +226,7 @@ const Home = ({ history }) => {
                     <div
                       className="item"
                       onClick={() => handleCategorySearch(item)}
+                      style={{ cursor: "pointer" }}
                     >
                       <div className="cat-item mobile">
                         <div className="cat-img">
@@ -327,7 +328,13 @@ const Home = ({ history }) => {
                     return (
                       <div className="item">
                         <div className="main-item-wrap">
-                          <div className="img-wrap">
+                          <div
+                            className="img-wrap"
+                            onClick={() =>
+                              window.open(item.leaflet_link, "_blank")
+                            }
+                            style={{ cursor: "pointer" }}
+                          >
                             <img
                               src={
                                 item.leaflet_image && "" !== item.leaflet_image

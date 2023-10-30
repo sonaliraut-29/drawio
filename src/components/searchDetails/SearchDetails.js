@@ -19,6 +19,7 @@ import {
   ADD_FAVOURITES,
   REMOVE_FAVOURITES,
   VENDORS,
+  BRANDS,
 } from "../../redux/reduxConstants/EndPoints";
 import Pagination from "../../uikit/Paginate";
 import CommunityLoaderCircularDash from "../../uikit/CommunityLoaderCircularDash";
@@ -65,12 +66,16 @@ const SearchDetails = ({ history }) => {
   const [only_discounted, setOnlyDiscounted] = useState(0);
   const [available_only, setAvailableOnly] = useState(0);
   const [isShowFilter, setIsShowFilter] = useState(false);
+  const [brands, setBrands] = useState([]);
+  const [selectedBrands, setSelectedBrands] = useState([]);
+
   const token = getCookie("token");
 
   useEffect(() => {
     fetchCategories();
     fetchSubcategories();
     fetchVendors();
+    fetchBrands();
   }, []);
 
   useEffect(() => {
@@ -106,6 +111,7 @@ const SearchDetails = ({ history }) => {
     selectedCategories,
     selectedSubCategories,
     selectedVendors,
+    selectedBrands,
     exclude_accessory,
     only_discounted,
     available_only,
@@ -126,6 +132,19 @@ const SearchDetails = ({ history }) => {
     } else {
       const newArray = prevValues.filter((item) => item !== e.target.value);
       setSelectedVendors(newArray);
+    }
+  };
+
+  const handleBrand = (e) => {
+    setPage(1);
+    const prevValues = [...selectedBrands];
+
+    if (e.target.checked) {
+      prevValues.push(e.target.value);
+      setSelectedBrands(prevValues);
+    } else {
+      const newArray = prevValues.filter((item) => item !== e.target.value);
+      setSelectedBrands(newArray);
     }
   };
   const handleCategories = (e) => {
@@ -191,6 +210,17 @@ const SearchDetails = ({ history }) => {
       .catch((e) => console.log(e));
   };
 
+  const fetchBrands = () => {
+    api(baseUrl)
+      .get(BRANDS)
+      .then((res) => {
+        if (res.data.success) {
+          setBrands(res.data.data);
+        }
+      })
+      .catch((e) => console.log(e));
+  };
+
   let fullSlug = "";
   let slugString = "";
   let slug = "";
@@ -217,11 +247,12 @@ const SearchDetails = ({ history }) => {
   useEffect(() => {
     if (searchText && "" !== searchText) {
       fetchProductList(searchText);
-      setSearchValue(searchText.replace("%20", " "));
+      setSearchValue(searchText.replace("%20", " ").replace(/%20| /g, " "));
     }
   }, [searchText]);
 
   const fetchProductList = (searchText) => {
+    let user_id = getCookie("user_id");
     setLoading(true);
 
     const offset_rows = (page - 1) * limit;
@@ -253,9 +284,16 @@ const SearchDetails = ({ history }) => {
     if (selectedVendors && selectedVendors.length > 0) {
       vendor = selectedVendors.join(",");
     }
+
+    let brands = "";
+    if (selectedBrands && selectedBrands.length > 0) {
+      brands = selectedBrands.join(",");
+    }
     // const textTemp =
     //   searchValue && "" !== searchValue ? searchValue : searchText;
-
+    if (!user_id) {
+      user_id = "";
+    }
     api(baseUrl)
       .get(
         SEARCH +
@@ -281,7 +319,11 @@ const SearchDetails = ({ history }) => {
           "&available_only=" +
           available_only +
           "&sub_category=" +
-          subcategory
+          subcategory +
+          "&brand=" +
+          brands +
+          "&user_id=" +
+          user_id
       )
       .then((res) => {
         setLoading(false);
@@ -306,7 +348,14 @@ const SearchDetails = ({ history }) => {
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && e.target.value.trim().length > 2) {
-      handleReset();
+      setPage(1);
+      setAvailableOnly(0);
+      setOnlyDiscounted(0);
+      setExcludeAccessory(0);
+      setSelectedCategories([]);
+      setSelectedSubCategories([]);
+      setSelectedVendors([]);
+
       history.push({
         pathname: `${routes.SEARCH_ROUTE}`,
         search: `?query=${e.target.value}`,
@@ -315,6 +364,7 @@ const SearchDetails = ({ history }) => {
   };
 
   const handlePageClick = (currentpage) => {
+    let user_id = getCookie("user_id");
     window.scroll(0, 0);
 
     setPage(currentpage.selected + 1);
@@ -350,6 +400,15 @@ const SearchDetails = ({ history }) => {
       vendor = selectedVendors.join(",");
     }
 
+    let brands = "";
+    if (selectedBrands && selectedBrands.length > 0) {
+      brands = selectedBrands.join(",");
+    }
+
+    if (!user_id) {
+      user_id = "";
+    }
+
     const textTemp =
       searchValue && "" !== searchValue ? searchValue : searchText;
     api(baseUrl)
@@ -377,7 +436,11 @@ const SearchDetails = ({ history }) => {
           "&available_only=" +
           available_only +
           "&sub_category=" +
-          subcategory
+          subcategory +
+          "&brand=" +
+          brands +
+          "&user_id=" +
+          user_id
       )
       .then((res) => {
         setLoading(false);
@@ -428,6 +491,9 @@ const SearchDetails = ({ history }) => {
         Vendor: item.Vendor,
         Item_Key: item.Item_Key,
         Price: item.Selling_Price,
+        Item_name: item.Item_name,
+        Item_Image_URL: item.Item_Image_URL,
+        Item_URL: item.Item_URL,
       };
 
       const headers = {
@@ -445,7 +511,7 @@ const SearchDetails = ({ history }) => {
                 itemIn.Vendor == item.Vendor &&
                 itemIn.Item_Key == item.Item_Key
               ) {
-                itemIn.is_Item_Favourites = true;
+                itemIn.is_a_Favorite = "1";
               }
               return itemIn;
             });
@@ -486,7 +552,7 @@ const SearchDetails = ({ history }) => {
               itemIn.Vendor == item.Vendor &&
               itemIn.Item_Key == item.Item_Key
             ) {
-              itemIn.is_Item_Favourites = false;
+              itemIn.is_a_Favorite = "0";
             }
             return itemIn;
           });
@@ -531,6 +597,11 @@ const SearchDetails = ({ history }) => {
     setSelectedCategories([]);
     setSelectedSubCategories([]);
     setSelectedVendors([]);
+    setSearchValue("");
+    history.push({
+      pathname: `${routes.SEARCH_ROUTE}`,
+      search: `?query=`,
+    });
   };
   return (
     <main className="search-page test">
@@ -669,6 +740,23 @@ const SearchDetails = ({ history }) => {
                     })
                   : ""}
               </section>
+              <section className="mt-4 vendors-filter">
+                <h6>Brands</h6>
+                {brands && brands.length > 0
+                  ? brands.map((item, index) => {
+                      return (
+                        <Form.Check
+                          type="checkbox"
+                          id={index}
+                          label={item.Brand}
+                          value={item.Brand}
+                          onChange={handleBrand}
+                          checked={selectedBrands.includes(item.Vendor)}
+                        />
+                      );
+                    })
+                  : ""}
+              </section>
               <section className="mt-4 filter-layout">
                 <div className="mt-0">
                   <div>
@@ -723,8 +811,8 @@ const SearchDetails = ({ history }) => {
                       <h5>
                         {totalCount}{" "}
                         {totalCount == 0 || totalCount == 1
-                          ? "Result"
-                          : "Results"}{" "}
+                          ? "Product"
+                          : "Products"}{" "}
                         found
                         {/* of{" "}
                     {searchValue && "" !== searchValue
@@ -747,17 +835,17 @@ const SearchDetails = ({ history }) => {
                         </Dropdown.Toggle>
 
                         <Dropdown.Menu>
-                          {/* <Dropdown.Item
-                          onClick={() => {
-                            handleSort(
-                              "Discounted_Price",
-                              "asc",
-                              "Price Low to High"
-                            );
-                          }}
-                        >
-                          Price Low to High
-                        </Dropdown.Item> */}
+                          <Dropdown.Item
+                            onClick={() => {
+                              handleSort(
+                                "Discounted_Price",
+                                "asc",
+                                "Price Low to High"
+                              );
+                            }}
+                          >
+                            Price Low to High
+                          </Dropdown.Item>
                           <Dropdown.Item
                             onClick={() => {
                               handleSort(
@@ -769,7 +857,7 @@ const SearchDetails = ({ history }) => {
                           >
                             Price High to Low
                           </Dropdown.Item>
-                          <Dropdown.Item
+                          {/* <Dropdown.Item
                             onClick={() => {
                               handleSort(
                                 "Discount_Percent",
@@ -779,7 +867,7 @@ const SearchDetails = ({ history }) => {
                             }}
                           >
                             Discount % Low to High
-                          </Dropdown.Item>
+                          </Dropdown.Item> */}
                           <Dropdown.Item
                             onClick={() => {
                               handleSort(
@@ -793,42 +881,42 @@ const SearchDetails = ({ history }) => {
                           </Dropdown.Item>
                           <Dropdown.Item
                             onClick={() => {
-                              handleSort("Category", "asc", "Category");
+                              handleSort("Category", "asc", "Category Asc");
                             }}
                           >
                             Category Asc
                           </Dropdown.Item>
                           <Dropdown.Item
                             onClick={() => {
-                              handleSort("Category", "desc", "Category");
+                              handleSort("Category", "desc", "Category Desc");
                             }}
                           >
                             Category Desc
                           </Dropdown.Item>
                           <Dropdown.Item
                             onClick={() => {
-                              handleSort("item_name", "asc", "Title");
+                              handleSort("item_name", "asc", "Title Asc");
                             }}
                           >
                             Title Asc
                           </Dropdown.Item>
                           <Dropdown.Item
                             onClick={() => {
-                              handleSort("item_name", "desc", "Title");
+                              handleSort("item_name", "desc", "Title Desc");
                             }}
                           >
                             Title Desc
                           </Dropdown.Item>
                           <Dropdown.Item
                             onClick={() => {
-                              handleSort("Brand", "asc", "Brand");
+                              handleSort("Brand", "asc", "Brand Asc");
                             }}
                           >
                             Brand Asc
                           </Dropdown.Item>
                           <Dropdown.Item
                             onClick={() => {
-                              handleSort("Brand", "desc", "Brand");
+                              handleSort("Brand", "desc", "Brand Desc");
                             }}
                           >
                             Brand Desc
@@ -852,7 +940,7 @@ const SearchDetails = ({ history }) => {
                             </Dropdown.Toggle>
 
                             <Dropdown.Menu>
-                              {/* <Dropdown.Item
+                              <Dropdown.Item
                                 onClick={() => {
                                   handleSort(
                                     "Discounted_Price",
@@ -862,7 +950,7 @@ const SearchDetails = ({ history }) => {
                                 }}
                               >
                                 Price Low to High
-                              </Dropdown.Item> */}
+                              </Dropdown.Item>
                               <Dropdown.Item
                                 onClick={() => {
                                   handleSort(
@@ -874,7 +962,7 @@ const SearchDetails = ({ history }) => {
                               >
                                 Price High to Low
                               </Dropdown.Item>
-                              <Dropdown.Item
+                              {/* <Dropdown.Item
                                 onClick={() => {
                                   handleSort(
                                     "Discount_Percent",
@@ -884,7 +972,7 @@ const SearchDetails = ({ history }) => {
                                 }}
                               >
                                 Discount % Low to High
-                              </Dropdown.Item>
+                              </Dropdown.Item> */}
                               <Dropdown.Item
                                 onClick={() => {
                                   handleSort(
@@ -898,42 +986,46 @@ const SearchDetails = ({ history }) => {
                               </Dropdown.Item>
                               <Dropdown.Item
                                 onClick={() => {
-                                  handleSort("Category", "asc", "Category");
+                                  handleSort("Category", "asc", "Category Asc");
                                 }}
                               >
                                 Category Asc
                               </Dropdown.Item>
                               <Dropdown.Item
                                 onClick={() => {
-                                  handleSort("Category", "desc", "Category");
+                                  handleSort(
+                                    "Category",
+                                    "desc",
+                                    "Category Desc"
+                                  );
                                 }}
                               >
                                 Category Desc
                               </Dropdown.Item>
                               <Dropdown.Item
                                 onClick={() => {
-                                  handleSort("item_name", "asc", "Title");
+                                  handleSort("item_name", "asc", "Title Asc");
                                 }}
                               >
                                 Title Asc
                               </Dropdown.Item>
                               <Dropdown.Item
                                 onClick={() => {
-                                  handleSort("item_name", "desc", "Title");
+                                  handleSort("item_name", "desc", "Title Desc");
                                 }}
                               >
                                 Title Desc
                               </Dropdown.Item>
                               <Dropdown.Item
                                 onClick={() => {
-                                  handleSort("Brand", "asc", "Brand");
+                                  handleSort("Brand", "asc", "Brand Asc");
                                 }}
                               >
                                 Brand Asc
                               </Dropdown.Item>
                               <Dropdown.Item
                                 onClick={() => {
-                                  handleSort("Brand", "desc", "Brand");
+                                  handleSort("Brand", "desc", "Brand Desc");
                                 }}
                               >
                                 Brand Desc
@@ -1037,16 +1129,14 @@ const SearchDetails = ({ history }) => {
                                   <div
                                     className="heart-icon"
                                     onClick={() =>
-                                      item.hasOwnProperty(
-                                        "is_Item_Favourites"
-                                      ) && item.is_Item_Favourites
+                                      item.hasOwnProperty("is_a_Favorite") &&
+                                      item.is_a_Favorite !== "0"
                                         ? handleRemoveFavourites(item)
                                         : handleAddToFavourites(item)
                                     }
                                   >
-                                    {item.hasOwnProperty(
-                                      "is_Item_Favourites"
-                                    ) && item.is_Item_Favourites ? (
+                                    {item.hasOwnProperty("is_a_Favorite") &&
+                                    item.is_a_Favorite !== "0" ? (
                                       <i
                                         class="fa fa-heart"
                                         aria-hidden="true"
