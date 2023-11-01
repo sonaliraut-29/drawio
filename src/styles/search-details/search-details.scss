@@ -9,21 +9,28 @@ main.search-page {
     input {
       border-color: #9a9a9a;
       border-radius: 30px;
-      height: 50px;
+      height: 45px;
       text-indent: 20px;
+      background: transparent;
     }
     button.btn.btn-primary {
       background: transparent;
       border: 0;
       position: absolute;
-      right: 34px;
-      top: 34px;
+      right: 10px;
+      top: 0;
+      bottom: 0;
     }
   }
   
-  #search-bar form.d-flex{
+  .btn-show-filter {
+    margin-right: 8px;
+    height: 40px;
+    margin-top: 10px;
+}
+  #search-bar form{
     position: relative;
-    background: #fff;
+    // background: #fff;
     padding: 30px 0px;
 
   }
@@ -37,9 +44,9 @@ main.search-page {
     padding: 5px 10px;
   }
 
-  #search-bar {
-    background: #fff;
-}
+//   #search-bar {
+//     background: #fff;
+// }
 
 
 .loading-msg {

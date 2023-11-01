@@ -103,7 +103,7 @@ const Search = ({ history }) => {
         <section id="home__search" className="mt-5">
           <Row>
             <div className="col-12 text-center s_logo mb-5">
-              <img src={images.LogoImage} alt="logo" />
+              <img src="/dist/assets/images/genie-saves-logo2.svg" alt="logo" />
             </div>
           </Row>
           <Row>

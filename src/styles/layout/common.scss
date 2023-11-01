@@ -211,15 +211,34 @@ p.error {
     font-size: 14px;
 }
 
+a.navbar-brand img {
+    width: 81px;
+    // padding: 5px;
+}
 
+nav.bg-body-tertiary.navbar.navbar-expand-lg.navbar-light {
+    padding: 0;
+    background: #fff !important;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.010);
+}
 
 
 // responsive
 /* Using SCSS variables to store breakpoints */
 $breakpoint-mobile: 767px;
 
+$breakpoint-lg-desk: 1680px;
+$breakpoint-vl-desk: 1920px;
+
 @media (max-width: $breakpoint-mobile) {
     .item-design .item .main-item-wrap .price span { font-size: 12px; }
     .item-design .item .main-item-wrap .price strike {  font-size: 8px; margin-left: 5px;  }
     .item-design .item .main-item-wrap .item-desc p { font-size: 10px;  min-height: 35px;  height: 35px; }
 }
+
+
+@media only screen and (min-width:$breakpoint-lg-desk) and (max-width:$breakpoint-vl-desk){
+    .container {
+        max-width: 1440px !important;
+    }
+    }

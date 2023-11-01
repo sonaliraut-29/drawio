@@ -617,11 +617,11 @@ const SearchDetails = ({ history }) => {
   return (
     <main className="search-page test">
       <div className="search-wrap">
-        <section id="search-bar" className="mb-4 px-0 ">
+        <section id="search-bar" className="mt-4 px-0 ">
           <Container>
             <Row>
               <div className="col-sm-2"></div>
-              <div className="col-sm-6">
+              <div className="col-sm-8">
                 <Form className="d-flex" onSubmit={(e) => e.preventDefault()}>
                   <Form.Control
                     type="Search product here"
@@ -641,15 +641,7 @@ const SearchDetails = ({ history }) => {
                   </Button>
                 </Form>
               </div>
-              <div className="col-sm-2 d-flex align-items-center">
-                <button
-                  className="btn-simple"
-                  type="button"
-                  onClick={() => setIsShowFilter(!isShowFilter)}
-                >
-                  {isShowFilter ? "Hide Filter" : "Show Filter"}
-                </button>
-              </div>
+              <div className="col-sm-2"></div>
             </Row>
           </Container>
         </section>
@@ -818,7 +810,7 @@ const SearchDetails = ({ history }) => {
               <Row>
                 <div className="col-sm-12 mb-4 mt-sm-0 mt-4 search-title-wrapper">
                   <Row>
-                    <div className="col-sm-8">
+                    <div className="col-sm-6">
                       <h5>
                         {totalCount}{" "}
                         {totalCount == 0 || totalCount == 1
@@ -831,7 +823,15 @@ const SearchDetails = ({ history }) => {
                       : searchText} */}
                       </h5>
                     </div>
-                    <div className="col-sm-4 d-flex justify-content-end">
+
+                    <div className="col-sm-6 d-flex justify-content-end">
+                      <button
+                        className="btn-simple btn-show-filter"
+                        type="button"
+                        onClick={() => setIsShowFilter(!isShowFilter)}
+                      >
+                        {isShowFilter ? "Hide Filter" : "Show Filter"}
+                      </button>
                       <button
                         className="btn btn-custom"
                         type="button"
