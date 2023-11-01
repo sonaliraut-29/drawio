@@ -3,6 +3,9 @@ import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import Carousel from "react-bootstrap/Carousel";
 import api from "../../redux/services/api";
 import { PRODUCT } from "../../redux/reduxConstants/EndPoints";
+import OwlCarousel from "react-owl-carousel";
+import "owl.carousel/dist/assets/owl.carousel.css";
+import "owl.carousel/dist/assets/owl.theme.default.css";
 
 import * as images from "../constant/Assets";
 import * as routes from "../constant/Routes";
@@ -41,8 +44,33 @@ const ProductDetail = ({ history }) => {
       .catch((e) => console.log(e));
   };
 
+  const options = {
+    margin: 15,
+    items: 4,
+    loop: true,
+    responsiveClass: true,
+    responsive: {
+      margin: 15,
+      0: {
+        items: 2,
+      },
+      400: {
+        items: 2,
+      },
+      600: {
+        items: 3,
+      },
+      700: {
+        items: 3,
+      },
+      1000: {
+        items: 4,
+      },
+    },
+  };
+
   return (
-    <main className="search-page test">
+    <main className="product-detail-page">
       <Container>
         <section className="pt-0 pt-sm-5 pb-5">
           <Row>
@@ -85,6 +113,143 @@ const ProductDetail = ({ history }) => {
               </div>
             </div>
           </Row>
+        </section>
+      </Container>
+
+      <section className="prod-slider text-center">
+        <Container>
+          <section className="prod-title d-flex justify-content-between">
+            <h4>Iphone 14</h4>
+            {/* <span>
+            <img src="dist/assets/images/heart-svg.svg" alt="prod image" />
+          </span> */}
+          </section>
+
+          <Carousel>
+            <Carousel.Item>
+              <a href="#" target="_blank">
+                <img src="dist/assets/images/l1.png" alt="prod image" />
+              </a>
+            </Carousel.Item>
+            <Carousel.Item>
+              <a href="#" target="_blank">
+                <img src="dist/assets/images/l2.png" alt="prod image" />
+              </a>
+            </Carousel.Item>
+          </Carousel>
+
+          <div className="likenshare d-flex justify-content-end">
+            <span>
+              <i class="fa fa-heart-o" aria-hidden="true"></i>
+            </span>
+            <a href="#">
+              <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+          </div>
+        </Container>
+      </section>
+
+      <Container>
+        <section className="prod-deatils">
+          <div className="product-name-price-wrapper d-flex justify-content-between">
+            <div className="product-name">iPhone 14</div>
+            <div className="product-price">
+              <strike>OLD</strike> <price>KD 400</price>
+            </div>
+          </div>
+          <div className="product-vendor-wrapper d-flex">
+            <div className="vendor-logo">
+              <img src="dist/assets/images/Xcite.jpg" />
+            </div>
+            <div className="vendor-name">Xcite Kuwait</div>
+          </div>
+
+          <div className="product-description-wrapper">
+            <p>
+              Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
+              nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
+              erat, sed diam voluptua. At vero eos et accusam et justo duo
+              dolores et ea rebum. Stet clita kasd gubergren, no sea takimata
+              sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit
+              amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+              invidunt ut labore et dolore magna aliquyam erat, sed diam
+              voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
+              Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum
+              dolor sit amet.
+            </p>
+            <p>
+              <a href="#" className="visit-website-link">
+                {" "}
+                VISIT WEBSITE
+              </a>
+            </p>
+          </div>
+        </section>
+
+        <section className="related-products">
+          <h6>Related products</h6>
+
+          <section className="mt-3 text-center item-design">
+            <Row>
+              <OwlCarousel
+                className="owl-theme"
+                loop
+                margin={10}
+                nav
+                responsiveClass={true}
+                responsive={{
+                  1: {
+                    items: 2,
+                  },
+                  1025: {
+                    items: 4,
+                  },
+                }}
+              >
+                <div className="item">
+                  <div className="main-item-wrap">
+                    <div className="img-wrap">
+                      <img src="dist/assets/images/image.png" alt="img" />
+                    </div>
+                    <div className="item-desc">
+                      <div className="vendor-logo">
+                        <img src="dist/assets/images/Xcite.jpg" alt="img" />
+                      </div>
+                      <h5>Brand name</h5>
+                      <p>item name </p>
+                    </div>
+                    <div className="price">
+                      <span>KD 10</span>
+                      <small>
+                        <strike>Old Price</strike>
+                      </small>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="item">
+                  <div className="main-item-wrap">
+                    <div className="img-wrap">
+                      <img src="dist/assets/images/image.png" alt="img" />
+                    </div>
+                    <div className="item-desc">
+                      <div className="vendor-logo">
+                        <img src="dist/assets/images/Xcite.jpg" alt="img" />
+                      </div>
+                      <h5>Brand name</h5>
+                      <p>item name </p>
+                    </div>
+                    <div className="price">
+                      <span>KD 10</span>
+                      <small>
+                        <strike>Old Price</strike>
+                      </small>
+                    </div>
+                  </div>
+                </div>
+              </OwlCarousel>
+            </Row>
+          </section>
         </section>
       </Container>
     </main>
