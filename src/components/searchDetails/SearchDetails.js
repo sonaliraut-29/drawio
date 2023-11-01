@@ -603,6 +603,17 @@ const SearchDetails = ({ history }) => {
       search: `?query=`,
     });
   };
+
+  const handleProductDetail = (item) => {
+    history.push({
+      pathname: routes.PRODUCTDETAIL,
+      state: {
+        Vendor: item.Vendor,
+        ItemKey: item.Item_Key,
+      },
+    });
+  };
+
   return (
     <main className="search-page test">
       <div className="search-wrap">
@@ -1171,7 +1182,10 @@ const SearchDetails = ({ history }) => {
                                     {item.Item_name}
                                   </p>
                                 </div>
-                                <div className="price">
+                                <div
+                                  className="price"
+                                  onClick={() => handleProductDetail(item)}
+                                >
                                   <span>KD {item.Selling_Price} </span>
                                   {item.Discount_Percent > 0 ? (
                                     <small>
