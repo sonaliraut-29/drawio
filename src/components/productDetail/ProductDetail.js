@@ -71,7 +71,7 @@ const ProductDetail = ({ history }) => {
 
   return (
     <main className="product-detail-page">
-      <Container>
+      {/* <Container>
         <section className="pt-0 pt-sm-5 pb-5">
           <Row>
             <div
@@ -114,7 +114,7 @@ const ProductDetail = ({ history }) => {
             </div>
           </Row>
         </section>
-      </Container>
+      </Container> */}
 
       <section className="prod-slider text-center">
         <Container>
@@ -125,47 +125,58 @@ const ProductDetail = ({ history }) => {
           </span> */}
           </section>
 
-          <Carousel>
-            <Carousel.Item>
-              <a href="#" target="_blank">
-                <img src="dist/assets/images/l1.png" alt="prod image" />
-              </a>
-            </Carousel.Item>
-            <Carousel.Item>
+          {/* <Carousel>
+            <Carousel.Item> */}
+          <a href="#" target="_blank">
+            <img src={product.Item_Image_URL} alt="prod image" />
+          </a>
+          {/* </Carousel.Item> */}
+          {/* <Carousel.Item>
               <a href="#" target="_blank">
                 <img src="dist/assets/images/l2.png" alt="prod image" />
               </a>
-            </Carousel.Item>
-          </Carousel>
+            </Carousel.Item> */}
+          {/* </Carousel> */}
 
-          <div className="likenshare d-flex justify-content-end">
+          {/* <div className="likenshare d-flex justify-content-end">
             <span>
               <i class="fa fa-heart-o" aria-hidden="true"></i>
             </span>
             <a href="#">
               <i class="fa fa-share-alt" aria-hidden="true"></i>
             </a>
-          </div>
+          </div> */}
         </Container>
       </section>
 
       <Container>
         <section className="prod-deatils">
           <div className="product-name-price-wrapper d-flex justify-content-between">
-            <div className="product-name">iPhone 14</div>
+            <div className="product-name">{product.Item_name}</div>
             <div className="product-price">
-              <strike>OLD</strike> <price>KD 400</price>
+              {product.Discount_Percent > 0 ? (
+                <strike>{product.Regular_Price}</strike>
+              ) : (
+                ""
+              )}{" "}
+              <price>KD {product.Selling_Price}</price>
             </div>
           </div>
           <div className="product-vendor-wrapper d-flex">
             <div className="vendor-logo">
-              <img src="dist/assets/images/Xcite.jpg" />
+              <img
+                src={
+                  product.Vendor
+                    ? images[product.Vendor.replace(" ", "-").toLowerCase()]
+                    : "./dist/assets/images/default-logo-sm.png"
+                }
+              />
             </div>
-            <div className="vendor-name">Xcite Kuwait</div>
+            <div className="vendor-name">{product.Vendor}</div>
           </div>
 
           <div className="product-description-wrapper">
-            <p>
+            {/* <p>
               Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
               nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
               erat, sed diam voluptua. At vero eos et accusam et justo duo
@@ -176,9 +187,9 @@ const ProductDetail = ({ history }) => {
               voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
               Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum
               dolor sit amet.
-            </p>
+            </p> */}
             <p>
-              <a href="#" className="visit-website-link">
+              <a href={product.Item_URL} className="visit-website-link">
                 {" "}
                 VISIT WEBSITE
               </a>
@@ -186,7 +197,7 @@ const ProductDetail = ({ history }) => {
           </div>
         </section>
 
-        <section className="related-products">
+        {/* <section className="related-products">
           <h6>Related products</h6>
 
           <section className="mt-3 text-center item-design">
@@ -250,7 +261,7 @@ const ProductDetail = ({ history }) => {
               </OwlCarousel>
             </Row>
           </section>
-        </section>
+        </section> */}
       </Container>
     </main>
   );

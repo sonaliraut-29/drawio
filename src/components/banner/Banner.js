@@ -1,7 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import * as images from "../constant/Assets";
 import * as routes from "../constant/Routes";
-import { Col, Container, Form, Row, Accordion } from "react-bootstrap";
+import {
+  Col,
+  Container,
+  Form,
+  Row,
+  Accordion,
+  Carousel,
+} from "react-bootstrap";
 import {
   CATEGORIES,
   SUBCATEGORIES,
@@ -25,7 +32,7 @@ const Banner = () => {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedSubCategories, setSelectedSubCategories] = useState([]);
 
-  const [totalCount, setTotalCount] = useState(100);
+  const [totalCount, setTotalCount] = useState(0);
   const [vendors, setVendors] = useState([]);
 
   const [vendorsAll, setVendorsAll] = useState([]);
@@ -158,6 +165,7 @@ const Banner = () => {
         setLoading(false);
         if (res.data.success) {
           setBanners(res.data.data);
+          setTotalCount(res.data.totalCount);
           const uniqueIds = res.data.data.map((x) => x.Vendor);
 
           const uniqueVendors = [...new Set(uniqueIds)];
@@ -204,6 +212,7 @@ const Banner = () => {
         setLoading(false);
         if (res.data.success) {
           setBanners(res.data.data);
+          setTotalCount(res.data.totalCount);
           const uniqueIds = res.data.data.map((x) => x.Vendor);
 
           const uniqueVendors = [...new Set(uniqueIds)];
@@ -231,6 +240,8 @@ const Banner = () => {
   const handleLink = (item) => {
     window.open(item.Banner_Link, "_blank");
   };
+
+  console.log(banners);
   return (
     <div className="Banners mb-5">
       <Container className="mt-5">
@@ -246,6 +257,7 @@ const Banner = () => {
             <section className="col-sm-3 cat-left">
               <section className="cat-for-desktop">
                 <div className="filter-layout">
+                  <h6>Vendors with Category</h6>
                   {categories && categories.length > 0 ? (
                     <>
                       {categories.map((item, index) => {
@@ -307,7 +319,68 @@ const Banner = () => {
                         </div>
                       </Row>
                       <Row>
-                        {banners && banners.length > 0
+                        {banners &&
+                        banners.length > 0 &&
+                        selectedCategories &&
+                        selectedCategories.length == 0 &&
+                        selectedVendors &&
+                        selectedVendors.length == 0 ? (
+                          <Carousel>
+                            {banners.map((item) => {
+                              let vendorName = item.Vendor.replace(
+                                " ",
+                                "-"
+                              ).toLowerCase();
+                              return (
+                                <>
+                                  {item.Vendor == ve ? (
+                                    <Carousel.Item>
+                                      <a
+                                        href={
+                                          item.Banner_Link &&
+                                          "" !== item.Banner_Link
+                                            ? item.Banner_Link
+                                            : "#"
+                                        }
+                                        target="_blank"
+                                      >
+                                        <img
+                                          src={
+                                            item.Banner_Image &&
+                                            "" !== item.Banner_Image
+                                              ? item.Banner_Image
+                                              : images.homeBannerImage
+                                          }
+                                          alt="banner"
+                                        />
+                                        <span className="banner-vendor-logo">
+                                          <img
+                                            src={
+                                              item.Vendor
+                                                ? images[vendorName]
+                                                : "./dist/assets/images/default-logo-sm.png"
+                                            }
+                                            alt="image"
+                                          ></img>
+                                        </span>
+                                      </a>
+                                    </Carousel.Item>
+                                  ) : (
+                                    ""
+                                  )}
+                                </>
+                              );
+                            })}
+                          </Carousel>
+                        ) : (
+                          ""
+                        )}
+                        {banners &&
+                        banners.length > 0 &&
+                        selectedCategories &&
+                        selectedCategories.length !== 0 &&
+                        selectedVendors &&
+                        selectedVendors.length !== 0
                           ? banners.map((item) => {
                               return (
                                 <>
