@@ -56,7 +56,7 @@ const Home = ({ history }) => {
 
   const fetchBanners = () => {
     api(baseUrl)
-      .get(BANNERS + "?days_tolerance=-35&num_of_rows_required=10")
+      .get(BANNERS + "?days_tolerance=-10&num_of_rows_required=10")
       .then((res) => {
         if (res.data.success) {
           setBanners(res.data.data);

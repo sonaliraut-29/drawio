@@ -38,6 +38,8 @@ const Banner = () => {
   const [vendorsAll, setVendorsAll] = useState([]);
   const [selectedVendors, setSelectedVendors] = useState([]);
 
+  const [results, setResults] = useState([]);
+
   useEffect(() => {
     const subCategoriesTemp = [];
     if (subCategories && subCategories.length > 0) {
@@ -171,6 +173,23 @@ const Banner = () => {
           const uniqueVendors = [...new Set(uniqueIds)];
 
           setVendors(uniqueVendors);
+          let result = [];
+
+          for (const element of res.data.data) {
+            if (result[element.Vendor]) {
+              result[element.Vendor] = {
+                venodrName: element.Vendor,
+                items: [...result[element.Vendor].items, element],
+              };
+            } else {
+              result[element.Vendor] = {
+                venodrName: element.Vendor,
+                items: [element],
+              };
+            }
+          }
+
+          setResults(Object.values(result));
         }
       })
       .catch((e) => console.log(e));
@@ -218,6 +237,24 @@ const Banner = () => {
           const uniqueVendors = [...new Set(uniqueIds)];
 
           setVendors(uniqueVendors);
+
+          let result = [];
+
+          for (const element of res.data.data) {
+            if (result[element.Vendor]) {
+              result[element.Vendor] = {
+                venodrName: element.Vendor,
+                items: [...result[element.Vendor].items, element],
+              };
+            } else {
+              result[element.Vendor] = {
+                venodrName: element.Vendor,
+                items: [element],
+              };
+            }
+          }
+
+          setResults(Object.values(result));
         }
       })
       .catch((e) => console.log(e));
@@ -241,7 +278,7 @@ const Banner = () => {
     window.open(item.Banner_Link, "_blank");
   };
 
-  console.log(banners);
+  console.log(results);
   return (
     <div className="Banners mb-5">
       <Container className="mt-5">
@@ -308,119 +345,93 @@ const Banner = () => {
                 </div>
               </section>
             </section>
+
             <section className="col-sm-9 banner-list">
-              {vendors &&
-                vendors.map((ve) => {
-                  return (
-                    <div className="inner-wrapper mb-4">
-                      <Row>
-                        <div className="seller-name text-left mb-3">
-                          <h3>{ve}</h3>
+              <>
+                {results &&
+                selectedCategories &&
+                selectedCategories.length == 0 &&
+                selectedVendors &&
+                selectedVendors.length == 0
+                  ? results.map((item) => {
+                      return (
+                        <>
+                          <div className="seller-name text-left mb-3">
+                            <h3>{item.venodrName}</h3>
+                          </div>
+                          <Row className="mt-5 banner-1">
+                            <Carousel>
+                              {item.items.map((inItem) => {
+                                return (
+                                  <Carousel.Item>
+                                    <a href="#" target="_blank">
+                                      <img
+                                        src={inItem.Banner_Image}
+                                        alt="banner"
+                                      />
+                                    </a>
+                                  </Carousel.Item>
+                                );
+                              })}
+                            </Carousel>
+                          </Row>
+                        </>
+                      );
+                    })
+                  : vendors &&
+                    ((selectedCategories && selectedCategories.length !== 0) ||
+                      (selectedVendors && selectedVendors.length !== 0)) &&
+                    vendors.map((ve) => {
+                      return (
+                        <div className="inner-wrapper mb-4">
+                          <Row>
+                            <div className="seller-name text-left mb-3">
+                              <h3>{ve}</h3>
+                            </div>
+                          </Row>
+                          <Row>
+                            {banners && banners.length > 0
+                              ? banners.map((item) => {
+                                  return (
+                                    <>
+                                      {item.Vendor == ve ? (
+                                        <div className="col-12 mb-4">
+                                          <div
+                                            className="seller-banner"
+                                            onClick={() => handleLink(item)}
+                                          >
+                                            <img
+                                              src={
+                                                item.Banner_Image
+                                                  ? item.Banner_Image
+                                                  : "/dist/assets/images/banner.png"
+                                              }
+                                              alt="banner image"
+                                            ></img>
+                                          </div>
+                                        </div>
+                                      ) : (
+                                        ""
+                                      )}
+                                    </>
+                                  );
+                                })
+                              : ""}
+                          </Row>
                         </div>
-                      </Row>
-                      <Row>
-                        {banners &&
-                        banners.length > 0 &&
-                        selectedCategories &&
-                        selectedCategories.length == 0 &&
-                        selectedVendors &&
-                        selectedVendors.length == 0 ? (
-                          <Carousel>
-                            {banners.map((item) => {
-                              let vendorName = item.Vendor.replace(
-                                " ",
-                                "-"
-                              ).toLowerCase();
-                              return (
-                                <>
-                                  {item.Vendor == ve ? (
-                                    <Carousel.Item>
-                                      <a
-                                        href={
-                                          item.Banner_Link &&
-                                          "" !== item.Banner_Link
-                                            ? item.Banner_Link
-                                            : "#"
-                                        }
-                                        target="_blank"
-                                      >
-                                        <img
-                                          src={
-                                            item.Banner_Image &&
-                                            "" !== item.Banner_Image
-                                              ? item.Banner_Image
-                                              : images.homeBannerImage
-                                          }
-                                          alt="banner"
-                                        />
-                                        <span className="banner-vendor-logo">
-                                          <img
-                                            src={
-                                              item.Vendor
-                                                ? images[vendorName]
-                                                : "./dist/assets/images/default-logo-sm.png"
-                                            }
-                                            alt="image"
-                                          ></img>
-                                        </span>
-                                      </a>
-                                    </Carousel.Item>
-                                  ) : (
-                                    ""
-                                  )}
-                                </>
-                              );
-                            })}
-                          </Carousel>
-                        ) : (
-                          ""
-                        )}
-                        {banners &&
-                        banners.length > 0 &&
-                        selectedCategories &&
-                        selectedCategories.length !== 0 &&
-                        selectedVendors &&
-                        selectedVendors.length !== 0
-                          ? banners.map((item) => {
-                              return (
-                                <>
-                                  {item.Vendor == ve ? (
-                                    <div className="col-12 mb-4">
-                                      <div
-                                        className="seller-banner"
-                                        onClick={() => handleLink(item)}
-                                      >
-                                        <img
-                                          src={
-                                            item.Banner_Image
-                                              ? item.Banner_Image
-                                              : "/dist/assets/images/banner.png"
-                                          }
-                                          alt="banner image"
-                                        ></img>
-                                      </div>
-                                    </div>
-                                  ) : (
-                                    ""
-                                  )}
-                                </>
-                              );
-                            })
-                          : ""}
-                      </Row>
-                    </div>
-                  );
-                })}
-              <Row className="">
-                <Col md={9} xs={12} className="pagination">
-                  <Pagination
-                    totalCount={totalCount}
-                    limitValue={limit}
-                    currentPage={page}
-                    handlePageClick={handlePageClick}
-                  />
-                </Col>
-              </Row>
+                      );
+                    })}
+                <Row className="">
+                  <Col md={9} xs={12} className="pagination">
+                    <Pagination
+                      totalCount={totalCount}
+                      limitValue={limit}
+                      currentPage={page}
+                      handlePageClick={handlePageClick}
+                    />
+                  </Col>
+                </Row>
+              </>
             </section>
           </Row>
         </section>
