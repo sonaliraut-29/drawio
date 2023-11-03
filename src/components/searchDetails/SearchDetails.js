@@ -7,6 +7,7 @@ import {
   Row,
   Accordion,
   Dropdown,
+  Modal,
 } from "react-bootstrap";
 
 import Modal from "react-bootstrap/Modal";
@@ -31,10 +32,104 @@ import { deleteCookie, getCookie } from "../../lib/helpers";
 import * as routes from "../constant/Routes";
 
 const SearchDetails = ({ history }) => {
-  const [show, setShow] = useState(false);
+  let fullSlug = "";
+  let slugString = "";
+  let slug = "";
+  let searchArr = "";
+  let searchText = "";
+  let arrSubCategory = [];
+  let arrVendor = [];
+  let arrCategory = [];
+  let arrBrand = [];
+  if (window !== undefined && typeof window !== "undefined") {
+    const paramArray = window.location.href.split("/");
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+    fullSlug = paramArray[paramArray.length - 1];
+
+    if (fullSlug.includes("?")) {
+      slugString = fullSlug.split("?");
+      slug = slugString[1];
+
+      if (slug) {
+        searchArr = slug.split("=");
+
+        let searchUrl = searchArr[1];
+
+        if (searchUrl) {
+          let searchUrlArr = searchUrl.split("&");
+          if (searchUrlArr && searchUrlArr.length > 0) {
+            searchText = searchUrlArr[0];
+          }
+        }
+      }
+    } else {
+      slug = paramArray[paramArray.length - 1];
+    }
+
+    const query = new URLSearchParams(history.location.search);
+    let sub_category = query.get("sub_category");
+
+    if (sub_category && "" !== sub_category) {
+      sub_category = sub_category
+        .replace("_", " ")
+        .replace("and_", "and ")
+        .replace("and", "&");
+      arrSubCategory = sub_category.split(",");
+      arrSubCategory = arrSubCategory.map((item) => {
+        if (item.includes("|")) {
+          item = item.replace("|", ", ");
+        }
+        if (item.includes("addcomma")) {
+          item = item.replace(" addcomma", ",");
+        }
+        return item;
+      });
+    }
+
+    let vendor = query.get("vendor");
+
+    if (vendor && "" !== vendor) {
+      vendor = vendor
+        .replace("_", " ")
+        .replace("and_", "and ")
+        .replace("and", "&");
+      arrVendor = vendor.split(",");
+    }
+
+    let brand = query.get("brand");
+
+    if (brand && "" !== brand) {
+      brand = brand
+        .replace("_", " ")
+        .replace("and_", "and ")
+        .replace("and", "&");
+      arrBrand = brand.split(",");
+    }
+
+    let category = query.get("category");
+
+    if (category && "" !== category) {
+      category = category
+        .replace("_", " ")
+        .replace("and_", "and ")
+        .replace("and", "&");
+
+      arrCategory = category.split(",");
+      arrCategory = arrCategory.map((item) => {
+        if (item.includes("|")) {
+          item = item.replace("|", ", ");
+        }
+        if (item.includes("addcomma")) {
+          item = item.replace(" addcomma", ",");
+        }
+        return item;
+      });
+    }
+  }
+
+  const [show, setShow] = useState(false);
+  // const handleClose = () => setShow(false);
+  // const handleShow = () => setShow(true);
 
   const [value, setValue] = useState([]);
   const [productList, setProductList] = useState([]);
@@ -55,28 +150,68 @@ const SearchDetails = ({ history }) => {
       history.location.state !== undefined &&
       history.location.state.selectedCategory
       ? [history.location.state.selectedCategory]
+      : arrCategory
+      ? arrCategory
       : []
   );
-  const [selectedSubCategories, setSelectedSubCategories] = useState([]);
+  const [selectedSubCategories, setSelectedSubCategories] = useState(
+    arrSubCategory ? arrSubCategory : []
+  );
   const [totalCount, setTotalCount] = useState(0);
   const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(2000);
+  const [maxPrice, setMaxPrice] = useState(5);
 
   const [OrderBy, setOrderBy] = useState("NEWID()");
   const [sort, setSort] = useState("");
 
   const [vendors, setVendors] = useState();
-  const [selectedVendors, setSelectedVendors] = useState([]);
+  const [selectedVendors, setSelectedVendors] = useState(
+    arrVendor ? arrVendor : []
+  );
   const [title, setTitle] = useState();
 
   const [exclude_accessory, setExcludeAccessory] = useState(0);
   const [only_discounted, setOnlyDiscounted] = useState(0);
   const [available_only, setAvailableOnly] = useState(0);
-  const [isShowFilter, setIsShowFilter] = useState(false);
+  const [isShowFilter, setIsShowFilter] = useState(true);
   const [brands, setBrands] = useState([]);
-  const [selectedBrands, setSelectedBrands] = useState([]);
+  const [selectedBrands, setSelectedBrands] = useState(
+    arrBrand ? arrBrand : []
+  );
+  const [isShowPopup, setIsShowPopup] = useState(false);
 
   const token = getCookie("token");
+
+  const handleClose = () => setIsShowPopup(false);
+  const handleShow = () => setIsShowPopup(true);
+
+  // const [expandedItem, setExpandedItem] = useState(
+  //   arrCategory.length > 0 || arrSubCategory.length > 0 ? "0" : ""
+  // );
+  // const [expandedItemInner, setExpandedItemInner] = useState("");
+
+  const [isActive, setIsActive] = useState(
+    arrVendor && arrVendor.length > 0 ? true : false
+  );
+
+  const [isActiveBrand, setIsActiveBrand] = useState(
+    arrBrand && arrBrand.length > 0 ? true : false
+  );
+
+  const [isActiveCategory, setIsActiveCategory] = useState(
+    ((arrCategory && arrCategory.length) ||
+      (arrSubCategory && arrSubCategory.length > 0)) > 0
+      ? true
+      : false
+  );
+
+  const [isActiveSubCategory, setIsActiveSubcategory] = useState(
+    arrSubCategory && arrSubCategory.length > 0 ? true : false
+  );
+
+  const [activeIndex, setActiveIndex] = useState(
+    arrSubCategory && arrSubCategory.length > 0 ? 0 : undefined
+  );
 
   useEffect(() => {
     fetchCategories();
@@ -114,6 +249,73 @@ const SearchDetails = ({ history }) => {
     fetchProductList(
       searchValue && "" !== searchValue ? searchValue : searchText
     );
+
+    let valuesearch =
+      searchValue && "" !== searchValue ? searchValue : searchText;
+    let text = "";
+    if (value.length > 0) {
+      text = "&price_from=" + value[0] + "&price_to=" + value[1];
+    }
+
+    let categoryText = "";
+    if (selectedCategories && selectedCategories.length > 0) {
+      const newselectedCategories = selectedCategories.map((item) => {
+        return item
+          .replace(/ & /g, "_and_")
+          .replace(/&/g, "and")
+          .replace(",", " addcomma");
+      });
+
+      let category = newselectedCategories.join("|");
+
+      categoryText = "&category=" + category;
+    }
+
+    let subcategoryText = "";
+    if (selectedSubCategories && selectedSubCategories.length > 0) {
+      const newselectedSubCategories = selectedSubCategories.map((item) => {
+        return item
+          .replace(/ & /g, "_and_")
+          .replace(/&/g, "and")
+          .replace(",", " addcomma");
+      });
+
+      const subcategory = newselectedSubCategories.join("|");
+      subcategoryText = "&sub_category=" + subcategory;
+    }
+
+    let vendorText = "";
+    if (selectedVendors && selectedVendors.length > 0) {
+      const vendor = selectedVendors.join(",");
+      vendorText = "&vendor=" + vendor;
+    }
+
+    let brandText = "";
+    if (selectedBrands && selectedBrands.length > 0) {
+      const brands = selectedBrands.join(",");
+
+      brandText = "&brand=" + brands;
+    }
+    let url = `?query=${valuesearch}&page=1&page_size=${limit}${text}${categoryText}${vendorText}${subcategoryText}${brandText}`;
+
+    if (exclude_accessory) {
+      url = url + "&exclude_accessory=" + exclude_accessory;
+    }
+
+    if (only_discounted) {
+      url = url + "&only_discounted=" + only_discounted;
+    }
+
+    if (available_only) {
+      url = url + "&available_only=" + available_only;
+    }
+
+    if (valuesearch) {
+      history.replace({
+        pathname: history.location.pathname,
+        search: url,
+      });
+    }
   }, [
     selectedCategories,
     selectedSubCategories,
@@ -125,12 +327,14 @@ const SearchDetails = ({ history }) => {
     OrderBy,
     sort,
     value,
+    limit,
   ]);
 
   const baseUrl = process.env.REACT_APP_API_BASEURL;
 
   const handleVendor = (e) => {
     setPage(1);
+    setLimit(20);
     const prevValues = [...selectedVendors];
 
     if (e.target.checked) {
@@ -144,6 +348,7 @@ const SearchDetails = ({ history }) => {
 
   const handleBrand = (e) => {
     setPage(1);
+    setLimit(20);
     const prevValues = [...selectedBrands];
 
     if (e.target.checked) {
@@ -155,6 +360,7 @@ const SearchDetails = ({ history }) => {
     }
   };
   const handleCategories = (e) => {
+    setLimit(20);
     const prevValues = [...selectedCategories];
 
     if (e.target.checked) {
@@ -164,9 +370,11 @@ const SearchDetails = ({ history }) => {
       const newArray = prevValues.filter((item) => item !== e.target.value);
       setSelectedCategories(newArray);
     }
+    // setExpandedItem(0);
   };
 
   const handleSubcategories = (e, key) => {
+    setLimit(20);
     const prevValues = [...selectedSubCategories];
     const prevCategories = [...selectedCategories];
 
@@ -227,29 +435,6 @@ const SearchDetails = ({ history }) => {
       })
       .catch((e) => console.log(e));
   };
-
-  let fullSlug = "";
-  let slugString = "";
-  let slug = "";
-  let searchArr = "";
-  let searchText = "";
-
-  if (window !== undefined && typeof window !== "undefined") {
-    const paramArray = window.location.href.split("/");
-
-    fullSlug = paramArray[paramArray.length - 1];
-    if (fullSlug.includes("?")) {
-      slugString = fullSlug.split("?");
-      slug = slugString[1];
-
-      if (slug) {
-        searchArr = slug.split("=");
-        searchText = searchArr[1];
-      }
-    } else {
-      slug = paramArray[paramArray.length - 1];
-    }
-  }
 
   useEffect(() => {
     if (searchText && "" !== searchText) {
@@ -336,6 +521,9 @@ const SearchDetails = ({ history }) => {
         setLoading(false);
         if (res.data.success) {
           setProductList(res.data.data);
+          setBrands(res.data.brand);
+          setSubcategories(res.data.sub_category);
+          setVendors(res.data.vendor);
           setTotalCount(res.data.totalCount);
           // setMinPrice(res.data.min_price);
           // setMaxPrice(res.data.man_price);
@@ -350,22 +538,77 @@ const SearchDetails = ({ history }) => {
 
   const handleChange = (e) => {
     setPage(1);
+    setLimit(20);
     setSearchValue(e.target.value);
   };
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && e.target.value.trim().length > 2) {
       setPage(1);
-      setAvailableOnly(0);
-      setOnlyDiscounted(0);
-      setExcludeAccessory(0);
-      setSelectedCategories([]);
-      setSelectedSubCategories([]);
-      setSelectedVendors([]);
+      setLimit(20);
+      const offset_rows = 0;
+      // setAvailableOnly(0);
+      // setOnlyDiscounted(0);
+      // setExcludeAccessory(0);
+      // setSelectedCategories([]);
+      // setSelectedSubCategories([]);
+      // setSelectedVendors([]);
+
+      let text = "";
+      if (value.length > 0) {
+        text = "&price_from=" + value[0] + "&price_to=" + value[1];
+      }
+
+      let categoryText = "";
+      if (selectedCategories && selectedCategories.length > 0) {
+        const newselectedCategories = selectedCategories.map((item) => {
+          return item.replace(/ & /g, "_and_").replace(/&/g, "and");
+        });
+
+        let category = newselectedCategories.join("|");
+
+        categoryText = "&category=" + category;
+      }
+
+      let subcategoryText = "";
+      if (selectedSubCategories && selectedSubCategories.length > 0) {
+        const newselectedSubCategories = selectedSubCategories.map((item) => {
+          return item.replace(/ & /g, "_and_").replace(/&/g, "and");
+        });
+
+        const subcategory = newselectedSubCategories.join("|");
+        subcategoryText = "&sub_category=" + subcategory;
+      }
+
+      let vendorText = "";
+      if (selectedVendors && selectedVendors.length > 0) {
+        const vendor = selectedVendors.join(",");
+        vendorText = "&vendor=" + vendor;
+      }
+
+      let brandText = "";
+      if (selectedBrands && selectedBrands.length > 0) {
+        const brands = selectedBrands.join(",");
+
+        brandText = "&brand=" + brands;
+      }
+      let url = `?query=${e.target.value}&page=1&page_size=${limit}${text}${categoryText}${vendorText}${subcategoryText}${brandText}`;
+
+      if (exclude_accessory) {
+        url = url + "&exclude_accessory=" + exclude_accessory;
+      }
+
+      if (only_discounted) {
+        url = url + "&only_discounted=" + only_discounted;
+      }
+
+      if (available_only) {
+        url = url + "&available_only=" + available_only;
+      }
 
       history.push({
         pathname: `${routes.SEARCH_ROUTE}`,
-        search: `?query=${e.target.value}`,
+        search: `${url}`,
       });
     }
   };
@@ -418,6 +661,54 @@ const SearchDetails = ({ history }) => {
 
     const textTemp =
       searchValue && "" !== searchValue ? searchValue : searchText;
+
+    let categoryText = "";
+    if (selectedCategories && selectedCategories.length > 0) {
+      const newselectedCategories = selectedCategories.map((item) => {
+        return item.replace(/ & /g, "_and_").replace(/&/g, "and");
+      });
+
+      let category = newselectedCategories.join("|");
+
+      categoryText = "&category=" + category;
+    }
+
+    let subcategoryText = "";
+    if (selectedSubCategories && selectedSubCategories.length > 0) {
+      const newselectedSubCategories = selectedSubCategories.map((item) => {
+        return item.replace(/ & /g, "_and_").replace(/&/g, "and");
+      });
+
+      const subcategory = newselectedSubCategories.join("|");
+      subcategoryText = "&sub_category=" + subcategory;
+    }
+
+    let vendorText = "";
+    if (selectedVendors && selectedVendors.length > 0) {
+      const vendor = selectedVendors.join(",");
+      vendorText = "&vendor=" + vendor;
+    }
+
+    let brandText = "";
+    if (selectedBrands && selectedBrands.length > 0) {
+      const brands = selectedBrands.join(",");
+
+      brandText = "&brand=" + brands;
+    }
+    let url = `?query=${textTemp}&page=${currentPageSelected}&page_size=${limit}${text}${categoryText}${vendorText}${subcategoryText}${brandText}`;
+
+    if (exclude_accessory) {
+      url = url + "&exclude_accessory=" + exclude_accessory;
+    }
+
+    if (only_discounted) {
+      url = url + "&only_discounted=" + only_discounted;
+    }
+
+    if (available_only) {
+      url = url + "&available_only=" + available_only;
+    }
+
     api(baseUrl)
       .get(
         SEARCH +
@@ -453,12 +744,19 @@ const SearchDetails = ({ history }) => {
         setLoading(false);
         if (res.data.success) {
           setProductList(res.data.data);
+          setBrands(res.data.brand);
+          setSubcategories(res.data.sub_category);
+          setVendors(res.data.vendor);
           setTotalCount(res.data.totalCount);
           // setMinPrice(res.data.min_price);
           // setMaxPrice(res.data.man_price);
         }
       })
       .catch((e) => console.log(e));
+    history.replace({
+      pathname: history.location.pathname,
+      search: url,
+    });
   };
 
   const handleRemoveCategory = (item) => {
@@ -485,11 +783,12 @@ const SearchDetails = ({ history }) => {
   const handleSlider = (value, index) => {
     setValue(value);
     setPage(1);
+    setLimit(20);
   };
 
   const handleAddToFavourites = (item) => {
     if (!token) {
-      history.push({ pathname: routes.LOGIN });
+      setIsShowPopup(true);
     } else {
       const user_id = getCookie("user_id");
       const data = {
@@ -607,13 +906,14 @@ const SearchDetails = ({ history }) => {
     setSearchValue("");
     history.push({
       pathname: `${routes.SEARCH_ROUTE}`,
-      search: `?query=`,
+      // search: `?query=`,
     });
   };
 
   const handleProductDetail = (item) => {
     history.push({
       pathname: routes.PRODUCTDETAIL,
+      search: "?Vendor=" + item.Vendor + "&Item_Key=" + item.Item_Key,
       state: {
         Vendor: item.Vendor,
         ItemKey: item.Item_Key,
@@ -621,6 +921,75 @@ const SearchDetails = ({ history }) => {
     });
   };
 
+  const handleSearch = (e) => {
+    setPage(1);
+    const offset_rows = 0;
+    // setAvailableOnly(0);
+    // setOnlyDiscounted(0);
+    // setExcludeAccessory(0);
+    // setSelectedCategories([]);
+    // setSelectedSubCategories([]);
+    // setSelectedVendors([]);
+
+    let text = "";
+    if (value.length > 0) {
+      text = "&price_from=" + value[0] + "&price_to=" + value[1];
+    }
+
+    let categoryText = "";
+    if (selectedCategories && selectedCategories.length > 0) {
+      const newselectedCategories = selectedCategories.map((item) => {
+        return item.replace(/ & /g, "_and_").replace(/&/g, "and");
+      });
+
+      let category = newselectedCategories.join("|");
+
+      categoryText = "&category=" + category;
+    }
+
+    let subcategoryText = "";
+    if (selectedSubCategories && selectedSubCategories.length > 0) {
+      const newselectedSubCategories = selectedSubCategories.map((item) => {
+        return item.replace(/ & /g, "_and_").replace(/&/g, "and");
+      });
+
+      const subcategory = newselectedSubCategories.join("|");
+      subcategoryText = "&sub_category=" + subcategory;
+    }
+
+    let vendorText = "";
+    if (selectedVendors && selectedVendors.length > 0) {
+      const vendor = selectedVendors.join(",");
+      vendorText = "&vendor=" + vendor;
+    }
+
+    let brandText = "";
+    if (selectedBrands && selectedBrands.length > 0) {
+      const brands = selectedBrands.join(",");
+
+      brandText = "&brand=" + brands;
+    }
+    let url = `?query=${searchValue}&page=1&page_size=${limit}${text}${categoryText}${vendorText}${subcategoryText}${brandText}`;
+
+    if (exclude_accessory) {
+      url = url + "&exclude_accessory=" + exclude_accessory;
+    }
+
+    if (only_discounted) {
+      url = url + "&only_discounted=" + only_discounted;
+    }
+
+    if (available_only) {
+      url = url + "&available_only=" + available_only;
+    }
+
+    history.push({
+      pathname: `${routes.SEARCH_ROUTE}`,
+      search: `${url}`,
+    });
+  };
+
+  console.log(activeIndex);
   return (
     <main className="search-page test">
       <div className="search-wrap">
@@ -640,7 +1009,7 @@ const SearchDetails = ({ history }) => {
                     onKeyDown={(e) => handleKeyDown(e)}
                   />
                   <Button
-                    // onClick={handleSearch}
+                    onClick={handleSearch}
                     disabled={searchValue && "" !== searchValue ? false : true}
                     type="button"
                   >
@@ -801,55 +1170,142 @@ const SearchDetails = ({ history }) => {
               style={{ display: isShowFilter ? "block" : "None" }}
             >
               <section className="cat-for-desktop">
-                {actualSubcategories && actualSubcategories.length > 0 ? (
-                  <Accordion defaultActiveKey={["0"]}>
-                    {actualSubcategories.map((item, index) => {
-                      return (
-                        <Accordion.Item
-                          eventKey={index}
-                          onClick={(e) => e.preventDefault()}
-                        >
-                          <Accordion.Header>
-                            <Form.Check
-                              type="checkbox"
-                              id={index}
-                              label={actualCategories[index]}
-                              value={actualCategories[index]}
-                              onChange={handleCategories}
-                              checked={selectedCategories.includes(
-                                actualCategories[index]
-                              )}
-                            />
-                          </Accordion.Header>
-                          <Accordion.Body>
-                            <ul>
-                              {item.map((innerItem, idx) => {
-                                return (
-                                  <li>
-                                    <Form.Check
-                                      type="checkbox"
-                                      id={idx}
-                                      label={innerItem}
-                                      value={innerItem}
-                                      onChange={(e) =>
-                                        handleSubcategories(e, index)
-                                      }
-                                      checked={selectedSubCategories.includes(
-                                        innerItem
-                                      )}
-                                    />
-                                  </li>
-                                );
-                              })}
-                            </ul>
-                          </Accordion.Body>
-                        </Accordion.Item>
-                      );
-                    })}
+                <div className="accordion">
+                  <div className="accordion-item">
+                    <div className="accordion-title">
+                      <div>Category</div>
+                      <div
+                        onClick={() => setIsActiveCategory(!isActiveCategory)}
+                      >
+                        {isActiveCategory ? "-" : "+"}
+                      </div>
+                    </div>
+                    <div className="accordion-content">
+                      {isActiveCategory &&
+                      actualSubcategories &&
+                      actualSubcategories.length > 0
+                        ? actualSubcategories.map((item, index) => {
+                            return (
+                              <>
+                                <div className="accordion">
+                                  <div className="accordion-item">
+                                    <div className="accordion-title">
+                                      <div>
+                                        <Form.Check
+                                          type="checkbox"
+                                          id={index}
+                                          label={actualCategories[index]}
+                                          value={actualCategories[index]}
+                                          onChange={handleCategories}
+                                          checked={selectedCategories.includes(
+                                            actualCategories[index]
+                                          )}
+                                        />
+                                      </div>
+                                      <div
+                                        onClick={() => {
+                                          setActiveIndex(index);
+                                          setIsActiveSubcategory(
+                                            !isActiveSubCategory
+                                          );
+                                        }}
+                                      >
+                                        {isActiveSubCategory &&
+                                        index == activeIndex
+                                          ? "-"
+                                          : "+"}
+                                      </div>
+                                    </div>
+                                    <div className="accordion-content">
+                                      {isActiveSubCategory &&
+                                      index == activeIndex
+                                        ? item.map((innerItem, idx) => {
+                                            return (
+                                              <Form.Check
+                                                type="checkbox"
+                                                id={idx}
+                                                label={innerItem}
+                                                value={innerItem}
+                                                onChange={(e) =>
+                                                  handleSubcategories(e, index)
+                                                }
+                                                checked={selectedSubCategories.includes(
+                                                  innerItem
+                                                )}
+                                              />
+                                            );
+                                          })
+                                        : ""}
+                                    </div>
+                                  </div>
+                                </div>
+                              </>
+                            );
+                          })
+                        : ""}
+                    </div>
+                  </div>
+                </div>
+                {/* {actualSubcategories && actualSubcategories.length > 0 ? (
+                  <Accordion>
+                    <Accordion.Item
+                      eventKey="0"
+                      defaultActiveKey={expandedItem}
+                    >
+                      <Accordion.Header>Category</Accordion.Header>
+                      <Accordion.Body>
+                        <Accordion>
+                          {actualSubcategories.map((item, index) => {
+                            return (
+                              <Accordion.Item
+                                eventKey={index}
+                                defaultActiveKey={expandedItemInner}
+                                // onClick={(e) => e.preventDefault()}
+                              >
+                                <Accordion.Header>
+                                  <Form.Check
+                                    type="checkbox"
+                                    id={index}
+                                    label={actualCategories[index]}
+                                    value={actualCategories[index]}
+                                    onChange={handleCategories}
+                                    checked={selectedCategories.includes(
+                                      actualCategories[index]
+                                    )}
+                                  />
+                                </Accordion.Header>
+                                <Accordion.Body>
+                                  <ul>
+                                    {item.map((innerItem, idx) => {
+                                      return (
+                                        <li>
+                                          <Form.Check
+                                            type="checkbox"
+                                            id={idx}
+                                            label={innerItem}
+                                            value={innerItem}
+                                            onChange={(e) =>
+                                              handleSubcategories(e, index)
+                                            }
+                                            checked={selectedSubCategories.includes(
+                                              innerItem
+                                            )}
+                                          />
+                                        </li>
+                                      );
+                                    })}
+                                  </ul>
+                                </Accordion.Body>
+                              </Accordion.Item>
+                            );
+                          })}
+                        </Accordion>
+                      </Accordion.Body>
+                    </Accordion.Item>
                   </Accordion>
                 ) : (
                   ""
-                )}
+                )} */}
               </section>
               <section className="price-range-slider mt-4">
                 <h6>Price</h6>
@@ -872,38 +1328,102 @@ const SearchDetails = ({ history }) => {
                 />
               </section>
               <section className="mt-4 vendors-filter">
-                <h6>Vendors</h6>
-                {vendors && vendors.length > 0
-                  ? vendors.map((item, index) => {
-                      return (
-                        <Form.Check
-                          type="checkbox"
-                          id={index}
-                          label={item.Vendor}
-                          value={item.Vendor}
-                          onChange={handleVendor}
-                          checked={selectedVendors.includes(item.Vendor)}
-                        />
-                      );
-                    })
-                  : ""}
+                <div className="accordion">
+                  <div className="accordion-item">
+                    <div className="accordion-title">
+                      <div>Vendors</div>
+                      <div onClick={() => setIsActive(!isActive)}>
+                        {isActive ? "-" : "+"}
+                      </div>
+                    </div>
+                    <div className="accordion-content">
+                      {isActive && vendors && vendors.length > 0
+                        ? vendors.map((item, index) => {
+                            return (
+                              <Form.Check
+                                type="checkbox"
+                                id={index}
+                                label={item.Name}
+                                value={item.Name}
+                                onChange={handleVendor}
+                                checked={selectedVendors.includes(item.Name)}
+                              />
+                            );
+                          })
+                        : ""}
+                    </div>
+                  </div>
+                </div>
+                {/* <Accordion>
+                  <Accordion.Item eventKey="0">
+                    <Accordion.Header>Vendors</Accordion.Header>
+                    <Accordion.Body>
+                      {vendors && vendors.length > 0
+                        ? vendors.map((item, index) => {
+                            return (
+                              <Form.Check
+                                type="checkbox"
+                                id={index}
+                                label={item.Name}
+                                value={item.Name}
+                                onChange={handleVendor}
+                                checked={selectedVendors.includes(item.Name)}
+                              />
+                            );
+                          })
+                        : ""}
+                    </Accordion.Body>
+                  </Accordion.Item>
+                </Accordion> */}
               </section>
               <section className="mt-4 vendors-filter">
-                <h6>Brands</h6>
-                {brands && brands.length > 0
-                  ? brands.map((item, index) => {
-                      return (
-                        <Form.Check
-                          type="checkbox"
-                          id={index}
-                          label={item.Brand}
-                          value={item.Brand}
-                          onChange={handleBrand}
-                          checked={selectedBrands.includes(item.Vendor)}
-                        />
-                      );
-                    })
-                  : ""}
+                <div className="accordion">
+                  <div className="accordion-item">
+                    <div className="accordion-title">
+                      <div>Brands</div>
+                      <div onClick={() => setIsActiveBrand(!isActiveBrand)}>
+                        {isActiveBrand ? "-" : "+"}
+                      </div>
+                    </div>
+                    <div className="accordion-content">
+                      {isActiveBrand && brands && brands.length > 0
+                        ? brands.map((item, index) => {
+                            return (
+                              <Form.Check
+                                type="checkbox"
+                                id={index}
+                                label={item.Name}
+                                value={item.Name}
+                                onChange={handleBrand}
+                                checked={selectedBrands.includes(item.Name)}
+                              />
+                            );
+                          })
+                        : ""}
+                    </div>
+                  </div>
+                </div>
+                {/* <Accordion>
+                  <Accordion.Item eventKey="0">
+                    <Accordion.Header>Brands</Accordion.Header>
+                    <Accordion.Body>
+                      {brands && brands.length > 0
+                        ? brands.map((item, index) => {
+                            return (
+                              <Form.Check
+                                type="checkbox"
+                                id={index}
+                                label={item.Name}
+                                value={item.Name}
+                                onChange={handleBrand}
+                                checked={selectedBrands.includes(item.Name)}
+                              />
+                            );
+                          })
+                        : ""}
+                    </Accordion.Body>
+                  </Accordion.Item>
+                </Accordion> */}
               </section>
               <section className="mt-4 filter-layout">
                 <div className="mt-0">
@@ -953,6 +1473,135 @@ const SearchDetails = ({ history }) => {
               }
             >
               <Row>
+                <div className="col-sm-12 mb-4 mt-sm-0 mt-4 search-title-wrapper">
+                  <Row>
+                    <div className="col-sm-8">
+                      {searchValue == "" &&
+                      searchText == "" &&
+                      selectedBrands.length == 0 &&
+                      selectedCategories.length == 0 &&
+                      selectedSubCategories.length == 0 &&
+                      selectedVendors.length == 0 &&
+                      exclude_accessory == 0 &&
+                      available_only == 0 &&
+                      only_discounted == 0 ? (
+                        ""
+                      ) : (
+                        <h5>
+                          {totalCount}{" "}
+                          {totalCount == 0 || totalCount == 1
+                            ? "Product"
+                            : "Products"}{" "}
+                          found
+                        </h5>
+                      )}
+                    </div>
+                    <div className="col-sm-4 d-flex justify-content-end">
+                      <button
+                        className="btn btn-custom"
+                        type="button"
+                        onClick={handleReset}
+                      >
+                        Reset
+                      </button>
+                      <Dropdown className="mx-2 d-flex justify-content-end">
+                        <Dropdown.Toggle variant="success" id="dropdown-sort">
+                          <i class="fa fa-exchange" aria-hidden="true"></i>{" "}
+                          {title ? title : "Sort by"}
+                        </Dropdown.Toggle>
+
+                        <Dropdown.Menu>
+                          <Dropdown.Item
+                            onClick={() => {
+                              handleSort(
+                                "Discounted_Price",
+                                "asc",
+                                "Price Low to High"
+                              );
+                            }}
+                          >
+                            Price Low to High
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            onClick={() => {
+                              handleSort(
+                                "Discounted_Price",
+                                "desc",
+                                "Price High to Low"
+                              );
+                            }}
+                          >
+                            Price High to Low
+                          </Dropdown.Item>
+                          {/* <Dropdown.Item
+                            onClick={() => {
+                              handleSort(
+                                "Discount_Percent",
+                                "asc",
+                                "Discount Low to High"
+                              );
+                            }}
+                          >
+                            Discount % Low to High
+                          </Dropdown.Item> */}
+                          <Dropdown.Item
+                            onClick={() => {
+                              handleSort(
+                                "Discount_Percent",
+                                "desc",
+                                "Discount High to Low"
+                              );
+                            }}
+                          >
+                            Discount % High to Low
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            onClick={() => {
+                              handleSort("Category", "asc", "Category Asc");
+                            }}
+                          >
+                            Category Asc
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            onClick={() => {
+                              handleSort("Category", "desc", "Category Desc");
+                            }}
+                          >
+                            Category Desc
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            onClick={() => {
+                              handleSort("item_name", "asc", "Title Asc");
+                            }}
+                          >
+                            Title Asc
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            onClick={() => {
+                              handleSort("item_name", "desc", "Title Desc");
+                            }}
+                          >
+                            Title Desc
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            onClick={() => {
+                              handleSort("Brand", "asc", "Brand Asc");
+                            }}
+                          >
+                            Brand Asc
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            onClick={() => {
+                              handleSort("Brand", "desc", "Brand Desc");
+                            }}
+                          >
+                            Brand Desc
+                          </Dropdown.Item>
+                        </Dropdown.Menu>
+                      </Dropdown>
+                    </div>
+                  </Row>
+                </div>
                 <div className="col-sm-12">
                   <section className="cat-for-mobile mb-4 ">
                     <Row>
@@ -1216,10 +1865,14 @@ const SearchDetails = ({ history }) => {
                                     src={item.Item_Image_URL}
                                     alt="img"
                                     className="img-fluid"
-                                    onClick={() => handleLink(item.Item_URL)}
+                                    onClick={() => handleProductDetail(item)}
+                                    // onClick={() => handleLink(item.Item_URL)}
                                   />
                                 </div>
-                                <div className="item-desc">
+                                <div
+                                  className="item-desc"
+                                  onClick={() => handleProductDetail(item)}
+                                >
                                   <img
                                     src={
                                       item.Vendor
@@ -1228,10 +1881,14 @@ const SearchDetails = ({ history }) => {
                                     }
                                     alt="img"
                                   />
-                                  <h5 onClick={() => handleLink(item.Item_URL)}>
+                                  <h5
+                                  // onClick={() => handleLink(item.Item_URL)}
+                                  >
                                     {item.Brand}
                                   </h5>
-                                  <p onClick={() => handleLink(item.Item_URL)}>
+                                  <p
+                                  // onClick={() => handleLink(item.Item_URL)}
+                                  >
                                     {item.Item_name}
                                   </p>
                                 </div>
@@ -1263,6 +1920,35 @@ const SearchDetails = ({ history }) => {
                         handlePageClick={handlePageClick}
                       />
                     </Col>
+                    <Col>
+                      {totalCount > 20 ? (
+                        <Dropdown className="mx-2 d-flex justify-content-end">
+                          Page Size
+                          <Dropdown.Toggle variant="success" id="dropdown-sort">
+                            {limit}
+                          </Dropdown.Toggle>
+                          <Dropdown.Menu>
+                            <Dropdown.Item onClick={() => setLimit(20)}>
+                              20
+                            </Dropdown.Item>
+                            <Dropdown.Item onClick={() => setLimit(30)}>
+                              30
+                            </Dropdown.Item>
+                            <Dropdown.Item onClick={() => setLimit(40)}>
+                              40
+                            </Dropdown.Item>
+                            <Dropdown.Item onClick={() => setLimit(50)}>
+                              50
+                            </Dropdown.Item>
+                            <Dropdown.Item onClick={() => setLimit(100)}>
+                              100
+                            </Dropdown.Item>
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      ) : (
+                        ""
+                      )}
+                    </Col>
                   </Row>
                 </section>
               ) : (
@@ -1276,6 +1962,29 @@ const SearchDetails = ({ history }) => {
           </Row>
         </section>
       </Container>
+      <Modal show={isShowPopup} onHide={handleClose} className="postFullscreen">
+        <Modal.Header closeButton>
+          <Modal.Title>Add to Whishlist</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div>
+            You need to login or sign up to add products to your wishlist.
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="primary"
+            onClick={() => {
+              history.push({ pathname: routes.LOGIN });
+            }}
+          >
+            Login
+          </Button>
+          <Button variant="secondary" onClick={handleClose}>
+            Cancel
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </main>
   );
 };

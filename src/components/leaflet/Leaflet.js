@@ -26,7 +26,7 @@ const Leaflet = () => {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedSubCategories, setSelectedSubCategories] = useState([]);
 
-  const [totalCount, setTotalCount] = useState(100);
+  const [totalCount, setTotalCount] = useState(0);
 
   const [vendors, setVendors] = useState([]);
   const [selectedVendors, setSelectedVendors] = useState([]);
@@ -137,6 +137,7 @@ const Leaflet = () => {
         setLoading(false);
         if (res.data.success) {
           setLeaflets(res.data.data);
+          setTotalCount(res.data.totalCount);
         }
       })
       .catch((e) => console.log(e));
@@ -179,6 +180,7 @@ const Leaflet = () => {
         setLoading(false);
         if (res.data.success) {
           setLeaflets(res.data.data);
+          setTotalCount(res.data.totalCount);
         }
       })
       .catch((e) => console.log(e));
@@ -261,6 +263,7 @@ const Leaflet = () => {
             <section className="col-sm-3 cat-left">
               <section className="cat-for-desktop">
                 <div className="filter-layout">
+                  <h6>Vendors with Category</h6>
                   {categories && categories.length > 0 ? (
                     <>
                       {categories.map((item, index) => {

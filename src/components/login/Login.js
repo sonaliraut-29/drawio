@@ -44,7 +44,8 @@ const Login = ({ history }) => {
           setCookie("token", res.data.access_token);
           setCookie("user_id", res.data.user.User_ID);
           setCookie("email", res.data.user.email);
-          history.push({ pathname: routes.HOME_ROUTE });
+          // history.push({ pathname: routes.HOME_ROUTE });
+          history.goBack();
         } else {
           setErrors(res.data.message);
         }
