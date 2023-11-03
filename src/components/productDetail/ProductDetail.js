@@ -71,81 +71,14 @@ const ProductDetail = ({ history }) => {
 
   return (
     <main className="product-detail-page">
-      {/* <Container>
-        <section className="pt-0 pt-sm-5 pb-5">
-          <Row>
-            <div
-              className="col-6 col-sm-3 mb-4"
-              // onClick={() => handleLink(item.Item_URL)}
-              style={{
-                cursor: "pointer",
-              }}
-              key={"result"}
-            >
-              <div className="item">
-                <div className="item-wrap">
-                  <img
-                    src={product.Item_Image_URL}
-                    alt="img"
-                    className="img-fluid"
-                  />
-                  <div className="item-desc">
-                    <img
-                      src={
-                        product.Vendor
-                          ? images[
-                              product.Vendor.replace(" ", "-").toLowerCase()
-                            ]
-                          : "./dist/assets/images/default-logo-sm.png"
-                      }
-                      alt="img"
-                    />
-                    <h5>{product.Brand}</h5>
-                    <p>{product.Item_name}</p>
-                  </div>
-                  <div className="price">
-                    <span>KD {product.Regular_Price} </span>
-                    <small>
-                      <strike>Old Price</strike>
-                    </small>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </Row>
-        </section>
-      </Container> */}
-
       <section className="prod-slider text-center">
         <Container>
           <section className="prod-title d-flex justify-content-between">
-            <h4>Iphone 14</h4>
-            {/* <span>
-            <img src="dist/assets/images/heart-svg.svg" alt="prod image" />
-          </span> */}
+            <h4>{product.Item_name}</h4>
           </section>
-
-          {/* <Carousel>
-            <Carousel.Item> */}
           <a href="#" target="_blank">
             <img src={product.Item_Image_URL} alt="prod image" />
           </a>
-          {/* </Carousel.Item> */}
-          {/* <Carousel.Item>
-              <a href="#" target="_blank">
-                <img src="dist/assets/images/l2.png" alt="prod image" />
-              </a>
-            </Carousel.Item> */}
-          {/* </Carousel> */}
-
-          {/* <div className="likenshare d-flex justify-content-end">
-            <span>
-              <i class="fa fa-heart-o" aria-hidden="true"></i>
-            </span>
-            <a href="#">
-              <i class="fa fa-share-alt" aria-hidden="true"></i>
-            </a>
-          </div> */}
         </Container>
       </section>
 

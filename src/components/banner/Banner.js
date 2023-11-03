@@ -278,7 +278,6 @@ const Banner = () => {
     window.open(item.Banner_Link, "_blank");
   };
 
-  console.log(results);
   return (
     <div className="Banners mb-5">
       <Container className="mt-5">

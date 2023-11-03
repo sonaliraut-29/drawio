@@ -38,6 +38,7 @@ const SearchDetails = ({ history }) => {
   let arrSubCategory = [];
   let arrVendor = [];
   let arrCategory = [];
+  let arrBrand = [];
   if (window !== undefined && typeof window !== "undefined") {
     const paramArray = window.location.href.split("/");
 
@@ -91,6 +92,16 @@ const SearchDetails = ({ history }) => {
         .replace("and_", "and ")
         .replace("and", "&");
       arrVendor = vendor.split(",");
+    }
+
+    let brand = query.get("brand");
+
+    if (brand && "" !== brand) {
+      brand = brand
+        .replace("_", " ")
+        .replace("and_", "and ")
+        .replace("and", "&");
+      arrBrand = brand.split(",");
     }
 
     let category = query.get("category");
@@ -158,7 +169,9 @@ const SearchDetails = ({ history }) => {
   const [available_only, setAvailableOnly] = useState(0);
   const [isShowFilter, setIsShowFilter] = useState(true);
   const [brands, setBrands] = useState([]);
-  const [selectedBrands, setSelectedBrands] = useState([]);
+  const [selectedBrands, setSelectedBrands] = useState(
+    arrBrand ? arrBrand : []
+  );
   const [isShowPopup, setIsShowPopup] = useState(false);
 
   const token = getCookie("token");
@@ -166,10 +179,33 @@ const SearchDetails = ({ history }) => {
   const handleClose = () => setIsShowPopup(false);
   const handleShow = () => setIsShowPopup(true);
 
-  const [expandedItem, setExpandedItem] = useState(
-    arrCategory.length > 0 || arrSubCategory.length > 0 ? "0" : ""
+  // const [expandedItem, setExpandedItem] = useState(
+  //   arrCategory.length > 0 || arrSubCategory.length > 0 ? "0" : ""
+  // );
+  // const [expandedItemInner, setExpandedItemInner] = useState("");
+
+  const [isActive, setIsActive] = useState(
+    arrVendor && arrVendor.length > 0 ? true : false
   );
-  const [expandedItemInner, setExpandedItemInner] = useState("");
+
+  const [isActiveBrand, setIsActiveBrand] = useState(
+    arrBrand && arrBrand.length > 0 ? true : false
+  );
+
+  const [isActiveCategory, setIsActiveCategory] = useState(
+    ((arrCategory && arrCategory.length) ||
+      (arrSubCategory && arrSubCategory.length > 0)) > 0
+      ? true
+      : false
+  );
+
+  const [isActiveSubCategory, setIsActiveSubcategory] = useState(
+    arrSubCategory && arrSubCategory.length > 0 ? true : false
+  );
+
+  const [activeIndex, setActiveIndex] = useState(
+    arrSubCategory && arrSubCategory.length > 0 ? 0 : undefined
+  );
 
   useEffect(() => {
     fetchCategories();
@@ -267,14 +303,7 @@ const SearchDetails = ({ history }) => {
     if (available_only) {
       url = url + "&available_only=" + available_only;
     }
-    setExpandedItemInner(0);
-    setExpandedItem(0);
-    // actualSubcategories.map((item, index) => {
-    //   if (selectedSubCategories.includes(item)) {
-    //     console.log(item);
-    //     setExpandedItemInner(index);
-    //   }
-    // });
+
     if (valuesearch) {
       history.replace({
         pathname: history.location.pathname,
@@ -335,7 +364,7 @@ const SearchDetails = ({ history }) => {
       const newArray = prevValues.filter((item) => item !== e.target.value);
       setSelectedCategories(newArray);
     }
-    setExpandedItem(0);
+    // setExpandedItem(0);
   };
 
   const handleSubcategories = (e, key) => {
@@ -356,9 +385,6 @@ const SearchDetails = ({ history }) => {
       const newArray = prevValues.filter((item) => item !== e.target.value);
       setSelectedSubCategories(newArray);
     }
-
-    setExpandedItemInner(0);
-    setExpandedItem(0);
   };
   const fetchCategories = () => {
     api(baseUrl)
@@ -881,6 +907,7 @@ const SearchDetails = ({ history }) => {
   const handleProductDetail = (item) => {
     history.push({
       pathname: routes.PRODUCTDETAIL,
+      search: "?Vendor=" + item.Vendor + "&Item_Key=" + item.Item_Key,
       state: {
         Vendor: item.Vendor,
         ItemKey: item.Item_Key,
@@ -956,7 +983,7 @@ const SearchDetails = ({ history }) => {
     });
   };
 
-  console.log(expandedItemInner);
+  console.log(activeIndex);
   return (
     <main className="search-page test">
       <div className="search-wrap">
@@ -1007,7 +1034,83 @@ const SearchDetails = ({ history }) => {
               style={{ display: isShowFilter ? "block" : "None" }}
             >
               <section className="cat-for-desktop">
-                {actualSubcategories && actualSubcategories.length > 0 ? (
+                <div className="accordion">
+                  <div className="accordion-item">
+                    <div className="accordion-title">
+                      <div>Category</div>
+                      <div
+                        onClick={() => setIsActiveCategory(!isActiveCategory)}
+                      >
+                        {isActiveCategory ? "-" : "+"}
+                      </div>
+                    </div>
+                    <div className="accordion-content">
+                      {isActiveCategory &&
+                      actualSubcategories &&
+                      actualSubcategories.length > 0
+                        ? actualSubcategories.map((item, index) => {
+                            return (
+                              <>
+                                <div className="accordion">
+                                  <div className="accordion-item">
+                                    <div className="accordion-title">
+                                      <div>
+                                        <Form.Check
+                                          type="checkbox"
+                                          id={index}
+                                          label={actualCategories[index]}
+                                          value={actualCategories[index]}
+                                          onChange={handleCategories}
+                                          checked={selectedCategories.includes(
+                                            actualCategories[index]
+                                          )}
+                                        />
+                                      </div>
+                                      <div
+                                        onClick={() => {
+                                          setActiveIndex(index);
+                                          setIsActiveSubcategory(
+                                            !isActiveSubCategory
+                                          );
+                                        }}
+                                      >
+                                        {isActiveSubCategory &&
+                                        index == activeIndex
+                                          ? "-"
+                                          : "+"}
+                                      </div>
+                                    </div>
+                                    <div className="accordion-content">
+                                      {isActiveSubCategory &&
+                                      index == activeIndex
+                                        ? item.map((innerItem, idx) => {
+                                            return (
+                                              <Form.Check
+                                                type="checkbox"
+                                                id={idx}
+                                                label={innerItem}
+                                                value={innerItem}
+                                                onChange={(e) =>
+                                                  handleSubcategories(e, index)
+                                                }
+                                                checked={selectedSubCategories.includes(
+                                                  innerItem
+                                                )}
+                                              />
+                                            );
+                                          })
+                                        : ""}
+                                    </div>
+                                  </div>
+                                </div>
+                              </>
+                            );
+                          })
+                        : ""}
+                    </div>
+                  </div>
+                </div>
+                {/* {actualSubcategories && actualSubcategories.length > 0 ? (
                   <Accordion>
                     <Accordion.Item
                       eventKey="0"
@@ -1066,7 +1169,7 @@ const SearchDetails = ({ history }) => {
                   </Accordion>
                 ) : (
                   ""
-                )}
+                )} */}
               </section>
               <section className="price-range-slider mt-4">
                 <h6>Price</h6>
@@ -1089,7 +1192,33 @@ const SearchDetails = ({ history }) => {
                 />
               </section>
               <section className="mt-4 vendors-filter">
-                <Accordion>
+                <div className="accordion">
+                  <div className="accordion-item">
+                    <div className="accordion-title">
+                      <div>Vendors</div>
+                      <div onClick={() => setIsActive(!isActive)}>
+                        {isActive ? "-" : "+"}
+                      </div>
+                    </div>
+                    <div className="accordion-content">
+                      {isActive && vendors && vendors.length > 0
+                        ? vendors.map((item, index) => {
+                            return (
+                              <Form.Check
+                                type="checkbox"
+                                id={index}
+                                label={item.Name}
+                                value={item.Name}
+                                onChange={handleVendor}
+                                checked={selectedVendors.includes(item.Name)}
+                              />
+                            );
+                          })
+                        : ""}
+                    </div>
+                  </div>
+                </div>
+                {/* <Accordion>
                   <Accordion.Item eventKey="0">
                     <Accordion.Header>Vendors</Accordion.Header>
                     <Accordion.Body>
@@ -1109,10 +1238,36 @@ const SearchDetails = ({ history }) => {
                         : ""}
                     </Accordion.Body>
                   </Accordion.Item>
-                </Accordion>
+                </Accordion> */}
               </section>
               <section className="mt-4 vendors-filter">
-                <Accordion>
+                <div className="accordion">
+                  <div className="accordion-item">
+                    <div className="accordion-title">
+                      <div>Brands</div>
+                      <div onClick={() => setIsActiveBrand(!isActiveBrand)}>
+                        {isActiveBrand ? "-" : "+"}
+                      </div>
+                    </div>
+                    <div className="accordion-content">
+                      {isActiveBrand && brands && brands.length > 0
+                        ? brands.map((item, index) => {
+                            return (
+                              <Form.Check
+                                type="checkbox"
+                                id={index}
+                                label={item.Name}
+                                value={item.Name}
+                                onChange={handleBrand}
+                                checked={selectedBrands.includes(item.Name)}
+                              />
+                            );
+                          })
+                        : ""}
+                    </div>
+                  </div>
+                </div>
+                {/* <Accordion>
                   <Accordion.Item eventKey="0">
                     <Accordion.Header>Brands</Accordion.Header>
                     <Accordion.Body>
@@ -1132,7 +1287,7 @@ const SearchDetails = ({ history }) => {
                         : ""}
                     </Accordion.Body>
                   </Accordion.Item>
-                </Accordion>
+                </Accordion> */}
               </section>
               <section className="mt-4 filter-layout">
                 <div className="mt-0">
@@ -1537,10 +1692,14 @@ const SearchDetails = ({ history }) => {
                                     src={item.Item_Image_URL}
                                     alt="img"
                                     className="img-fluid"
-                                    onClick={() => handleLink(item.Item_URL)}
+                                    onClick={() => handleProductDetail(item)}
+                                    // onClick={() => handleLink(item.Item_URL)}
                                   />
                                 </div>
-                                <div className="item-desc">
+                                <div
+                                  className="item-desc"
+                                  onClick={() => handleProductDetail(item)}
+                                >
                                   <img
                                     src={
                                       item.Vendor
@@ -1549,10 +1708,14 @@ const SearchDetails = ({ history }) => {
                                     }
                                     alt="img"
                                   />
-                                  <h5 onClick={() => handleLink(item.Item_URL)}>
+                                  <h5
+                                  // onClick={() => handleLink(item.Item_URL)}
+                                  >
                                     {item.Brand}
                                   </h5>
-                                  <p onClick={() => handleLink(item.Item_URL)}>
+                                  <p
+                                  // onClick={() => handleLink(item.Item_URL)}
+                                  >
                                     {item.Item_name}
                                   </p>
                                 </div>

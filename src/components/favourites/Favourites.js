@@ -35,13 +35,24 @@ const Favourites = ({ history }) => {
   const fetchFavourites = () => {
     setLoading(true);
     const COUNTRY_ID = 1;
+    const offset_rows = 0;
 
     const headers = {
       Authorization: "bearer " + token,
     };
 
     api(baseUrl, headers)
-      .get(FAVOURITES + "/" + COUNTRY_ID + "/" + user_id)
+      .get(
+        FAVOURITES +
+          "/" +
+          COUNTRY_ID +
+          "/" +
+          user_id +
+          "?Start_offset=" +
+          offset_rows +
+          "&num_of_rows_required=" +
+          limit
+      )
       .then((res) => {
         setLoading(false);
         if (res.data.success) {
@@ -67,7 +78,17 @@ const Favourites = ({ history }) => {
     };
 
     api(baseUrl, headers)
-      .get(FAVOURITES + "/" + COUNTRY_ID + "/" + user_id)
+      .get(
+        FAVOURITES +
+          "/" +
+          COUNTRY_ID +
+          "/" +
+          user_id +
+          "?Start_offset=" +
+          offset_rows +
+          "&num_of_rows_required=" +
+          limit
+      )
       .then((res) => {
         setLoading(false);
         if (res.data.success) {
