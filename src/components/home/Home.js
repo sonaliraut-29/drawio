@@ -384,11 +384,11 @@ const Home = ({ history }) => {
           ""
         )}
 
-        <section id="home__hotdeals" className="mt-5 text-center">
+        {/* <section id="home__hotdeals" className="mt-5 text-center">
           <Row>
             <Col className="d-flex justify-content-center align-items-center title-wrap mt-5 mb-4">
               <h2 className="section-title mb-1">Todays Hot Deals</h2>
-              <span>{/* <a href="#">View All</a> */}</span>
+              <span><a href="#">View All</a></span>
             </Col>
           </Row>
 
@@ -419,7 +419,7 @@ const Home = ({ history }) => {
               </Row>
             </div>
           </Row>
-        </section>
+        </section> */}
       </Container>
     </div>
   );
