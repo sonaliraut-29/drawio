@@ -53,7 +53,7 @@ const Search = ({ history }) => {
   };
 
   return (
-    <>
+    <div className="main-search-page">
       <section id="home__banner">
         <Row>
           {banners && banners.length > 0 ? (
@@ -136,7 +136,7 @@ const Search = ({ history }) => {
               </button>
             </div>
 
-            <div className="col-12 text-center mt-5 pt-5 home-link">
+            <div className="col-12 text-center mt-5 pt-5 pb-5 home-link">
               <a href="/home" className="mt-5">
                 Go to Home Page
               </a>
@@ -145,7 +145,7 @@ const Search = ({ history }) => {
           </Row>
         </section>
       </Container>
-    </>
+    </div>
   );
 };
 export default Search;

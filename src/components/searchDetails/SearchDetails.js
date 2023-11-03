@@ -9,6 +9,8 @@ import {
   Dropdown,
 } from "react-bootstrap";
 
+import Modal from "react-bootstrap/Modal";
+
 import * as images from "../constant/Assets";
 
 import api from "../../redux/services/api";
@@ -29,6 +31,11 @@ import { deleteCookie, getCookie } from "../../lib/helpers";
 import * as routes from "../constant/Routes";
 
 const SearchDetails = ({ history }) => {
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
   const [value, setValue] = useState([]);
   const [productList, setProductList] = useState([]);
   const [limit, setLimit] = useState(20);
@@ -651,6 +658,144 @@ const SearchDetails = ({ history }) => {
 
         <section className="pt-0 pt-sm-5 pb-5">
           <Row>
+            <div className="col-sm-2 mb-3 for-desktop">
+              <button
+                className="btn-simple btn-show-filter"
+                type="button"
+                onClick={() => setIsShowFilter(!isShowFilter)}
+              >
+                {isShowFilter ? "Hide Filter" : "Show Filter"}
+              </button>
+            </div>
+            <div className="col-sm-10">
+              <div className="col-sm-12 mb-4 mt-sm-0 mt-4 search-title-wrapper">
+                <Row>
+                  <div className="col-sm-6">
+                    <h5>
+                      {totalCount}{" "}
+                      {totalCount == 0 || totalCount == 1
+                        ? "Product"
+                        : "Products"}{" "}
+                      found
+                      {/* of{" "}
+                    {searchValue && "" !== searchValue
+                      ? searchValue
+                      : searchText} */}
+                    </h5>
+                  </div>
+
+                  <div className="col-sm-6 cat-for-desktop">
+                    <section className=" d-flex justify-content-end">
+                      <button
+                        className="btn btn-custom"
+                        type="button"
+                        onClick={handleReset}
+                      >
+                        Reset
+                      </button>
+                      <Dropdown className="mx-2 d-flex justify-content-end">
+                        <Dropdown.Toggle variant="success" id="dropdown-sort">
+                          <i class="fa fa-exchange" aria-hidden="true"></i>{" "}
+                          {title ? title : "Sort by"}
+                        </Dropdown.Toggle>
+
+                        <Dropdown.Menu>
+                          <Dropdown.Item
+                            onClick={() => {
+                              handleSort(
+                                "Discounted_Price",
+                                "asc",
+                                "Price Low to High"
+                              );
+                            }}
+                          >
+                            Price Low to High
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            onClick={() => {
+                              handleSort(
+                                "Discounted_Price",
+                                "desc",
+                                "Price High to Low"
+                              );
+                            }}
+                          >
+                            Price High to Low
+                          </Dropdown.Item>
+                          {/* <Dropdown.Item
+                            onClick={() => {
+                              handleSort(
+                                "Discount_Percent",
+                                "asc",
+                                "Discount Low to High"
+                              );
+                            }}
+                          >
+                            Discount % Low to High
+                          </Dropdown.Item> */}
+                          <Dropdown.Item
+                            onClick={() => {
+                              handleSort(
+                                "Discount_Percent",
+                                "desc",
+                                "Discount High to Low"
+                              );
+                            }}
+                          >
+                            Discount % High to Low
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            onClick={() => {
+                              handleSort("Category", "asc", "Category Asc");
+                            }}
+                          >
+                            Category Asc
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            onClick={() => {
+                              handleSort("Category", "desc", "Category Desc");
+                            }}
+                          >
+                            Category Desc
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            onClick={() => {
+                              handleSort("item_name", "asc", "Title Asc");
+                            }}
+                          >
+                            Title Asc
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            onClick={() => {
+                              handleSort("item_name", "desc", "Title Desc");
+                            }}
+                          >
+                            Title Desc
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            onClick={() => {
+                              handleSort("Brand", "asc", "Brand Asc");
+                            }}
+                          >
+                            Brand Asc
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            onClick={() => {
+                              handleSort("Brand", "desc", "Brand Desc");
+                            }}
+                          >
+                            Brand Desc
+                          </Dropdown.Item>
+                        </Dropdown.Menu>
+                      </Dropdown>
+                    </section>
+                  </div>
+                </Row>
+              </div>
+            </div>
+          </Row>
+
+          <Row>
             <div
               className="col-sm-3 cat-left"
               style={{ display: isShowFilter ? "block" : "None" }}
@@ -808,139 +953,41 @@ const SearchDetails = ({ history }) => {
               }
             >
               <Row>
-                <div className="col-sm-12 mb-4 mt-sm-0 mt-4 search-title-wrapper">
-                  <Row>
-                    <div className="col-sm-6">
-                      <h5>
-                        {totalCount}{" "}
-                        {totalCount == 0 || totalCount == 1
-                          ? "Product"
-                          : "Products"}{" "}
-                        found
-                        {/* of{" "}
-                    {searchValue && "" !== searchValue
-                      ? searchValue
-                      : searchText} */}
-                      </h5>
-                    </div>
-
-                    <div className="col-sm-6 d-flex justify-content-end">
-                      <button
-                        className="btn-simple btn-show-filter"
-                        type="button"
-                        onClick={() => setIsShowFilter(!isShowFilter)}
-                      >
-                        {isShowFilter ? "Hide Filter" : "Show Filter"}
-                      </button>
-                      <button
-                        className="btn btn-custom"
-                        type="button"
-                        onClick={handleReset}
-                      >
-                        Reset
-                      </button>
-                      <Dropdown className="mx-2 d-flex justify-content-end">
-                        <Dropdown.Toggle variant="success" id="dropdown-sort">
-                          <i class="fa fa-exchange" aria-hidden="true"></i>{" "}
-                          {title ? title : "Sort by"}
-                        </Dropdown.Toggle>
-
-                        <Dropdown.Menu>
-                          <Dropdown.Item
-                            onClick={() => {
-                              handleSort(
-                                "Discounted_Price",
-                                "asc",
-                                "Price Low to High"
-                              );
-                            }}
-                          >
-                            Price Low to High
-                          </Dropdown.Item>
-                          <Dropdown.Item
-                            onClick={() => {
-                              handleSort(
-                                "Discounted_Price",
-                                "desc",
-                                "Price High to Low"
-                              );
-                            }}
-                          >
-                            Price High to Low
-                          </Dropdown.Item>
-                          {/* <Dropdown.Item
-                            onClick={() => {
-                              handleSort(
-                                "Discount_Percent",
-                                "asc",
-                                "Discount Low to High"
-                              );
-                            }}
-                          >
-                            Discount % Low to High
-                          </Dropdown.Item> */}
-                          <Dropdown.Item
-                            onClick={() => {
-                              handleSort(
-                                "Discount_Percent",
-                                "desc",
-                                "Discount High to Low"
-                              );
-                            }}
-                          >
-                            Discount % High to Low
-                          </Dropdown.Item>
-                          <Dropdown.Item
-                            onClick={() => {
-                              handleSort("Category", "asc", "Category Asc");
-                            }}
-                          >
-                            Category Asc
-                          </Dropdown.Item>
-                          <Dropdown.Item
-                            onClick={() => {
-                              handleSort("Category", "desc", "Category Desc");
-                            }}
-                          >
-                            Category Desc
-                          </Dropdown.Item>
-                          <Dropdown.Item
-                            onClick={() => {
-                              handleSort("item_name", "asc", "Title Asc");
-                            }}
-                          >
-                            Title Asc
-                          </Dropdown.Item>
-                          <Dropdown.Item
-                            onClick={() => {
-                              handleSort("item_name", "desc", "Title Desc");
-                            }}
-                          >
-                            Title Desc
-                          </Dropdown.Item>
-                          <Dropdown.Item
-                            onClick={() => {
-                              handleSort("Brand", "asc", "Brand Asc");
-                            }}
-                          >
-                            Brand Asc
-                          </Dropdown.Item>
-                          <Dropdown.Item
-                            onClick={() => {
-                              handleSort("Brand", "desc", "Brand Desc");
-                            }}
-                          >
-                            Brand Desc
-                          </Dropdown.Item>
-                        </Dropdown.Menu>
-                      </Dropdown>
-                    </div>
-                  </Row>
-                </div>
                 <div className="col-sm-12">
-                  <section className="cat-for-mobile mb-4">
+                  <section className="cat-for-mobile mb-4 ">
                     <Row>
-                      <div className="col-6">
+                      <div className="col-4">
+                        {/* <button
+                          className="btn-simple btn-show-filter"
+                          type="button"
+                          onClick={() => setIsShowFilter(!isShowFilter)}
+                        >
+                          {isShowFilter ? "Hide Filter" : "Show Filter"}
+                        </button> */}
+
+                        <button
+                          className="btn-simple btn-show-filter"
+                          onClick={handleShow}
+                        >
+                          Filter
+                        </button>
+                        <Modal
+                          show={show}
+                          onHide={handleClose}
+                          className="mob-filter-popup"
+                        >
+                          <Modal.Header closeButton>
+                            <Modal.Title>Filter</Modal.Title>
+                          </Modal.Header>
+                          <Modal.Body>Show filter category</Modal.Body>
+                          <Modal.Footer>
+                            <Button variant="secondary" onClick={handleClose}>
+                              Close
+                            </Button>
+                          </Modal.Footer>
+                        </Modal>
+                      </div>
+                      <div className="col-4">
                         <div className="sort-dropdown">
                           <Dropdown>
                             <Dropdown.Toggle
@@ -1045,8 +1092,14 @@ const SearchDetails = ({ history }) => {
                           </Dropdown>
                         </div>
                       </div>
-                      <div className="col-6">
-                        <div className="cat-list">Category</div>
+                      <div className="col-4">
+                        <button
+                          className="btn btn-custom"
+                          type="button"
+                          onClick={handleReset}
+                        >
+                          Reset
+                        </button>
                       </div>
                     </Row>
                   </section>

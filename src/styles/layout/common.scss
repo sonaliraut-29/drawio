@@ -233,7 +233,15 @@ $breakpoint-vl-desk: 1920px;
 @media (max-width: $breakpoint-mobile) {
     .item-design .item .main-item-wrap .price span { font-size: 12px; }
     .item-design .item .main-item-wrap .price strike {  font-size: 8px; margin-left: 5px;  }
-    .item-design .item .main-item-wrap .item-desc p { font-size: 10px;  min-height: 35px;  height: 35px; }
+    .item-design .item .main-item-wrap .item-desc p { font-size: 10px;  min-height: 35px;  height: 35px;    line-height: 1.2; }
+
+    .item-design .item .main-item-wrap .img-wrap {
+        height: 100px;
+    }
+    .section-title {
+        font-size: 24px;
+    }
+    
 }
 
 
