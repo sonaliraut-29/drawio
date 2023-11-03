@@ -12,18 +12,27 @@ import * as routes from "../constant/Routes";
 
 const ProductDetail = ({ history }) => {
   const [product, setProduct] = useState([]);
+  const query = new URLSearchParams(history.location.search);
 
   const Vendor =
     history &&
     history.location &&
     history.location.state &&
-    history.location.state.Vendor;
+    history.location.state.Vendor
+      ? history.location.state.Vendor
+      : query.get("Vendor")
+      ? query.get("Vendor")
+      : "";
 
   const ItemKey =
     history &&
     history.location &&
     history.location.state &&
-    history.location.state.ItemKey;
+    history.location.state.ItemKey
+      ? history.location.state.ItemKey
+      : query.get("Item_Key")
+      ? query.get("Item_Key")
+      : "";
 
   useEffect(() => {
     Vendor && ItemKey && fetchProduct();
