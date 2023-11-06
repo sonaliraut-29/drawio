@@ -128,7 +128,7 @@ button#dropdown-sort {
   height: 100%;
 }
 
-
+.for-mobile{display: none;}
 
 
   // responsive
@@ -153,7 +153,8 @@ $breakpoint-mobile: 767px;
   border-radius: 20px;
 }
 .for-desktop {
-  display: none;
+  display: none !important;
 }
+.for-mobile{display: block;}
 
 }
