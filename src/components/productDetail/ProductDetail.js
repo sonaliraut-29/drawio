@@ -85,9 +85,9 @@ const ProductDetail = ({ history }) => {
           <section className="prod-title d-flex justify-content-between">
             <h4>{product.Item_name}</h4>
           </section>
-          <a href="#" target="_blank">
-            <img src={product.Item_Image_URL} alt="prod image" />
-          </a>
+          {/* <a href="#" target="_blank"> */}
+          <img src={product.Item_Image_URL} alt="prod image" />
+          {/* </a> */}
         </Container>
       </section>
 
