@@ -107,6 +107,7 @@ const Home = ({ history }) => {
   const handleCategorySearch = (item) => {
     history.push({
       pathname: routes.SEARCH_ROUTE,
+      search: "?category=" + item.Category,
       state: {
         selectedCategory: item.Category,
       },

@@ -15,7 +15,6 @@ import {
   ALL_BANNERS,
   VENDORS,
 } from "../../redux/reduxConstants/EndPoints";
-
 import api from "../../redux/services/api";
 import Pagination from "../../uikit/Paginate";
 

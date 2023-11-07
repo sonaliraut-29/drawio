@@ -9,7 +9,6 @@ import {
   Dropdown,
   Modal,
 } from "react-bootstrap";
-
 import * as images from "../constant/Assets";
 
 import api from "../../redux/services/api";
@@ -50,10 +49,9 @@ const SearchDetails = ({ history }) => {
 
       if (slug) {
         searchArr = slug.split("=");
-
         let searchUrl = searchArr[1];
 
-        if (searchUrl) {
+        if (searchArr[0] == "query" && searchUrl) {
           let searchUrlArr = searchUrl.split("&");
           if (searchUrlArr && searchUrlArr.length > 0) {
             searchText = searchUrlArr[0];
@@ -311,12 +309,12 @@ const SearchDetails = ({ history }) => {
       url = url + "&available_only=" + available_only;
     }
 
-    if (valuesearch) {
-      history.replace({
-        pathname: history.location.pathname,
-        search: url,
-      });
-    }
+    // if (valuesearch) {
+    history.replace({
+      pathname: history.location.pathname,
+      search: url,
+    });
+    // }
   }, [
     selectedCategories,
     selectedSubCategories,
@@ -388,9 +386,11 @@ const SearchDetails = ({ history }) => {
     if (e.target.checked) {
       prevValues.push(e.target.value);
       setSelectedSubCategories(prevValues);
+      setActiveIndex(0);
     } else {
       const newArray = prevValues.filter((item) => item !== e.target.value);
       setSelectedSubCategories(newArray);
+      setActiveIndex(undefined);
     }
   };
   const fetchCategories = () => {
@@ -990,7 +990,6 @@ const SearchDetails = ({ history }) => {
     });
   };
 
-  console.log(activeIndex);
   return (
     <main className="search-page test">
       <div className="search-wrap">
@@ -1041,17 +1040,25 @@ const SearchDetails = ({ history }) => {
               <div className="col-sm-12 mb-sm-4 mb-0 search-title-wrapper 1">
                 <Row>
                   <div className="col-sm-6">
-                    <h5>
-                      {totalCount}{" "}
-                      {totalCount == 0 || totalCount == 1
-                        ? "Product"
-                        : "Products"}{" "}
-                      found
-                      {/* of{" "}
-                    {searchValue && "" !== searchValue
-                      ? searchValue
-                      : searchText} */}
-                    </h5>
+                    {searchValue == "" &&
+                    searchText == "" &&
+                    selectedBrands.length == 0 &&
+                    selectedCategories.length == 0 &&
+                    selectedSubCategories.length == 0 &&
+                    selectedVendors.length == 0 &&
+                    exclude_accessory == 0 &&
+                    available_only == 0 &&
+                    only_discounted == 0 ? (
+                      ""
+                    ) : (
+                      <h5>
+                        {totalCount}{" "}
+                        {totalCount == 0 || totalCount == 1
+                          ? "Product"
+                          : "Products"}{" "}
+                        found
+                      </h5>
+                    )}
                   </div>
 
                   <div className="col-sm-6 cat-for-desktop">
@@ -1179,9 +1186,14 @@ const SearchDetails = ({ history }) => {
                         <div
                           className="two"
                           onClick={() => setIsActiveCategory(!isActiveCategory)}
+                          style={{ cursor: "pointer" }}
                         >
-                          {isActiveCategory ? "^" : "v"}
-                          {/* <i class="fa fa-angle-down" aria-hidden="true"></i><i class="fa fa-angle-up" aria-hidden="true"></i> */}
+                          {/* {isActiveCategory ? "-" : "+"} */}
+                          {isActiveCategory ? (
+                            <i class="fa fa-angle-down" aria-hidden="true"></i>
+                          ) : (
+                            <i class="fa fa-angle-up" aria-hidden="true"></i>
+                          )}
                         </div>
                       </div>
                       <div className="accordion-content three">
@@ -1213,11 +1225,21 @@ const SearchDetails = ({ history }) => {
                                               !isActiveSubCategory
                                             );
                                           }}
+                                          style={{ cursor: "pointer" }}
+                                          className="test-open"
                                         >
                                           {isActiveSubCategory &&
-                                          index == activeIndex
-                                            ? "-"
-                                            : "+"}
+                                          index == activeIndex ? (
+                                            <i
+                                              class="fa fa-angle-down"
+                                              aria-hidden="true"
+                                            ></i>
+                                          ) : (
+                                            <i
+                                              class="fa fa-angle-up"
+                                              aria-hidden="true"
+                                            ></i>
+                                          )}
                                         </div>
                                       </div>
                                       <div className="accordion-content">
@@ -1340,8 +1362,16 @@ const SearchDetails = ({ history }) => {
                     <div className="accordion-item">
                       <div className="accordion-title">
                         <h6>Vendors</h6>
-                        <div onClick={() => setIsActive(!isActive)}>
-                          {isActive ? "-" : "+"}
+                        <div
+                          onClick={() => setIsActive(!isActive)}
+                          style={{ cursor: "pointer" }}
+                        >
+                          {/* {isActive ? "-" : "+"} */}
+                          {isActive ? (
+                            <i class="fa fa-angle-down" aria-hidden="true"></i>
+                          ) : (
+                            <i class="fa fa-angle-up" aria-hidden="true"></i>
+                          )}
                         </div>
                       </div>
                       <div className="accordion-content">
@@ -1389,8 +1419,16 @@ const SearchDetails = ({ history }) => {
                     <div className="accordion-item">
                       <div className="accordion-title">
                         <h6>Brands</h6>
-                        <div onClick={() => setIsActiveBrand(!isActiveBrand)}>
-                          {isActiveBrand ? "-" : "+"}
+                        <div
+                          onClick={() => setIsActiveBrand(!isActiveBrand)}
+                          style={{ cursor: "pointer" }}
+                        >
+                          {/* {isActiveBrand ? "-" : "+"} */}
+                          {isActiveBrand ? (
+                            <i class="fa fa-angle-down" aria-hidden="true"></i>
+                          ) : (
+                            <i class="fa fa-angle-up" aria-hidden="true"></i>
+                          )}
                         </div>
                       </div>
                       <div className="accordion-content">
@@ -1470,42 +1508,6 @@ const SearchDetails = ({ history }) => {
                       />
                     </div>
                   </div>
-                </div>
-
-                <div className="mt-4 filter-layout">
-                  <Accordion defaultActiveKey={["0"]} alwaysOpen>
-                    <Accordion.Item eventKey="0">
-                      <Accordion.Header>Accordion Item #1</Accordion.Header>
-                      <Accordion.Body>
-                        <Form>
-                          <div className="mb-3">
-                            <Form.Check
-                              inline
-                              label="1"
-                              name="group1"
-                              type="checkbox"
-                              id="1"
-                            />
-                          </div>
-                          <div className="mb-3">
-                            <Form.Check
-                              inline
-                              label="2"
-                              name="group1"
-                              type="checkbox"
-                              id="2"
-                            />
-                          </div>
-                        </Form>
-                      </Accordion.Body>
-                    </Accordion.Item>
-                    <Accordion.Item eventKey="1">
-                      <Accordion.Header>Accordion Item #2</Accordion.Header>
-                      <Accordion.Body>
-                        Lorem ipsum dolor sit amet
-                      </Accordion.Body>
-                    </Accordion.Item>
-                  </Accordion>
                 </div>
               </section>
             </div>
@@ -1601,17 +1603,6 @@ const SearchDetails = ({ history }) => {
                           >
                             Price High to Low
                           </Dropdown.Item>
-                          {/* <Dropdown.Item
-                            onClick={() => {
-                              handleSort(
-                                "Discount_Percent",
-                                "asc",
-                                "Discount Low to High"
-                              );
-                            }}
-                          >
-                            Discount % Low to High
-                          </Dropdown.Item> */}
                           <Dropdown.Item
                             onClick={() => {
                               handleSort(
@@ -1668,7 +1659,7 @@ const SearchDetails = ({ history }) => {
                         </Dropdown.Menu>
                       </Dropdown>
                     </div>
-                  </Row>
+                  </Row>{" "}
                 </div>
               </Row>
               <Row>
