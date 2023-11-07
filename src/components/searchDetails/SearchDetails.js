@@ -1174,16 +1174,17 @@ const SearchDetails = ({ history }) => {
                 <div className="mt-4 vendors-filter">
                   <div className="accordion">
                     <div className="accordion-item">
-                      <div className="accordion-title">
+                      <div className="accordion-title one">
                         <h6>Category</h6>
                         <div
+                          className="two"
                           onClick={() => setIsActiveCategory(!isActiveCategory)}
                         >
-                          {isActiveCategory ? "-" : "+"}
+                          {isActiveCategory ? "^" : "v"}
                           {/* <i class="fa fa-angle-down" aria-hidden="true"></i><i class="fa fa-angle-up" aria-hidden="true"></i> */}
                         </div>
                       </div>
-                      <div className="accordion-content">
+                      <div className="accordion-content three">
                         {isActiveCategory &&
                         actualSubcategories &&
                         actualSubcategories.length > 0
@@ -1469,6 +1470,42 @@ const SearchDetails = ({ history }) => {
                       />
                     </div>
                   </div>
+                </div>
+
+                <div className="mt-4 filter-layout">
+                  <Accordion defaultActiveKey={["0"]} alwaysOpen>
+                    <Accordion.Item eventKey="0">
+                      <Accordion.Header>Accordion Item #1</Accordion.Header>
+                      <Accordion.Body>
+                        <Form>
+                          <div className="mb-3">
+                            <Form.Check
+                              inline
+                              label="1"
+                              name="group1"
+                              type="checkbox"
+                              id="1"
+                            />
+                          </div>
+                          <div className="mb-3">
+                            <Form.Check
+                              inline
+                              label="2"
+                              name="group1"
+                              type="checkbox"
+                              id="2"
+                            />
+                          </div>
+                        </Form>
+                      </Accordion.Body>
+                    </Accordion.Item>
+                    <Accordion.Item eventKey="1">
+                      <Accordion.Header>Accordion Item #2</Accordion.Header>
+                      <Accordion.Body>
+                        Lorem ipsum dolor sit amet
+                      </Accordion.Body>
+                    </Accordion.Item>
+                  </Accordion>
                 </div>
               </section>
             </div>
