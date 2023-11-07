@@ -21,7 +21,7 @@ import Pagination from "../../uikit/Paginate";
 const Banner = () => {
   const [banners, setBanners] = useState([]);
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(20);
   const [loading, setLoading] = useState(false);
 
   const [categories, setCategories] = useState([]);
