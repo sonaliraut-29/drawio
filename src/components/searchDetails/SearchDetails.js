@@ -244,6 +244,9 @@ const SearchDetails = ({ history }) => {
 
       setActualSubCategories(resultArray);
       setActualCategories(resultKeys);
+    } else {
+      setActualSubCategories([]);
+      setActualCategories([]);
     }
   }, [subCategories]);
 
