@@ -1190,7 +1190,7 @@ const SearchDetails = ({ history }) => {
                       <div className="accordion-title one">
                         <h6>Category</h6>
                         <div
-                          className="two"
+                          className="main-cat-icon"
                           onClick={() => {
                             setIsActiveCategory(!isActiveCategory);
                           }}
@@ -1235,6 +1235,7 @@ const SearchDetails = ({ history }) => {
                                             );
                                           }}
                                           style={{ cursor: "pointer" }}
+                                          className="cat-icon"
                                         >
                                           {activeCategory.includes(index) ? (
                                             <span
@@ -1534,42 +1535,6 @@ const SearchDetails = ({ history }) => {
                       />
                     </div>
                   </div>
-                </div>
-
-                <div className="mt-4 filter-layout">
-                  <Accordion defaultActiveKey={["0"]} alwaysOpen>
-                    <Accordion.Item eventKey="0">
-                      <Accordion.Header>Accordion Item #1</Accordion.Header>
-                      <Accordion.Body>
-                        <Form>
-                          <div className="mb-3">
-                            <Form.Check
-                              inline
-                              label="1"
-                              name="group1"
-                              type="checkbox"
-                              id="1"
-                            />
-                          </div>
-                          <div className="mb-3">
-                            <Form.Check
-                              inline
-                              label="2"
-                              name="group1"
-                              type="checkbox"
-                              id="2"
-                            />
-                          </div>
-                        </Form>
-                      </Accordion.Body>
-                    </Accordion.Item>
-                    <Accordion.Item eventKey="1">
-                      <Accordion.Header>Accordion Item #2</Accordion.Header>
-                      <Accordion.Body>
-                        Lorem ipsum dolor sit amet
-                      </Accordion.Body>
-                    </Accordion.Item>
-                  </Accordion>
                 </div>
               </section>
             </div>
@@ -1892,8 +1857,8 @@ const SearchDetails = ({ history }) => {
                     </Col>
                     <Col>
                       {totalCount > 20 ? (
-                        <Dropdown className="mx-2 d-flex justify-content-end">
-                          Page Size
+                        <Dropdown className="mx-2 d-flex justify-content-end page-size">
+                          <span className="text">Page Size</span>
                           <Dropdown.Toggle variant="success" id="dropdown-sort">
                             {limit}
                           </Dropdown.Toggle>
