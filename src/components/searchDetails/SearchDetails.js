@@ -49,10 +49,9 @@ const SearchDetails = ({ history }) => {
 
       if (slug) {
         searchArr = slug.split("=");
-
         let searchUrl = searchArr[1];
 
-        if (searchUrl) {
+        if (searchArr[0] == "query" && searchUrl) {
           let searchUrlArr = searchUrl.split("&");
           if (searchUrlArr && searchUrlArr.length > 0) {
             searchText = searchUrlArr[0];
@@ -310,12 +309,12 @@ const SearchDetails = ({ history }) => {
       url = url + "&available_only=" + available_only;
     }
 
-    if (valuesearch) {
-      history.replace({
-        pathname: history.location.pathname,
-        search: url,
-      });
-    }
+    // if (valuesearch) {
+    history.replace({
+      pathname: history.location.pathname,
+      search: url,
+    });
+    // }
   }, [
     selectedCategories,
     selectedSubCategories,
@@ -387,9 +386,11 @@ const SearchDetails = ({ history }) => {
     if (e.target.checked) {
       prevValues.push(e.target.value);
       setSelectedSubCategories(prevValues);
+      setActiveIndex(0);
     } else {
       const newArray = prevValues.filter((item) => item !== e.target.value);
       setSelectedSubCategories(newArray);
+      setActiveIndex(undefined);
     }
   };
   const fetchCategories = () => {
@@ -1351,8 +1352,16 @@ const SearchDetails = ({ history }) => {
                     <div className="accordion-item">
                       <div className="accordion-title">
                         <h6>Vendors</h6>
-                        <div onClick={() => setIsActive(!isActive)}>
-                          {isActive ? "-" : "+"}
+                        <div
+                          onClick={() => setIsActive(!isActive)}
+                          style={{ cursor: "pointer" }}
+                        >
+                          {/* {isActive ? "-" : "+"} */}
+                          {isActive ? (
+                            <i class="fa fa-angle-down" aria-hidden="true"></i>
+                          ) : (
+                            <i class="fa fa-angle-up" aria-hidden="true"></i>
+                          )}
                         </div>
                       </div>
                       <div className="accordion-content">
@@ -1400,8 +1409,16 @@ const SearchDetails = ({ history }) => {
                     <div className="accordion-item">
                       <div className="accordion-title">
                         <h6>Brands</h6>
-                        <div onClick={() => setIsActiveBrand(!isActiveBrand)}>
-                          {isActiveBrand ? "-" : "+"}
+                        <div
+                          onClick={() => setIsActiveBrand(!isActiveBrand)}
+                          style={{ cursor: "pointer" }}
+                        >
+                          {/* {isActiveBrand ? "-" : "+"} */}
+                          {isActiveBrand ? (
+                            <i class="fa fa-angle-down" aria-hidden="true"></i>
+                          ) : (
+                            <i class="fa fa-angle-up" aria-hidden="true"></i>
+                          )}
                         </div>
                       </div>
                       <div className="accordion-content">
