@@ -156,13 +156,38 @@ button#dropdown-sort {
 .accordion-content.three .accordion-content .form-check {
   margin-left: 24px;
 }
-
-.test-open {
-  font-size: 20px;
+.accordion-content.three .accordion-content .form-check label {
+  position: relative;
+  top: -5px;
 }
 
+// .cat-icon i {
+//   font-size: 12px !important;
+// }
+// .cat-icon {
+//   font-size: 18px;
+//   margin-top: -8px;
+// }
+.cat-icon span {
+  font-size: 18px;
+  margin-top: -8px;
+}
+.page-size {
+  align-items: center;
+  margin-top: 17px;
+}
 
+.page-size button {
+  margin: 0 !important;
+}
 
+.page-size .text {
+  margin-right: 10px;
+}
+.main-cat-icon i {
+  font-size: 24px;
+  margin-top: -5px;
+}
 
 
 

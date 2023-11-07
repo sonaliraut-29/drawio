@@ -1184,7 +1184,7 @@ const SearchDetails = ({ history }) => {
                       <div className="accordion-title one">
                         <h6>Category</h6>
                         <div
-                          className="two"
+                          className="main-cat-icon"
                           onClick={() => setIsActiveCategory(!isActiveCategory)}
                           style={{ cursor: "pointer" }}
                         >
@@ -1226,20 +1226,12 @@ const SearchDetails = ({ history }) => {
                                             );
                                           }}
                                           style={{ cursor: "pointer" }}
-                                          className="test-open"
+                                          className="cat-icon"
                                         >
                                           {isActiveSubCategory &&
-                                          index == activeIndex ? (
-                                            <i
-                                              class="fa fa-minus"
-                                              aria-hidden="true"
-                                            ></i>
-                                          ) : (
-                                            <i
-                                              class="fa fa-plus"
-                                              aria-hidden="true"
-                                            ></i>
-                                          )}
+                                          index == activeIndex
+                                            ? "-"
+                                            : "+"}
                                         </div>
                                       </div>
                                       <div className="accordion-content">
@@ -1830,8 +1822,8 @@ const SearchDetails = ({ history }) => {
                     </Col>
                     <Col>
                       {totalCount > 20 ? (
-                        <Dropdown className="mx-2 d-flex justify-content-end">
-                          Page Size
+                        <Dropdown className="mx-2 d-flex justify-content-end page-size">
+                          <span className="text">Page Size</span>
                           <Dropdown.Toggle variant="success" id="dropdown-sort">
                             {limit}
                           </Dropdown.Toggle>
