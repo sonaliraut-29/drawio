@@ -358,7 +358,7 @@ const Banner = () => {
                           <div className="seller-name text-left mb-3">
                             <h3>{item.venodrName}</h3>
                           </div>
-                          <Row className="mt-5 banner-1">
+                          <Row className="mt-3 mb-5 pb-3 banner-1">
                             <Carousel>
                               {item.items.map((inItem) => {
                                 return (
