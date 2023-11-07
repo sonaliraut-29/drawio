@@ -363,7 +363,10 @@ const Banner = () => {
                               {item.items.map((inItem) => {
                                 return (
                                   <Carousel.Item>
-                                    <a href="#" target="_blank">
+                                    <a
+                                      href={inItem.Banner_Link}
+                                      target="_blank"
+                                    >
                                       <img
                                         src={inItem.Banner_Image}
                                         alt="banner"
