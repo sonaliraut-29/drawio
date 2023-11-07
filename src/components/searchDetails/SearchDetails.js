@@ -1251,7 +1251,7 @@ const SearchDetails = ({ history }) => {
                                                 setActiveCategory(prevCate);
                                               }}
                                             >
-                                              -
+                                              −
                                             </span>
                                           ) : (
                                             <span

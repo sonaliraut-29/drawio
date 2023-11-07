@@ -2,9 +2,7 @@
     text-align: left;
 }
 
-.seller-banner img {
-    width: 100%;
-} 
+
 .banner-list {
     padding-left: 30px;
 }
@@ -20,3 +18,12 @@
 .banner-list {
     padding-left: 30px !important;
 }
+
+.banner-list .banner-1 img {
+    height: 300px;
+}
+.banner-list .seller-banner img{
+    width: 100%;
+    height: 300px;
+    object-fit: contain;
+} 
