@@ -1231,12 +1231,12 @@ const SearchDetails = ({ history }) => {
                                           {isActiveSubCategory &&
                                           index == activeIndex ? (
                                             <i
-                                              class="fa fa-angle-down"
+                                              class="fa fa-minus"
                                               aria-hidden="true"
                                             ></i>
                                           ) : (
                                             <i
-                                              class="fa fa-angle-up"
+                                              class="fa fa-plus"
                                               aria-hidden="true"
                                             ></i>
                                           )}
