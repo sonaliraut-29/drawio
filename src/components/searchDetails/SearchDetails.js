@@ -124,10 +124,6 @@ const SearchDetails = ({ history }) => {
     }
   }
 
-  const [show, setShow] = useState(false);
-  // const handleClose = () => setShow(false);
-  // const handleShow = () => setShow(true);
-
   const [value, setValue] = useState([]);
   const [productList, setProductList] = useState([]);
   const [limit, setLimit] = useState(20);
@@ -181,6 +177,13 @@ const SearchDetails = ({ history }) => {
 
   const handleClose = () => setIsShowPopup(false);
   const handleShow = () => setIsShowPopup(true);
+
+  // for filter-popup
+  // const [show, setShow] = useState(false);
+
+  const [isShowMobFilter, setIsMobShowFilter] = useState(false);
+  const handleCloseFilter = () => setIsMobShowFilter(false);
+  const handleShowFilter = () => setIsMobShowFilter(true);
 
   // const [expandedItem, setExpandedItem] = useState(
   //   arrCategory.length > 0 || arrSubCategory.length > 0 ? "0" : ""
@@ -1021,7 +1024,7 @@ const SearchDetails = ({ history }) => {
       <Container>
         {loading && <CommunityLoaderCircularDash isbackground={false} />}
 
-        <section className="pt-0 pt-sm-5 pb-5">
+        <section className="pb-5">
           <Row>
             <div className="col-sm-2 mb-3 for-desktop">
               <button
@@ -1033,7 +1036,7 @@ const SearchDetails = ({ history }) => {
               </button>
             </div>
             <div className="col-sm-10">
-              <div className="col-sm-12 mb-4 mt-sm-0 mt-4 search-title-wrapper">
+              <div className="col-sm-12 mb-sm-4 mb-0 search-title-wrapper 1">
                 <Row>
                   <div className="col-sm-6">
                     {searchValue == "" &&
@@ -1170,83 +1173,95 @@ const SearchDetails = ({ history }) => {
 
           <Row>
             <div
-              className="col-sm-3 cat-left"
+              className="col-sm-3 cat-left "
               style={{ display: isShowFilter ? "block" : "None" }}
             >
               <section className="cat-for-desktop">
-                <div className="accordion">
-                  <div className="accordion-item">
-                    <div className="accordion-title">
-                      <div>Category</div>
-                      <div
-                        onClick={() => setIsActiveCategory(!isActiveCategory)}
-                      >
-                        {isActiveCategory ? "-" : "+"}
+                <div className="mt-4 vendors-filter">
+                  <div className="accordion">
+                    <div className="accordion-item">
+                      <div className="accordion-title">
+                        <h6>Category</h6>
+                        <div
+                          onClick={() => setIsActiveCategory(!isActiveCategory)}
+                          style={{ cursor: "pointer" }}
+                        >
+                          {/* {isActiveCategory ? "-" : "+"} */}
+                          {isActiveCategory ? (
+                            <i class="fa fa-angle-down" aria-hidden="true"></i>
+                          ) : (
+                            <i class="fa fa-angle-up" aria-hidden="true"></i>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                    <div className="accordion-content">
-                      {isActiveCategory &&
-                      actualSubcategories &&
-                      actualSubcategories.length > 0
-                        ? actualSubcategories.map((item, index) => {
-                            return (
-                              <>
-                                <div className="accordion">
-                                  <div className="accordion-item">
-                                    <div className="accordion-title">
-                                      <div>
-                                        <Form.Check
-                                          type="checkbox"
-                                          id={index}
-                                          label={actualCategories[index]}
-                                          value={actualCategories[index]}
-                                          onChange={handleCategories}
-                                          checked={selectedCategories.includes(
-                                            actualCategories[index]
-                                          )}
-                                        />
+                      <div className="accordion-content">
+                        {isActiveCategory &&
+                        actualSubcategories &&
+                        actualSubcategories.length > 0
+                          ? actualSubcategories.map((item, index) => {
+                              return (
+                                <>
+                                  <div className="accordion">
+                                    <div className="accordion-item">
+                                      <div className="accordion-title">
+                                        <div>
+                                          <Form.Check
+                                            type="checkbox"
+                                            id={index}
+                                            label={actualCategories[index]}
+                                            value={actualCategories[index]}
+                                            onChange={handleCategories}
+                                            checked={selectedCategories.includes(
+                                              actualCategories[index]
+                                            )}
+                                          />
+                                        </div>
+                                        <div
+                                          onClick={() => {
+                                            setActiveIndex(index);
+                                            setIsActiveSubcategory(
+                                              !isActiveSubCategory
+                                            );
+                                          }}
+                                          style={{ cursor: "pointer" }}
+                                        >
+                                          {isActiveSubCategory &&
+                                          index == activeIndex
+                                            ? "-"
+                                            : "+"}
+                                        </div>
                                       </div>
-                                      <div
-                                        onClick={() => {
-                                          setActiveIndex(index);
-                                          setIsActiveSubcategory(
-                                            !isActiveSubCategory
-                                          );
-                                        }}
-                                      >
+                                      <div className="accordion-content">
                                         {isActiveSubCategory &&
                                         index == activeIndex
-                                          ? "-"
-                                          : "+"}
+                                          ? item.map((innerItem, idx) => {
+                                              return (
+                                                <Form.Check
+                                                  type="checkbox"
+                                                  id={idx}
+                                                  label={innerItem}
+                                                  value={innerItem}
+                                                  onChange={(e) =>
+                                                    handleSubcategories(
+                                                      e,
+                                                      index
+                                                    )
+                                                  }
+                                                  checked={selectedSubCategories.includes(
+                                                    innerItem
+                                                  )}
+                                                />
+                                              );
+                                            })
+                                          : ""}
                                       </div>
                                     </div>
-                                    <div className="accordion-content">
-                                      {isActiveSubCategory &&
-                                      index == activeIndex
-                                        ? item.map((innerItem, idx) => {
-                                            return (
-                                              <Form.Check
-                                                type="checkbox"
-                                                id={idx}
-                                                label={innerItem}
-                                                value={innerItem}
-                                                onChange={(e) =>
-                                                  handleSubcategories(e, index)
-                                                }
-                                                checked={selectedSubCategories.includes(
-                                                  innerItem
-                                                )}
-                                              />
-                                            );
-                                          })
-                                        : ""}
-                                    </div>
                                   </div>
-                                </div>
-                              </>
-                            );
-                          })
-                        : ""}
+                                </>
+                              );
+                            })
+                          : ""}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -1310,55 +1325,55 @@ const SearchDetails = ({ history }) => {
                 ) : (
                   ""
                 )} */}
-              </section>
-              <section className="price-range-slider mt-4">
-                <h6>Price</h6>
 
-                <ReactSlider
-                  className="horizontal-slider"
-                  thumbClassName="thumb"
-                  trackClassName="track"
-                  defaultValue={[minPrice, maxPrice]}
-                  ariaLabel={["Lower thumb", "Upper thumb"]}
-                  ariaValuetext={(state) => `Thumb value ${state.valueNow}`}
-                  renderThumb={(props, state) => (
-                    <div {...props}>{state.valueNow}</div>
-                  )}
-                  min={Math.floor(minPrice)}
-                  max={Math.floor(maxPrice)}
-                  // pearling
-                  // minDistance={10}
-                  onChange={handleSlider}
-                />
-              </section>
-              <section className="mt-4 vendors-filter">
-                <div className="accordion">
-                  <div className="accordion-item">
-                    <div className="accordion-title">
-                      <div>Vendors</div>
-                      <div onClick={() => setIsActive(!isActive)}>
-                        {isActive ? "-" : "+"}
+                <div className="price-range-slider mt-4">
+                  <h6>Price</h6>
+
+                  <ReactSlider
+                    className="horizontal-slider"
+                    thumbClassName="thumb"
+                    trackClassName="track"
+                    defaultValue={[minPrice, maxPrice]}
+                    ariaLabel={["Lower thumb", "Upper thumb"]}
+                    ariaValuetext={(state) => `Thumb value ${state.valueNow}`}
+                    renderThumb={(props, state) => (
+                      <div {...props}>{state.valueNow}</div>
+                    )}
+                    min={Math.floor(minPrice)}
+                    max={Math.floor(maxPrice)}
+                    // pearling
+                    // minDistance={10}
+                    onChange={handleSlider}
+                  />
+                </div>
+                <div className="mt-4 vendors-filter">
+                  <div className="accordion">
+                    <div className="accordion-item">
+                      <div className="accordion-title">
+                        <h6>Vendors</h6>
+                        <div onClick={() => setIsActive(!isActive)}>
+                          {isActive ? "-" : "+"}
+                        </div>
+                      </div>
+                      <div className="accordion-content">
+                        {isActive && vendors && vendors.length > 0
+                          ? vendors.map((item, index) => {
+                              return (
+                                <Form.Check
+                                  type="checkbox"
+                                  id={index}
+                                  label={item.Name}
+                                  value={item.Name}
+                                  onChange={handleVendor}
+                                  checked={selectedVendors.includes(item.Name)}
+                                />
+                              );
+                            })
+                          : ""}
                       </div>
                     </div>
-                    <div className="accordion-content">
-                      {isActive && vendors && vendors.length > 0
-                        ? vendors.map((item, index) => {
-                            return (
-                              <Form.Check
-                                type="checkbox"
-                                id={index}
-                                label={item.Name}
-                                value={item.Name}
-                                onChange={handleVendor}
-                                checked={selectedVendors.includes(item.Name)}
-                              />
-                            );
-                          })
-                        : ""}
-                    </div>
                   </div>
-                </div>
-                {/* <Accordion>
+                  {/* <Accordion>
                   <Accordion.Item eventKey="0">
                     <Accordion.Header>Vendors</Accordion.Header>
                     <Accordion.Body>
@@ -1379,35 +1394,35 @@ const SearchDetails = ({ history }) => {
                     </Accordion.Body>
                   </Accordion.Item>
                 </Accordion> */}
-              </section>
-              <section className="mt-4 vendors-filter">
-                <div className="accordion">
-                  <div className="accordion-item">
-                    <div className="accordion-title">
-                      <div>Brands</div>
-                      <div onClick={() => setIsActiveBrand(!isActiveBrand)}>
-                        {isActiveBrand ? "-" : "+"}
+                </div>
+                <div className="mt-4 vendors-filter">
+                  <div className="accordion">
+                    <div className="accordion-item">
+                      <div className="accordion-title">
+                        <h6>Brands</h6>
+                        <div onClick={() => setIsActiveBrand(!isActiveBrand)}>
+                          {isActiveBrand ? "-" : "+"}
+                        </div>
+                      </div>
+                      <div className="accordion-content">
+                        {isActiveBrand && brands && brands.length > 0
+                          ? brands.map((item, index) => {
+                              return (
+                                <Form.Check
+                                  type="checkbox"
+                                  id={index}
+                                  label={item.Name}
+                                  value={item.Name}
+                                  onChange={handleBrand}
+                                  checked={selectedBrands.includes(item.Name)}
+                                />
+                              );
+                            })
+                          : ""}
                       </div>
                     </div>
-                    <div className="accordion-content">
-                      {isActiveBrand && brands && brands.length > 0
-                        ? brands.map((item, index) => {
-                            return (
-                              <Form.Check
-                                type="checkbox"
-                                id={index}
-                                label={item.Name}
-                                value={item.Name}
-                                onChange={handleBrand}
-                                checked={selectedBrands.includes(item.Name)}
-                              />
-                            );
-                          })
-                        : ""}
-                    </div>
                   </div>
-                </div>
-                {/* <Accordion>
+                  {/* <Accordion>
                   <Accordion.Item eventKey="0">
                     <Accordion.Header>Brands</Accordion.Header>
                     <Accordion.Body>
@@ -1428,47 +1443,46 @@ const SearchDetails = ({ history }) => {
                     </Accordion.Body>
                   </Accordion.Item>
                 </Accordion> */}
+                </div>
+                <div className="mt-4 filter-layout">
+                  <div className="mt-0">
+                    <div>
+                      <Form.Check
+                        type="checkbox"
+                        id="exclude_accessory"
+                        label="Exclude Accessory"
+                        value={exclude_accessory}
+                        onChange={handleExcludeAccessory}
+                        checked={exclude_accessory}
+                      />
+                    </div>
+                  </div>
+                  <div className="mt-4">
+                    <div>
+                      <Form.Check
+                        type="checkbox"
+                        id="only_discounted"
+                        label="Only Discounted"
+                        value={only_discounted}
+                        onChange={handleOnlyDiscounted}
+                        checked={only_discounted}
+                      />
+                    </div>
+                  </div>
+                  <div className="mt-4">
+                    <div>
+                      <Form.Check
+                        type="checkbox"
+                        id="available_only"
+                        label="Available Only"
+                        value={available_only}
+                        onChange={handleOnlyAvailable}
+                        checked={available_only}
+                      />
+                    </div>
+                  </div>
+                </div>
               </section>
-              <section className="mt-4 filter-layout">
-                <div className="mt-0">
-                  <div>
-                    <Form.Check
-                      type="checkbox"
-                      id="exclude_accessory"
-                      label="Exclude Accessory"
-                      value={exclude_accessory}
-                      onChange={handleExcludeAccessory}
-                      checked={exclude_accessory}
-                    />
-                  </div>
-                </div>
-                <div className="mt-4">
-                  <div>
-                    <Form.Check
-                      type="checkbox"
-                      id="only_discounted"
-                      label="Only Discounted"
-                      value={only_discounted}
-                      onChange={handleOnlyDiscounted}
-                      checked={only_discounted}
-                    />
-                  </div>
-                </div>
-                <div className="mt-4">
-                  <div>
-                    <Form.Check
-                      type="checkbox"
-                      id="available_only"
-                      label="Available Only"
-                      value={available_only}
-                      onChange={handleOnlyAvailable}
-                      checked={available_only}
-                    />
-                  </div>
-                </div>
-              </section>
-
-              <section className="cat-for-mobile"></section>
             </div>
 
             <div
@@ -1477,9 +1491,9 @@ const SearchDetails = ({ history }) => {
               }
             >
               <Row>
-                <div className="col-sm-12 mb-4 mt-sm-0 mt-4 search-title-wrapper">
-                  {/* <Row>
-                    <div className="col-sm-8">
+                <div className="col-sm-12 mb-4  search-title-wrapper cat-for-mobile">
+                  <Row>
+                    {/* <div className="col-sm-8">
                       {searchValue == "" &&
                       searchText == "" &&
                       selectedBrands.length == 0 &&
@@ -1499,8 +1513,33 @@ const SearchDetails = ({ history }) => {
                           found
                         </h5>
                       )}
-                    </div>
-                    <div className="col-sm-4 d-flex justify-content-end">
+                    </div> */}
+
+                    <div className="col-sm-4 d-flex justify-content-end ">
+                      <button
+                        className="btn-simple btn-show-filter"
+                        onClick={handleShowFilter}
+                      >
+                        Filter
+                      </button>
+                      <Modal
+                        show={isShowMobFilter}
+                        onHide={handleCloseFilter}
+                        className="mob-filter-popup"
+                      >
+                        <Modal.Header closeButton>
+                          <Modal.Title>Filter </Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>Show filter category</Modal.Body>
+                        <Modal.Footer>
+                          <Button
+                            variant="secondary"
+                            onClick={handleCloseFilter}
+                          >
+                            Close
+                          </Button>
+                        </Modal.Footer>
+                      </Modal>
                       <button
                         className="btn btn-custom"
                         type="button"
@@ -1593,158 +1632,7 @@ const SearchDetails = ({ history }) => {
                         </Dropdown.Menu>
                       </Dropdown>
                     </div>
-                  </Row> */}
-                </div>
-                <div className="col-sm-12">
-                  <section className="cat-for-mobile mb-4 ">
-                    <Row>
-                      <div className="col-4">
-                        {/* <button
-                          className="btn-simple btn-show-filter"
-                          type="button"
-                          onClick={() => setIsShowFilter(!isShowFilter)}
-                        >
-                          {isShowFilter ? "Hide Filter" : "Show Filter"}
-                        </button> */}
-
-                        <button
-                          className="btn-simple btn-show-filter"
-                          onClick={handleShow}
-                        >
-                          Filter
-                        </button>
-                        <Modal
-                          show={show}
-                          onHide={handleClose}
-                          className="mob-filter-popup"
-                        >
-                          <Modal.Header closeButton>
-                            <Modal.Title>Filter</Modal.Title>
-                          </Modal.Header>
-                          <Modal.Body>Show filter category</Modal.Body>
-                          <Modal.Footer>
-                            <Button variant="secondary" onClick={handleClose}>
-                              Close
-                            </Button>
-                          </Modal.Footer>
-                        </Modal>
-                      </div>
-                      <div className="col-4">
-                        <div className="sort-dropdown">
-                          <Dropdown>
-                            <Dropdown.Toggle
-                              variant="success"
-                              id="dropdown-basic"
-                            >
-                              Sort by
-                            </Dropdown.Toggle>
-
-                            <Dropdown.Menu>
-                              <Dropdown.Item
-                                onClick={() => {
-                                  handleSort(
-                                    "Discounted_Price",
-                                    "asc",
-                                    "Price Low to High"
-                                  );
-                                }}
-                              >
-                                Price Low to High
-                              </Dropdown.Item>
-                              <Dropdown.Item
-                                onClick={() => {
-                                  handleSort(
-                                    "Discounted_Price",
-                                    "desc",
-                                    "Price High to Low"
-                                  );
-                                }}
-                              >
-                                Price High to Low
-                              </Dropdown.Item>
-                              {/* <Dropdown.Item
-                                onClick={() => {
-                                  handleSort(
-                                    "Discount_Percent",
-                                    "asc",
-                                    "Discount Low to High"
-                                  );
-                                }}
-                              >
-                                Discount % Low to High
-                              </Dropdown.Item> */}
-                              <Dropdown.Item
-                                onClick={() => {
-                                  handleSort(
-                                    "Discount_Percent",
-                                    "desc",
-                                    "Discount High to Low"
-                                  );
-                                }}
-                              >
-                                Discount % High to Low
-                              </Dropdown.Item>
-                              <Dropdown.Item
-                                onClick={() => {
-                                  handleSort("Category", "asc", "Category Asc");
-                                }}
-                              >
-                                Category Asc
-                              </Dropdown.Item>
-                              <Dropdown.Item
-                                onClick={() => {
-                                  handleSort(
-                                    "Category",
-                                    "desc",
-                                    "Category Desc"
-                                  );
-                                }}
-                              >
-                                Category Desc
-                              </Dropdown.Item>
-                              <Dropdown.Item
-                                onClick={() => {
-                                  handleSort("item_name", "asc", "Title Asc");
-                                }}
-                              >
-                                Title Asc
-                              </Dropdown.Item>
-                              <Dropdown.Item
-                                onClick={() => {
-                                  handleSort("item_name", "desc", "Title Desc");
-                                }}
-                              >
-                                Title Desc
-                              </Dropdown.Item>
-                              <Dropdown.Item
-                                onClick={() => {
-                                  handleSort("Brand", "asc", "Brand Asc");
-                                }}
-                              >
-                                Brand Asc
-                              </Dropdown.Item>
-                              <Dropdown.Item
-                                onClick={() => {
-                                  handleSort("Brand", "desc", "Brand Desc");
-                                }}
-                              >
-                                Brand Desc
-                              </Dropdown.Item>
-                            </Dropdown.Menu>
-                          </Dropdown>
-                        </div>
-                      </div>
-                      <div className="col-4">
-                        <button
-                          className="btn btn-custom"
-                          type="button"
-                          onClick={handleReset}
-                        >
-                          Reset
-                        </button>
-                      </div>
-                    </Row>
-                  </section>
+                  </Row>{" "}
                 </div>
               </Row>
               <Row>

@@ -136,6 +136,7 @@ const Favourites = ({ history }) => {
   const handleProductDetail = (item) => {
     history.push({
       pathname: routes.PRODUCTDETAIL,
+      search: "?Vendor=" + item.Vendor + "&Item_Key=" + item.Item_Key,
       state: { Vendor: item.Vendor, ItemKey: item.Item_Key },
     });
   };
