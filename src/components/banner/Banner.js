@@ -15,6 +15,7 @@ import {
   ALL_BANNERS,
   VENDORS,
 } from "../../redux/reduxConstants/EndPoints";
+import Carousel from "react-bootstrap/Carousel";
 import api from "../../redux/services/api";
 import Pagination from "../../uikit/Paginate";
 
@@ -432,6 +433,48 @@ const Banner = () => {
                 </Row>
               </>
             </section>
+          </Row>
+
+          {/* Banner 1 */}
+          <Row className="mt-5 banner-1">
+            <Carousel>
+              <Carousel.Item>
+                <a href="#" target="_blank">
+                  <img src="dist/assets/images/banner2.png" alt="banner" />
+                </a>
+              </Carousel.Item>
+              <Carousel.Item>
+                <a href="#" target="_blank">
+                  <img src="dist/assets/images/banner2.png" alt="banner" />
+                </a>
+              </Carousel.Item>
+              <Carousel.Item>
+                <a href="#" target="_blank">
+                  <img src="dist/assets/images/banner2.png" alt="banner" />
+                </a>
+              </Carousel.Item>
+            </Carousel>
+          </Row>
+
+          {/* Banner 2 */}
+          <Row className="mt-5 banner-2">
+            <Carousel>
+              <Carousel.Item>
+                <a href="#" target="_blank">
+                  <img src="dist/assets/images/banner2.png" alt="banner" />
+                </a>
+              </Carousel.Item>
+              <Carousel.Item>
+                <a href="#" target="_blank">
+                  <img src="dist/assets/images/banner2.png" alt="banner" />
+                </a>
+              </Carousel.Item>
+              <Carousel.Item>
+                <a href="#" target="_blank">
+                  <img src="dist/assets/images/banner2.png" alt="banner" />
+                </a>
+              </Carousel.Item>
+            </Carousel>
           </Row>
         </section>
       </Container>

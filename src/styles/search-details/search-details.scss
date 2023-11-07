@@ -9,21 +9,28 @@ main.search-page {
     input {
       border-color: #9a9a9a;
       border-radius: 30px;
-      height: 50px;
+      height: 45px;
       text-indent: 20px;
+      background: transparent;
     }
     button.btn.btn-primary {
       background: transparent;
       border: 0;
       position: absolute;
-      right: 34px;
-      top: 34px;
+      right: 10px;
+      top: 0;
+      bottom: 0;
     }
   }
   
-  #search-bar form.d-flex{
+  .btn-show-filter {
+    margin-right: 8px;
+    height: 40px;
+    margin-top: 10px;
+}
+  #search-bar form{
     position: relative;
-    background: #fff;
+    // background: #fff;
     padding: 30px 0px;
 
   }
@@ -37,9 +44,9 @@ main.search-page {
     padding: 5px 10px;
   }
 
-  #search-bar {
-    background: #fff;
-}
+//   #search-bar {
+//     background: #fff;
+// }
 
 
 .loading-msg {
@@ -110,9 +117,16 @@ button#dropdown-sort {
 .col-sm-12.cat-right {
   transition: 0.5s;
 }
+.search-title-wrapper h5 {
+  margin-top: 15px;
+}
 
-
-
+.mob-filter-popup .modal-content {
+  height: 100%;
+}
+.mob-filter-popup .modal-dialog {
+  height: 100%;
+}
 
 
 
@@ -129,6 +143,17 @@ $breakpoint-mobile: 767px;
 .search-products .item .item-wrap .item-desc img {width: 40px !important;}
 .search-products .item .item-wrap { padding: 10px;}
 #search-bar input{height: 40px;}
-#search-bar button.btn.btn-primary{top:18px;right: 12px;}
+#search-bar button.btn.btn-primary{top:-5px;right: 12px;}
+
+.cat-for-mobile .sort-dropdown {
+  margin-top: 11px;
+}
+
+.cat-for-mobile .sort-dropdown button {
+  border-radius: 20px;
+}
+.for-desktop {
+  display: none;
+}
 
 }

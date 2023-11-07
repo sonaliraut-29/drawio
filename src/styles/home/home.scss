@@ -229,6 +229,10 @@
   transition: ease-in 0.5s;
 }
 
+button.btn-simple.btn-show-filter {
+  width: 100%;
+}
+
 // responsive
 /* Using SCSS variables to store breakpoints */
 $breakpoint-mobile: 767px;
@@ -253,4 +257,37 @@ $breakpoint-mobile: 767px;
   .cat-img {
     min-height: 70px;
   }
+
+  .cat-img {
+    padding: 15px 30px;
+    border-radius: 9px;
+}
+.cat-txt span {
+  font-size: 10px;
+  line-height: 1.2;
+  display: block;
+  margin-top: 5px;
+}
+.section-title {
+  font-size: 24px !important;
+}
+#home__search input {
+  height: 45px;
+}
+
+#home__search button.btn.btn-primary {
+  right: 11px;
+  top: 0;
+  bottom: 3px;
+}
+
+
+button.navbar-toggler {
+  box-shadow: none;
+  border: 0;
+}
+
+button.navbar-toggler:focus {
+  box-shadow: none;
+}
 }

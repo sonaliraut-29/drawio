@@ -104,28 +104,6 @@ const Home = ({ history }) => {
     window.open(link, "_blank");
   };
 
-  const options = {
-    responsiveClass: true,
-    responsive: {
-      margin: 15,
-      0: {
-        items: 2,
-      },
-      400: {
-        items: 2,
-      },
-      600: {
-        items: 3,
-      },
-      700: {
-        items: 3,
-      },
-      1000: {
-        items: 3,
-      },
-    },
-  };
-
   const handleCategorySearch = (item) => {
     history.push({
       pathname: routes.SEARCH_ROUTE,
@@ -136,7 +114,7 @@ const Home = ({ history }) => {
   };
   return (
     <div className="Home">
-      <Container className="mt-5">
+      <Container className="mt-sm-5 mt-0">
         <section id="home__banner">
           <Row>
             {banners && banners.length > 0 ? (
@@ -255,14 +233,27 @@ const Home = ({ history }) => {
 
         <section id="home__popular" className="mt-5 text-center item-design">
           <Row>
-            <Col className="d-flex justify-content-center align-items-center title-wrap mt-5 mb-4">
+            <Col className="d-flex justify-content-center align-items-center title-wrap mt-sm-5 mt-0 mb-4">
               <h2 className="section-title mb-1">Popular Products</h2>
               <span>{/* <a href="#">View All</a> */}</span>
             </Col>
           </Row>
           {popularProducts && popularProducts.length > 0 ? (
             <Row>
-              <OwlCarousel className="owl-theme" loop margin={20}>
+              <OwlCarousel
+                className="owl-theme"
+                loop
+                margin={20}
+                responsiveClass={true}
+                responsive={{
+                  1: {
+                    items: 2,
+                  },
+                  1025: {
+                    items: 3,
+                  },
+                }}
+              >
                 {popularProducts.map((item) => {
                   let vendorName = item.Vendor.replace(" ", "-").toLowerCase();
                   return (

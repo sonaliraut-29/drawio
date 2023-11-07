@@ -88,7 +88,7 @@ const Header = ({ history }) => {
       <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
         <Container>
           <Navbar.Brand href="/">
-            <img src="./dist/assets/images/logo.png" alt="logo" />
+            <img src="./dist/assets/images/genie-saves-logo2.svg" alt="logo" />
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
