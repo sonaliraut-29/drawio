@@ -204,6 +204,9 @@ const SearchDetails = ({ history }) => {
       : false
   );
 
+  const [activeCategory, setActiveCategory] = useState(
+    arrSubCategory && arrSubCategory.length ? [0] : []
+  );
   const [isActiveSubCategory, setIsActiveSubcategory] = useState(
     arrSubCategory && arrSubCategory.length > 0 ? true : false
   );
@@ -905,6 +908,8 @@ const SearchDetails = ({ history }) => {
     setSelectedSubCategories([]);
     setSelectedVendors([]);
     setSearchValue("");
+    setActiveCategory([]);
+    setIsActiveCategory(false);
     history.push({
       pathname: `${routes.SEARCH_ROUTE}`,
       // search: `?query=`,
@@ -990,6 +995,7 @@ const SearchDetails = ({ history }) => {
     });
   };
 
+  console.log(activeCategory);
   return (
     <main className="search-page test">
       <div className="search-wrap">
@@ -1185,7 +1191,9 @@ const SearchDetails = ({ history }) => {
                         <h6>Category</h6>
                         <div
                           className="two"
-                          onClick={() => setIsActiveCategory(!isActiveCategory)}
+                          onClick={() => {
+                            setIsActiveCategory(!isActiveCategory);
+                          }}
                           style={{ cursor: "pointer" }}
                         >
                           {/* {isActiveCategory ? "-" : "+"} */}
@@ -1220,6 +1228,7 @@ const SearchDetails = ({ history }) => {
                                         </div>
                                         <div
                                           onClick={() => {
+                                            console.log(isActiveSubCategory);
                                             setActiveIndex(index);
                                             setIsActiveSubcategory(
                                               !isActiveSubCategory
@@ -1227,23 +1236,41 @@ const SearchDetails = ({ history }) => {
                                           }}
                                           style={{ cursor: "pointer" }}
                                         >
-                                          {isActiveSubCategory &&
-                                          index == activeIndex ? (
-                                            <i
-                                              class="fa fa-minus"
-                                              aria-hidden="true"
-                                            ></i>
+                                          {activeCategory.includes(index) ? (
+                                            <span
+                                              onClick={() => {
+                                                let prevCate = [
+                                                  ...activeCategory,
+                                                ];
+
+                                                prevCate = prevCate.filter(
+                                                  (t) => t !== index
+                                                );
+
+                                                setActiveCategory(prevCate);
+                                              }}
+                                            >
+                                              -
+                                            </span>
                                           ) : (
-                                            <i
-                                              class="fa fa-plus"
-                                              aria-hidden="true"
-                                            ></i>
+                                            <span
+                                              onClick={() => {
+                                                let prevCate = [
+                                                  ...activeCategory,
+                                                ];
+
+                                                prevCate.push(index);
+
+                                                setActiveCategory(prevCate);
+                                              }}
+                                            >
+                                              +
+                                            </span>
                                           )}
                                         </div>
                                       </div>
                                       <div className="accordion-content">
-                                        {isActiveSubCategory &&
-                                        index == activeIndex
+                                        {activeCategory.includes(index)
                                           ? item.map((innerItem, idx) => {
                                               return (
                                                 <Form.Check
