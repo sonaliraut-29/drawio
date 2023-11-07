@@ -15,7 +15,6 @@ import {
   ALL_BANNERS,
   VENDORS,
 } from "../../redux/reduxConstants/EndPoints";
-import Carousel from "react-bootstrap/Carousel";
 import api from "../../redux/services/api";
 import Pagination from "../../uikit/Paginate";
 

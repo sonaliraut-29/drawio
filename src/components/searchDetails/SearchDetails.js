@@ -9,9 +9,6 @@ import {
   Dropdown,
   Modal,
 } from "react-bootstrap";
-
-import Modal from "react-bootstrap/Modal";
-
 import * as images from "../constant/Assets";
 
 import api from "../../redux/services/api";
@@ -989,7 +986,6 @@ const SearchDetails = ({ history }) => {
     });
   };
 
-  console.log(activeIndex);
   return (
     <main className="search-page test">
       <div className="search-wrap">
@@ -1040,17 +1036,25 @@ const SearchDetails = ({ history }) => {
               <div className="col-sm-12 mb-4 mt-sm-0 mt-4 search-title-wrapper">
                 <Row>
                   <div className="col-sm-6">
-                    <h5>
-                      {totalCount}{" "}
-                      {totalCount == 0 || totalCount == 1
-                        ? "Product"
-                        : "Products"}{" "}
-                      found
-                      {/* of{" "}
-                    {searchValue && "" !== searchValue
-                      ? searchValue
-                      : searchText} */}
-                    </h5>
+                    {searchValue == "" &&
+                    searchText == "" &&
+                    selectedBrands.length == 0 &&
+                    selectedCategories.length == 0 &&
+                    selectedSubCategories.length == 0 &&
+                    selectedVendors.length == 0 &&
+                    exclude_accessory == 0 &&
+                    available_only == 0 &&
+                    only_discounted == 0 ? (
+                      ""
+                    ) : (
+                      <h5>
+                        {totalCount}{" "}
+                        {totalCount == 0 || totalCount == 1
+                          ? "Product"
+                          : "Products"}{" "}
+                        found
+                      </h5>
+                    )}
                   </div>
 
                   <div className="col-sm-6 cat-for-desktop">
@@ -1474,7 +1478,7 @@ const SearchDetails = ({ history }) => {
             >
               <Row>
                 <div className="col-sm-12 mb-4 mt-sm-0 mt-4 search-title-wrapper">
-                  <Row>
+                  {/* <Row>
                     <div className="col-sm-8">
                       {searchValue == "" &&
                       searchText == "" &&
@@ -1533,17 +1537,6 @@ const SearchDetails = ({ history }) => {
                           >
                             Price High to Low
                           </Dropdown.Item>
-                          {/* <Dropdown.Item
-                            onClick={() => {
-                              handleSort(
-                                "Discount_Percent",
-                                "asc",
-                                "Discount Low to High"
-                              );
-                            }}
-                          >
-                            Discount % Low to High
-                          </Dropdown.Item> */}
                           <Dropdown.Item
                             onClick={() => {
                               handleSort(
@@ -1600,7 +1593,7 @@ const SearchDetails = ({ history }) => {
                         </Dropdown.Menu>
                       </Dropdown>
                     </div>
-                  </Row>
+                  </Row> */}
                 </div>
                 <div className="col-sm-12">
                   <section className="cat-for-mobile mb-4 ">
