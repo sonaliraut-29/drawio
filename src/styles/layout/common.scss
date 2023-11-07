@@ -169,7 +169,7 @@ a#basic-nav-dropdown:after {
 
 .vendors-filter {
     background: #fff;
-    padding: 15px 15px 50px;
+    padding: 15px 15px;
     border: 1px solid #dee2e6;
     border-radius: 5px;
     text-align: left;
@@ -215,13 +215,18 @@ a.navbar-brand img {
     width: 81px;
     // padding: 5px;
 }
-
+a.nav-link {
+    font-weight: 500;
+}
 nav.bg-body-tertiary.navbar.navbar-expand-lg.navbar-light {
     padding: 0;
     background: #fff !important;
     box-shadow: 0 5px 10px rgba(0,0,0,0.010);
 }
-
+.navbar-nav .login {
+    color: #007cc3;
+    font-size: 18px;
+}
 
 // responsive
 /* Using SCSS variables to store breakpoints */

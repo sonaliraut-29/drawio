@@ -103,6 +103,13 @@ main.search-page {
 
 .img-wrap .heart-icon i {
     color: #aaa;
+    font-size: 20px;
+    background: #fff;
+    border-radius: 50%;
+    padding: 5px;
+}
+i.fa.fa-heart {
+  color: deeppink;
 }
 
 button#dropdown-sort {
@@ -129,8 +136,22 @@ button#dropdown-sort {
 }
 
 .for-mobile{display: none;}
+.accordion-item {
+  border: 0 !important;
+}
 
+.accordion-title {
+  display: flex;
+  justify-content: space-between;
+}
+.accordion-content .accordion {
+  line-height: 2;
+}
 
+.accordion-title .form-check label {
+  position: relative;
+  top: -5px;
+}
   // responsive
 /* Using SCSS variables to store breakpoints */
 $breakpoint-mobile: 767px;

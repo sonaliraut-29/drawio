@@ -183,8 +183,8 @@ const SearchDetails = ({ history }) => {
   // const [show, setShow] = useState(false);
 
   const [isShowMobFilter, setIsMobShowFilter] = useState(false);
-  // const handleClose = () => setIsMobShowFilter(false);
-  // const handleShow = () => setIsMobShowFilter(true);
+  const handleCloseFilter = () => setIsMobShowFilter(false);
+  const handleShowFilter = () => setIsMobShowFilter(true);
 
   // const [expandedItem, setExpandedItem] = useState(
   //   arrCategory.length > 0 || arrSubCategory.length > 0 ? "0" : ""
@@ -1026,7 +1026,7 @@ const SearchDetails = ({ history }) => {
       <Container>
         {loading && <CommunityLoaderCircularDash isbackground={false} />}
 
-        <section className="pt-0 pt-sm-5 pb-5">
+        <section className="pb-5">
           <Row>
             <div className="col-sm-2 mb-3 for-desktop">
               <button
@@ -1061,7 +1061,7 @@ const SearchDetails = ({ history }) => {
                         type="button"
                         onClick={handleReset}
                       >
-                        Reset d
+                        Reset
                       </button>
                       <Dropdown className="mx-2 d-flex justify-content-end">
                         <Dropdown.Toggle variant="success" id="dropdown-sort">
@@ -1171,79 +1171,85 @@ const SearchDetails = ({ history }) => {
               style={{ display: isShowFilter ? "block" : "None" }}
             >
               <section className="cat-for-desktop">
-                <div className="accordion">
-                  <div className="accordion-item">
-                    <div className="accordion-title">
-                      <div>Category</div>
-                      <div
-                        onClick={() => setIsActiveCategory(!isActiveCategory)}
-                      >
-                        {isActiveCategory ? "-" : "+"}
+                <div className="mt-4 vendors-filter">
+                  <div className="accordion">
+                    <div className="accordion-item">
+                      <div className="accordion-title">
+                        <h6>Category</h6>
+                        <div
+                          onClick={() => setIsActiveCategory(!isActiveCategory)}
+                        >
+                          {isActiveCategory ? "-" : "+"}
+                          {/* <i class="fa fa-angle-down" aria-hidden="true"></i><i class="fa fa-angle-up" aria-hidden="true"></i> */}
+                        </div>
                       </div>
-                    </div>
-                    <div className="accordion-content">
-                      {isActiveCategory &&
-                      actualSubcategories &&
-                      actualSubcategories.length > 0
-                        ? actualSubcategories.map((item, index) => {
-                            return (
-                              <>
-                                <div className="accordion">
-                                  <div className="accordion-item">
-                                    <div className="accordion-title">
-                                      <div>
-                                        <Form.Check
-                                          type="checkbox"
-                                          id={index}
-                                          label={actualCategories[index]}
-                                          value={actualCategories[index]}
-                                          onChange={handleCategories}
-                                          checked={selectedCategories.includes(
-                                            actualCategories[index]
-                                          )}
-                                        />
+                      <div className="accordion-content">
+                        {isActiveCategory &&
+                        actualSubcategories &&
+                        actualSubcategories.length > 0
+                          ? actualSubcategories.map((item, index) => {
+                              return (
+                                <>
+                                  <div className="accordion">
+                                    <div className="accordion-item">
+                                      <div className="accordion-title">
+                                        <div>
+                                          <Form.Check
+                                            type="checkbox"
+                                            id={index}
+                                            label={actualCategories[index]}
+                                            value={actualCategories[index]}
+                                            onChange={handleCategories}
+                                            checked={selectedCategories.includes(
+                                              actualCategories[index]
+                                            )}
+                                          />
+                                        </div>
+                                        <div
+                                          onClick={() => {
+                                            setActiveIndex(index);
+                                            setIsActiveSubcategory(
+                                              !isActiveSubCategory
+                                            );
+                                          }}
+                                        >
+                                          {isActiveSubCategory &&
+                                          index == activeIndex
+                                            ? "-"
+                                            : "+"}
+                                        </div>
                                       </div>
-                                      <div
-                                        onClick={() => {
-                                          setActiveIndex(index);
-                                          setIsActiveSubcategory(
-                                            !isActiveSubCategory
-                                          );
-                                        }}
-                                      >
+                                      <div className="accordion-content">
                                         {isActiveSubCategory &&
                                         index == activeIndex
-                                          ? "-"
-                                          : "+"}
+                                          ? item.map((innerItem, idx) => {
+                                              return (
+                                                <Form.Check
+                                                  type="checkbox"
+                                                  id={idx}
+                                                  label={innerItem}
+                                                  value={innerItem}
+                                                  onChange={(e) =>
+                                                    handleSubcategories(
+                                                      e,
+                                                      index
+                                                    )
+                                                  }
+                                                  checked={selectedSubCategories.includes(
+                                                    innerItem
+                                                  )}
+                                                />
+                                              );
+                                            })
+                                          : ""}
                                       </div>
                                     </div>
-                                    <div className="accordion-content">
-                                      {isActiveSubCategory &&
-                                      index == activeIndex
-                                        ? item.map((innerItem, idx) => {
-                                            return (
-                                              <Form.Check
-                                                type="checkbox"
-                                                id={idx}
-                                                label={innerItem}
-                                                value={innerItem}
-                                                onChange={(e) =>
-                                                  handleSubcategories(e, index)
-                                                }
-                                                checked={selectedSubCategories.includes(
-                                                  innerItem
-                                                )}
-                                              />
-                                            );
-                                          })
-                                        : ""}
-                                    </div>
                                   </div>
-                                </div>
-                              </>
-                            );
-                          })
-                        : ""}
+                                </>
+                              );
+                            })
+                          : ""}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -1332,7 +1338,7 @@ const SearchDetails = ({ history }) => {
                   <div className="accordion">
                     <div className="accordion-item">
                       <div className="accordion-title">
-                        <div>Vendors</div>
+                        <h6>Vendors</h6>
                         <div onClick={() => setIsActive(!isActive)}>
                           {isActive ? "-" : "+"}
                         </div>
@@ -1381,7 +1387,7 @@ const SearchDetails = ({ history }) => {
                   <div className="accordion">
                     <div className="accordion-item">
                       <div className="accordion-title">
-                        <div>Brands</div>
+                        <h6>Brands</h6>
                         <div onClick={() => setIsActiveBrand(!isActiveBrand)}>
                           {isActiveBrand ? "-" : "+"}
                         </div>
@@ -1500,21 +1506,24 @@ const SearchDetails = ({ history }) => {
                     <div className="col-sm-4 d-flex justify-content-end ">
                       <button
                         className="btn-simple btn-show-filter"
-                        onClick={handleShow}
+                        onClick={handleShowFilter}
                       >
                         Filter
                       </button>
                       <Modal
                         show={isShowMobFilter}
-                        onHide={handleClose}
+                        onHide={handleCloseFilter}
                         className="mob-filter-popup"
                       >
                         <Modal.Header closeButton>
-                          <Modal.Title>Filter 111 </Modal.Title>
+                          <Modal.Title>Filter </Modal.Title>
                         </Modal.Header>
                         <Modal.Body>Show filter category</Modal.Body>
                         <Modal.Footer>
-                          <Button variant="secondary" onClick={handleClose}>
+                          <Button
+                            variant="secondary"
+                            onClick={handleCloseFilter}
+                          >
                             Close
                           </Button>
                         </Modal.Footer>

@@ -122,7 +122,7 @@ const Header = ({ history }) => {
                   </NavDropdown.Item>
                 </NavDropdown>
               ) : (
-                <Nav.Link href={routes.LOGIN}>
+                <Nav.Link href={routes.LOGIN} className="login">
                   {" "}
                   <i class="fa fa-user" aria-hidden="true"></i> Login
                 </Nav.Link>
