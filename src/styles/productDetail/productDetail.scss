@@ -100,8 +100,19 @@
 }
 
 .prod-slider img {
-  height: 400px;
+    height: 400px;
 }
+
+.product-name-price-wrapper .product-name {
+    width: 70%;
+    margin-bottom: 20px;
+}
+
+.product-description-wrapper {
+    margin-top: 20px;
+    margin-bottom: 60px;
+}
+
 
 .product-name-price-wrapper .product-name {
   width: 70%;
@@ -122,10 +133,10 @@ $breakpoint-mobile: 767px;
     margin-top: 35px;
   }
 
-  .product-vendor-wrapper .vendor-name {
-    margin-left: 10px;
-    font-size: 10px;
-  }
+    .product-detail-page .item-design .item .main-item-wrap .img-wrap {  height: 100px;  }
+    .product-name-price-wrapper .product-name {
+        width: 100%;
+    }
 
   .product-description-wrapper p {
     font-size: 10px;
