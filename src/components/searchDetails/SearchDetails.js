@@ -1491,6 +1491,7 @@ const SearchDetails = ({ history }) => {
                             brands.length > 3 &&
                             brandCount < brands.length ? (
                               <span
+                                className="cate-view"
                                 onClick={() =>
                                   loadMoreBrands(brands.length, "more")
                                 }
