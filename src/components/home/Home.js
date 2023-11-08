@@ -100,8 +100,16 @@ const Home = ({ history }) => {
     }
   };
 
-  const handleRedirect = (link) => {
-    window.open(link, "_blank");
+  const handleRedirect = (item) => {
+    // window.open(link, "_blank");
+    history.push({
+      pathname: routes.PRODUCTDETAIL,
+      search: "?Vendor=" + item.Vendor + "&Item_Key=" + item.Item_Key,
+      state: {
+        Vendor: item.Vendor,
+        ItemKey: item.Item_Key,
+      },
+    });
   };
 
   const handleCategorySearch = (item) => {
@@ -260,7 +268,7 @@ const Home = ({ history }) => {
                   return (
                     <div
                       className="item"
-                      onClick={() => handleRedirect(item.Item_URL)}
+                      onClick={() => handleRedirect(item)}
                       style={{ cursor: "pointer" }}
                     >
                       <div className="main-item-wrap">
