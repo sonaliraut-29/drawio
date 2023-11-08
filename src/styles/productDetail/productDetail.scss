@@ -124,6 +124,19 @@
   margin-bottom: 60px;
 }
 
+span.catge-view {
+    display: block;
+    margin-top: 15px;
+    color: #0090d3;
+    text-decoration: underline;
+    cursor: pointer;    font-size: 14px;
+}
+
+span.catge-view i {
+    position: relative;
+    top: 2px;    font-size: 20px;
+}
+
 // responsive
 /* Using SCSS variables to store breakpoints */
 $breakpoint-mobile: 767px;
