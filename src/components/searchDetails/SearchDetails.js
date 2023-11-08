@@ -215,6 +215,18 @@ const SearchDetails = ({ history }) => {
     arrSubCategory && arrSubCategory.length > 0 ? 0 : undefined
   );
 
+  const [brandCount, setBrandCount] = useState(3);
+
+  const loadMoreBrands = (length, text) => {
+    let prevBrandCount = brandCount;
+    if ("more" == text && prevBrandCount < brands.length) {
+      prevBrandCount = prevBrandCount + length;
+      setBrandCount(prevBrandCount);
+    } else if ("less" == text) {
+      setBrandCount(length);
+    }
+  };
+
   useEffect(() => {
     fetchCategories();
     fetchSubcategories();
@@ -998,7 +1010,6 @@ const SearchDetails = ({ history }) => {
     });
   };
 
-  console.log(activeCategory);
   return (
     <main className="search-page test">
       <div className="search-wrap">
@@ -1462,8 +1473,9 @@ const SearchDetails = ({ history }) => {
                         </div>
                       </div>
                       <div className="accordion-content">
-                        {isActiveBrand && brands && brands.length > 0
-                          ? brands.map((item, index) => {
+                        {isActiveBrand && brands && brands.length > 0 ? (
+                          <>
+                            {brands.slice(0, brandCount).map((item, index) => {
                               return (
                                 <Form.Check
                                   type="checkbox"
@@ -1474,8 +1486,24 @@ const SearchDetails = ({ history }) => {
                                   checked={selectedBrands.includes(item.Name)}
                                 />
                               );
-                            })
-                          : ""}
+                            })}
+                            {brands &&
+                            brands.length > 3 &&
+                            brandCount < brands.length ? (
+                              <span onClick={() => loadMoreBrands(5, "more")}>
+                                View More
+                              </span>
+                            ) : brandCount >= brands.length ? (
+                              <span onClick={() => loadMoreBrands(3, "less")}>
+                                View Less
+                              </span>
+                            ) : (
+                              ""
+                            )}
+                          </>
+                        ) : (
+                          ""
+                        )}
                       </div>
                     </div>
                   </div>
