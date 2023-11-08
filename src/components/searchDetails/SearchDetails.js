@@ -1490,12 +1490,26 @@ const SearchDetails = ({ history }) => {
                             {brands &&
                             brands.length > 3 &&
                             brandCount < brands.length ? (
-                              <span onClick={() => loadMoreBrands(5, "more")}>
-                                View More
+                              <span
+                                className="cate-view"
+                                onClick={() => loadMoreBrands(5, "more")}
+                              >
+                                View More{" "}
+                                <i
+                                  class="fa fa-angle-down"
+                                  aria-hidden="true"
+                                ></i>
                               </span>
                             ) : brandCount >= brands.length ? (
-                              <span onClick={() => loadMoreBrands(3, "less")}>
-                                View Less
+                              <span
+                                className="catge-view"
+                                onClick={() => loadMoreBrands(3, "less")}
+                              >
+                                View Less{" "}
+                                <i
+                                  class="fa fa-angle-up"
+                                  aria-hidden="true"
+                                ></i>
                               </span>
                             ) : (
                               ""

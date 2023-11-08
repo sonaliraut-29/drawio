@@ -188,6 +188,23 @@ button#dropdown-sort {
   margin-top: -5px;
 }
 
+span.cate-view i {
+    font-size: 20px;
+    position: relative;
+    top: 2px;
+}
+
+span.cate-view {
+    font-size: 16px;
+    text-decoration: underline;
+    color: #0090d3;
+    margin-top: 13px;
+    display: block;
+}
+span.cate-view:hover {
+  cursor: pointer;
+}
+
 // responsive
 /* Using SCSS variables to store breakpoints */
 $breakpoint-mobile: 767px;
