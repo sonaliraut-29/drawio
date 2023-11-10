@@ -138,19 +138,20 @@ a#basic-nav-dropdown:after {
         h5 {
           text-align: left;
           padding-top: 15px;
+          min-height: 63px;
         }
 
         p {
-          text-align: left;
+          align-items: center;
           overflow: hidden;
+          text-overflow: ellipsis;
           display: -webkit-box;
+          line-height: 1.2;
           -webkit-line-clamp: 3;
           -webkit-box-orient: vertical;
-          min-height: 76px;
-          font-size: 14px;
-          height: 45px;
-          display: flex;
-          align-items: center;
+          font-size: 12px;
+          min-height: 45px;
+          margin-bottom: 5px;
         }
       }
 

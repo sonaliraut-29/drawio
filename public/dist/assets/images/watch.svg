@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="21" height="32.157" viewBox="0 0 21 32.157">
-  <g id="Artboard" transform="translate(0.955 1.079)">
-    <g id="watch" transform="translate(0 0)">
-      <circle id="Oval" cx="10" cy="10" r="10" transform="translate(-0.455 5)" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
-      <path id="Shape" d="M7,8v4.091l2.045,2.045" transform="translate(2.545 2.909)" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" fill-rule="evenodd"/>
-      <path id="Shape-2" data-name="Shape" d="M15.269,23.156l-.5,5.424a2.832,2.832,0,0,1-2.832,2.578H5.808A2.832,2.832,0,0,1,2.976,28.58l-.5-5.424M2.494,8l.5-5.424A2.832,2.832,0,0,1,5.808,0h6.161A2.832,2.832,0,0,1,14.8,2.578L15.3,8" transform="translate(0.664 -0.579)" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" fill-rule="evenodd"/>
-    </g>
-  </g>
-</svg>
