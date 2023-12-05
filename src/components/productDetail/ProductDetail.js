@@ -131,7 +131,11 @@ const ProductDetail = ({ history }) => {
               dolor sit amet.
             </p> */}
             <p>
-              <a href={product.Item_URL} className="visit-website-link">
+              <a
+                href={product.Item_URL}
+                className="visit-website-link"
+                target="_blank"
+              >
                 {" "}
                 VISIT WEBSITE
               </a>

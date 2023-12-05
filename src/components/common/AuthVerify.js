@@ -16,7 +16,7 @@ const AuthVerify = ({ history, logOut }) => {
   if (user) {
     const decodedJwt = parseJwt(getCookie("token"));
 
-    if (decodedJwt.exp * 1000 < Date.now()) {
+    if (decodedJwt && decodedJwt.exp * 1000 < Date.now()) {
       logOut();
     }
   }

@@ -151,7 +151,7 @@ const SearchDetails = ({ history }) => {
   );
   const [totalCount, setTotalCount] = useState(0);
   const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(5);
+  const [maxPrice, setMaxPrice] = useState();
 
   const [OrderBy, setOrderBy] = useState("NEWID()");
   const [sort, setSort] = useState("");
@@ -167,6 +167,7 @@ const SearchDetails = ({ history }) => {
   const [available_only, setAvailableOnly] = useState(0);
   const [isShowFilter, setIsShowFilter] = useState(true);
   const [brands, setBrands] = useState([]);
+  const [originalBrands, setOriginalBrands] = useState();
   const [selectedBrands, setSelectedBrands] = useState(
     arrBrand ? arrBrand : []
   );
@@ -215,7 +216,8 @@ const SearchDetails = ({ history }) => {
     arrSubCategory && arrSubCategory.length > 0 ? 0 : undefined
   );
 
-  const [brandCount, setBrandCount] = useState(3);
+  const [brandCount, setBrandCount] = useState(10);
+  const [brandFilter, setBrandFilter] = useState();
 
   const loadMoreBrands = (length, text) => {
     let prevBrandCount = brandCount;
@@ -351,7 +353,7 @@ const SearchDetails = ({ history }) => {
 
   const handleVendor = (e) => {
     setPage(1);
-    setLimit(20);
+    // setLimit(20);
     const prevValues = [...selectedVendors];
 
     if (e.target.checked) {
@@ -365,7 +367,7 @@ const SearchDetails = ({ history }) => {
 
   const handleBrand = (e) => {
     setPage(1);
-    setLimit(20);
+    // setLimit(20);
     const prevValues = [...selectedBrands];
 
     if (e.target.checked) {
@@ -377,7 +379,7 @@ const SearchDetails = ({ history }) => {
     }
   };
   const handleCategories = (e) => {
-    setLimit(20);
+    // setLimit(20);
     const prevValues = [...selectedCategories];
 
     if (e.target.checked) {
@@ -391,7 +393,7 @@ const SearchDetails = ({ history }) => {
   };
 
   const handleSubcategories = (e, key) => {
-    setLimit(20);
+    // setLimit(20);
     const prevValues = [...selectedSubCategories];
     const prevCategories = [...selectedCategories];
 
@@ -450,6 +452,7 @@ const SearchDetails = ({ history }) => {
       .then((res) => {
         if (res.data.success) {
           setBrands(res.data.data);
+          setOriginalBrands(res.data.data);
         }
       })
       .catch((e) => console.log(e));
@@ -541,11 +544,12 @@ const SearchDetails = ({ history }) => {
         if (res.data.success) {
           setProductList(res.data.data);
           setBrands(res.data.brand);
+          setOriginalBrands(res.data.brand);
           setSubcategories(res.data.sub_category);
           setVendors(res.data.vendor);
           setTotalCount(res.data.totalCount);
           // setMinPrice(res.data.min_price);
-          // setMaxPrice(res.data.man_price);
+          setMaxPrice(res.data.max_price);
         }
       })
       .catch((e) => console.log(e));
@@ -557,15 +561,16 @@ const SearchDetails = ({ history }) => {
 
   const handleChange = (e) => {
     setPage(1);
-    setLimit(20);
+    // setLimit(20);
     setSearchValue(e.target.value);
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === "Enter" && e.target.value.trim().length > 2) {
+    if (e.key === "Enter") {
       setPage(1);
-      setLimit(20);
+      // setLimit(20);
       const offset_rows = 0;
+      //&& e.target.value.trim().length > 2
       // setAvailableOnly(0);
       // setOnlyDiscounted(0);
       // setExcludeAccessory(0);
@@ -764,11 +769,12 @@ const SearchDetails = ({ history }) => {
         if (res.data.success) {
           setProductList(res.data.data);
           setBrands(res.data.brand);
+          setOriginalBrands(res.data.brand);
           setSubcategories(res.data.sub_category);
           setVendors(res.data.vendor);
           setTotalCount(res.data.totalCount);
           // setMinPrice(res.data.min_price);
-          // setMaxPrice(res.data.man_price);
+          setMaxPrice(res.data.max_price);
         }
       })
       .catch((e) => console.log(e));
@@ -802,7 +808,7 @@ const SearchDetails = ({ history }) => {
   const handleSlider = (value, index) => {
     setValue(value);
     setPage(1);
-    setLimit(20);
+    // setLimit(20);
   };
 
   const handleAddToFavourites = (item) => {
@@ -925,6 +931,7 @@ const SearchDetails = ({ history }) => {
     setSearchValue("");
     setActiveCategory([]);
     setIsActiveCategory(false);
+    setLimit(20);
     history.push({
       pathname: `${routes.SEARCH_ROUTE}`,
       // search: `?query=`,
@@ -932,14 +939,22 @@ const SearchDetails = ({ history }) => {
   };
 
   const handleProductDetail = (item) => {
-    history.push({
-      pathname: routes.PRODUCTDETAIL,
-      search: "?Vendor=" + item.Vendor + "&Item_Key=" + item.Item_Key,
-      state: {
-        Vendor: item.Vendor,
-        ItemKey: item.Item_Key,
-      },
-    });
+    // history.push({
+    //   pathname: routes.PRODUCTDETAIL,
+    //   search: "?Vendor=" + item.Vendor + "&Item_Key=" + item.Item_Key,
+    //   state: {
+    //     Vendor: item.Vendor,
+    //     ItemKey: item.Item_Key,
+    //   },
+    // });
+    window.open(
+      routes.PRODUCTDETAIL +
+        "?Vendor=" +
+        item.Vendor +
+        "&Item_Key=" +
+        item.Item_Key,
+      "_blank"
+    );
   };
 
   const handleSearch = (e) => {
@@ -1010,6 +1025,25 @@ const SearchDetails = ({ history }) => {
     });
   };
 
+  const handleBrandFilter = (e) => {
+    const searchBrand = e.target.value;
+    setBrandFilter(e.target.vaule);
+    if (searchBrand) {
+      const prevBrands = [...originalBrands];
+
+      const changeFilter = prevBrands.filter((item) => {
+        const regex = new RegExp(`${searchBrand}`, "gi");
+        return item.Name.match(regex);
+      });
+      setBrands(changeFilter);
+    } else {
+      const prevBrands = [...originalBrands];
+      setBrands(prevBrands);
+      setBrandCount(10);
+    }
+  };
+
+  console.log(maxPrice);
   return (
     <main className="search-page test">
       <div className="search-wrap">
@@ -1211,7 +1245,7 @@ const SearchDetails = ({ history }) => {
                           style={{ cursor: "pointer" }}
                         >
                           {/* {isActiveCategory ? "-" : "+"} */}
-                          {isActiveCategory ? (
+                          {isActiveCategory || isActiveSubCategory ? (
                             <i class="fa fa-angle-down" aria-hidden="true"></i>
                           ) : (
                             <i class="fa fa-angle-up" aria-hidden="true"></i>
@@ -1242,7 +1276,6 @@ const SearchDetails = ({ history }) => {
                                         </div>
                                         <div
                                           onClick={() => {
-                                            console.log(isActiveSubCategory);
                                             setActiveIndex(index);
                                             setIsActiveSubcategory(
                                               !isActiveSubCategory
@@ -1380,23 +1413,24 @@ const SearchDetails = ({ history }) => {
 
                 <div className="price-range-slider mt-4">
                   <h6>Price</h6>
-
-                  <ReactSlider
-                    className="horizontal-slider"
-                    thumbClassName="thumb"
-                    trackClassName="track"
-                    defaultValue={[minPrice, maxPrice]}
-                    ariaLabel={["Lower thumb", "Upper thumb"]}
-                    ariaValuetext={(state) => `Thumb value ${state.valueNow}`}
-                    renderThumb={(props, state) => (
-                      <div {...props}>{state.valueNow}</div>
-                    )}
-                    min={Math.floor(minPrice)}
-                    max={Math.floor(maxPrice)}
-                    // pearling
-                    // minDistance={10}
-                    onChange={handleSlider}
-                  />
+                  {maxPrice && (
+                    <ReactSlider
+                      className="horizontal-slider"
+                      thumbClassName="thumb"
+                      trackClassName="track"
+                      defaultValue={[minPrice, maxPrice]}
+                      ariaLabel={["Lower thumb", "Upper thumb"]}
+                      ariaValuetext={(state) => `Thumb value ${state.valueNow}`}
+                      renderThumb={(props, state) => (
+                        <div {...props}>{state.valueNow}</div>
+                      )}
+                      min={Math.floor(minPrice)}
+                      max={Math.ceil(maxPrice)}
+                      // pearling
+                      // minDistance={10}
+                      onChange={handleSlider}
+                    />
+                  )}
                 </div>
                 <div className="mt-4 vendors-filter">
                   <div className="accordion">
@@ -1473,8 +1507,24 @@ const SearchDetails = ({ history }) => {
                         </div>
                       </div>
                       <div className="accordion-content">
-                        {isActiveBrand && brands && brands.length > 0 ? (
+                        {isActiveBrand ? (
                           <>
+                            {
+                              // (brands && brands.length > 10) || brandFilter
+                              // ?
+                              <div className="some-input-field-class">
+                                <input
+                                  type="text"
+                                  name="filter"
+                                  id="filter"
+                                  value={brandFilter}
+                                  onChange={handleBrandFilter}
+                                />
+                              </div>
+                              //  : (
+                              //   ""
+                              // )
+                            }
                             {brands.slice(0, brandCount).map((item, index) => {
                               return (
                                 <Form.Check
@@ -1487,35 +1537,38 @@ const SearchDetails = ({ history }) => {
                                 />
                               );
                             })}
-                            {brands &&
-                            brands.length > 3 &&
-                            brandCount < brands.length ? (
-                              <span
-                                className="catge-view"
-                                onClick={() =>
-                                  loadMoreBrands(brands.length, "more")
-                                }
-                              >
-                                View More{" "}
-                                <i
-                                  class="fa fa-angle-down"
-                                  aria-hidden="true"
-                                ></i>
-                              </span>
-                            ) : brandCount >= brands.length ? (
-                              <span
-                                className="catge-view"
-                                onClick={() => loadMoreBrands(3, "less")}
-                              >
-                                View Less{" "}
-                                <i
-                                  class="fa fa-angle-up"
-                                  aria-hidden="true"
-                                ></i>
-                              </span>
-                            ) : (
-                              ""
-                            )}
+                            {
+                              brands &&
+                              brands.length > 10 &&
+                              brandCount < brands.length ? (
+                                <span
+                                  className="catge-view"
+                                  onClick={() => loadMoreBrands(100, "more")}
+                                >
+                                  View More{" "}
+                                  <i
+                                    class="fa fa-angle-down"
+                                    aria-hidden="true"
+                                  ></i>
+                                </span>
+                              ) : (
+                                ""
+                              )
+                              // brandCount >= brands.length ? (
+                              //   <span
+                              //     className="catge-view"
+                              //     onClick={() => loadMoreBrands(10, "less")}
+                              //   >
+                              //     View Less{" "}
+                              //     <i
+                              //       class="fa fa-angle-up"
+                              //       aria-hidden="true"
+                              //     ></i>
+                              //   </span>
+                              // ) : (
+                              //   ""
+                              // )
+                            }
                           </>
                         ) : (
                           ""

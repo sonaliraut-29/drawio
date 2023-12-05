@@ -4,6 +4,7 @@ import NoPageFound from "../common/uikit/NoPageFound";
 import routesList from "../../routesList";
 import Header from "../common/header/Header";
 import Footer from "../common/footer/Footer";
+import SocialLoginCallback from "../SocialLoginCallback";
 
 const Layout = ({ history }) => {
   const isLoginOrRegiterRoute =
@@ -26,6 +27,9 @@ const Layout = ({ history }) => {
           };
           return <Route key={route.path} {...data} />;
         })}
+        <Route path="/login/callback">
+          <SocialLoginCallback history={history} />
+        </Route>
         <Route component={NoPageFound} />
       </Switch>
 

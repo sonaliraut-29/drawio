@@ -152,9 +152,9 @@ const Register = ({ history }) => {
       .post(REGISTER, data)
       .then((res) => {
         if (res.data.data.access_token) {
-          setCookie("token", res.data.data.access_token);
-          setCookie("user_id", res.data.data.user.User_ID);
-          setCookie("email", res.data.data.user.email);
+          setCookie("token", res.data.data.access_token, 365);
+          setCookie("user_id", res.data.data.user.User_ID, 365);
+          setCookie("email", res.data.data.user.email, 365);
           history.push({ pathname: routes.HOME_ROUTE });
         } else {
           setErrors(res.data);
@@ -166,6 +166,11 @@ const Register = ({ history }) => {
   const handleGovernorate = (e) => {
     setGovernate(e.target.value);
   };
+
+  const handleSocialLogin = (provider) => {
+    window.location.href = baseUrl + `/${provider}/authorize`;
+  };
+
   return (
     <>
       {!token ? (
@@ -434,7 +439,7 @@ const Register = ({ history }) => {
           <section className="google-apple-id">
             <Row>
               <div className="col-12 text-center">
-                <a href="#">
+                <a onClick={() => handleSocialLogin("google")}>
                   <img
                     src="/dist/assets/images/google.svg"
                     alt="GoogleID"

@@ -120,13 +120,14 @@ const Favourites = ({ history }) => {
         setLoading(false);
         if (res.data.success) {
           let prevProducts = [...productList];
+
           let prevTotalCount = totalCount;
 
-          prevProducts = prevProducts.filter(
-            (itemIn) =>
-              itemIn.Vendor !== item.Vendor && itemIn.Item_Key !== item.Item_Key
+          const changeProducts = prevProducts.filter(
+            (itemIn) => itemIn.Item_Key !== item.Item_Key
           );
-          setProductList(prevProducts);
+
+          setProductList(changeProducts);
           setTotalCount(prevTotalCount > 0 ? prevTotalCount - 1 : 0);
         }
       })
@@ -134,11 +135,20 @@ const Favourites = ({ history }) => {
   };
 
   const handleProductDetail = (item) => {
-    history.push({
-      pathname: routes.PRODUCTDETAIL,
-      search: "?Vendor=" + item.Vendor + "&Item_Key=" + item.Item_Key,
-      state: { Vendor: item.Vendor, ItemKey: item.Item_Key },
-    });
+    // history.push({
+    //   pathname: routes.PRODUCTDETAIL,
+    //   search: "?Vendor=" + item.Vendor + "&Item_Key=" + item.Item_Key,
+    //   state: { Vendor: item.Vendor, ItemKey: item.Item_Key },
+    // });
+
+    window.open(
+      routes.PRODUCTDETAIL +
+        "?Vendor=" +
+        item.Vendor +
+        "&Item_Key=" +
+        item.Item_Key,
+      "_blank"
+    );
   };
   return (
     <>

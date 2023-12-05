@@ -31,6 +31,10 @@ const Leaflet = () => {
   const [vendors, setVendors] = useState([]);
   const [selectedVendors, setSelectedVendors] = useState([]);
 
+  const [isShowFilter, setIsShowFilter] = useState(false);
+  const handleCloseFilter = () => setIsShowFilter(false);
+  const handleShowFilter = () => setIsShowFilter(true);
+
   useEffect(() => {
     const subCategoriesTemp = [];
     if (subCategories && subCategories.length > 0) {
@@ -257,65 +261,84 @@ const Leaflet = () => {
               <h2 className="section-title mb-1">Leaflets</h2>
               <span></span>
             </Col>
+            <Row>
+              <div className="col-sm-2 mb-3 for-desktop">
+                <button
+                  className="btn-simple btn-show-filter"
+                  type="button"
+                  onClick={() => setIsShowFilter(!isShowFilter)}
+                >
+                  {isShowFilter ? "Hide Filter" : "Show Filter"}
+                </button>
+              </div>
+            </Row>
           </Row>
 
           <Row className="mt-4">
-            <section className="col-sm-3 cat-left">
-              <section className="cat-for-desktop">
-                <div className="filter-layout">
-                  <h6>Vendors with Category</h6>
-                  {categories && categories.length > 0 ? (
-                    <>
-                      {categories.map((item, index) => {
-                        return (
-                          <>
+            {isShowFilter && (
+              <section className="col-sm-3 cat-left">
+                <section className="cat-for-desktop">
+                  <div className="filter-layout">
+                    <h6>Vendors with Category</h6>
+                    {categories && categories.length > 0 ? (
+                      <>
+                        {categories.map((item, index) => {
+                          return (
+                            <>
+                              <Form.Check
+                                type="checkbox"
+                                id={index}
+                                label={item.Category}
+                                value={item.Category}
+                                onChange={handleCategories}
+                                checked={selectedCategories.includes(
+                                  item.Category
+                                )}
+                              />
+                            </>
+                          );
+                        })}
+                      </>
+                    ) : (
+                      ""
+                    )}
+                  </div>
+                  <div className="mt-4 vendors-filter">
+                    <h6>Vendors</h6>
+                    {vendors && vendors.length > 0
+                      ? vendors.map((item, index) => {
+                          return (
                             <Form.Check
                               type="checkbox"
                               id={index}
-                              label={item.Category}
-                              value={item.Category}
-                              onChange={handleCategories}
-                              checked={selectedCategories.includes(
-                                item.Category
-                              )}
+                              label={item.Vendor}
+                              value={item.Vendor}
+                              onChange={handleVendor}
+                              checked={selectedVendors.includes(item.Vendor)}
                             />
-                          </>
-                        );
-                      })}
-                    </>
-                  ) : (
-                    ""
-                  )}
-                </div>
-                <div className="mt-4 vendors-filter">
-                  <h6>Vendors</h6>
-                  {vendors && vendors.length > 0
-                    ? vendors.map((item, index) => {
-                        return (
-                          <Form.Check
-                            type="checkbox"
-                            id={index}
-                            label={item.Vendor}
-                            value={item.Vendor}
-                            onChange={handleVendor}
-                            checked={selectedVendors.includes(item.Vendor)}
-                          />
-                        );
-                      })
-                    : ""}
-                </div>
-              </section>
+                          );
+                        })
+                      : ""}
+                  </div>
+                </section>
 
-              <section className="cat-for-mobile">
-                <div className="catfilter-mob mb-4">
-                  <button className="btn">
-                    <img src="dist/assets/images/filter.png"></img> Filter
-                  </button>
-                </div>
+                <section className="cat-for-mobile">
+                  <div className="catfilter-mob mb-4">
+                    <button className="btn">
+                      <img src="dist/assets/images/filter.png"></img> Filter
+                    </button>
+                  </div>
+                </section>
               </section>
-            </section>
+            )}
 
-            <section className="col-sm-9 leaflet-list">
+            <section
+              className={
+                isShowFilter
+                  ? "col-sm-9 leaflet-list"
+                  : "col-sm-12 leaflet-list"
+              }
+            >
               <Row>
                 {leaflets && leaflets.length > 0
                   ? leaflets.map((item) => {

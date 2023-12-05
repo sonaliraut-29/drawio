@@ -102,14 +102,23 @@ const Home = ({ history }) => {
 
   const handleRedirect = (item) => {
     // window.open(link, "_blank");
-    history.push({
-      pathname: routes.PRODUCTDETAIL,
-      search: "?Vendor=" + item.Vendor + "&Item_Key=" + item.Item_Key,
-      state: {
-        Vendor: item.Vendor,
-        ItemKey: item.Item_Key,
-      },
-    });
+    // history.push({
+    //   pathname: routes.PRODUCTDETAIL,
+    //   search: "?Vendor=" + item.Vendor + "&Item_Key=" + item.Item_Key,
+    //   state: {
+    //     Vendor: item.Vendor,
+    //     ItemKey: item.Item_Key,
+    //   },
+    // });
+
+    window.open(
+      routes.PRODUCTDETAIL +
+        "?Vendor=" +
+        item.Vendor +
+        "&Item_Key=" +
+        item.Item_Key,
+      "_blank"
+    );
   };
 
   const handleCategorySearch = (item) => {

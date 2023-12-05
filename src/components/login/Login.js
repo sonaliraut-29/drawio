@@ -41,9 +41,9 @@ const Login = ({ history }) => {
       .post(LOGIN, data)
       .then((res) => {
         if (res.data.access_token) {
-          setCookie("token", res.data.access_token);
-          setCookie("user_id", res.data.user.User_ID);
-          setCookie("email", res.data.user.email);
+          setCookie("token", res.data.access_token, 365);
+          setCookie("user_id", res.data.user.User_ID, 365);
+          setCookie("email", res.data.user.email, 365);
           // history.push({ pathname: routes.HOME_ROUTE });
           history.goBack();
         } else {
@@ -51,6 +51,10 @@ const Login = ({ history }) => {
         }
       })
       .catch((e) => console.log(e));
+  };
+
+  const handleSocialLogin = (provider) => {
+    window.location.href = baseUrl + `/${provider}/authorize`;
   };
   return (
     <>
@@ -139,7 +143,7 @@ const Login = ({ history }) => {
         <section className="google-apple-id">
           <Row>
             <div className="col-12 text-center">
-              <a href="#">
+              <a onClick={() => handleSocialLogin("google")}>
                 <img src="/dist/assets/images/google.svg" alt="GoogleID"></img>
               </a>
               <a href="#">

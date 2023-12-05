@@ -37,6 +37,7 @@ export function setCookie(key, value, expireDays) {
       (expireDays == null
         ? ""
         : "; expires=" + exdate.toUTCString() + " ; path=/");
+
     document.cookie = key + "=" + c_value;
   }
 }

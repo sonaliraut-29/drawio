@@ -40,6 +40,10 @@ const Banner = () => {
 
   const [results, setResults] = useState([]);
 
+  const [isShowFilter, setIsShowFilter] = useState(false);
+  const handleCloseFilter = () => setIsShowFilter(false);
+  const handleShowFilter = () => setIsShowFilter(true);
+
   useEffect(() => {
     const subCategoriesTemp = [];
     if (subCategories && subCategories.length > 0) {
@@ -288,62 +292,75 @@ const Banner = () => {
               <span></span>
             </Col>
           </Row>
+          <Row>
+            <div className="col-sm-2 mb-3 for-desktop">
+              <button
+                className="btn-simple btn-show-filter"
+                type="button"
+                onClick={() => setIsShowFilter(!isShowFilter)}
+              >
+                {isShowFilter ? "Hide Filter" : "Show Filter"}
+              </button>
+            </div>
+          </Row>
 
           <Row className="mt-4">
-            <section className="col-sm-3 cat-left">
-              <section className="cat-for-desktop">
-                <div className="filter-layout">
-                  <h6>Vendors with Category</h6>
-                  {categories && categories.length > 0 ? (
-                    <>
-                      {categories.map((item, index) => {
-                        return (
-                          <>
+            {isShowFilter && (
+              <section className="col-sm-3 cat-left">
+                <section className="cat-for-desktop">
+                  <div className="filter-layout">
+                    <h6>Vendors with Category</h6>
+                    {categories && categories.length > 0 ? (
+                      <>
+                        {categories.map((item, index) => {
+                          return (
+                            <>
+                              <Form.Check
+                                type="checkbox"
+                                id={index}
+                                label={item.Category}
+                                value={item.Category}
+                                onChange={handleCategories}
+                                checked={selectedCategories.includes(
+                                  item.Category
+                                )}
+                              />
+                            </>
+                          );
+                        })}
+                      </>
+                    ) : (
+                      ""
+                    )}
+                  </div>
+                  <div className="mt-4 vendors-filter">
+                    <h6>Vendors</h6>
+                    {vendorsAll && vendorsAll.length > 0
+                      ? vendorsAll.map((item, index) => {
+                          return (
                             <Form.Check
                               type="checkbox"
                               id={index}
-                              label={item.Category}
-                              value={item.Category}
-                              onChange={handleCategories}
-                              checked={selectedCategories.includes(
-                                item.Category
-                              )}
+                              label={item.Vendor}
+                              value={item.Vendor}
+                              onChange={handleVendor}
+                              checked={selectedVendors.includes(item.Vendor)}
                             />
-                          </>
-                        );
-                      })}
-                    </>
-                  ) : (
-                    ""
-                  )}
-                </div>
-                <div className="mt-4 vendors-filter">
-                  <h6>Vendors</h6>
-                  {vendorsAll && vendorsAll.length > 0
-                    ? vendorsAll.map((item, index) => {
-                        return (
-                          <Form.Check
-                            type="checkbox"
-                            id={index}
-                            label={item.Vendor}
-                            value={item.Vendor}
-                            onChange={handleVendor}
-                            checked={selectedVendors.includes(item.Vendor)}
-                          />
-                        );
-                      })
-                    : ""}
-                </div>
-              </section>
+                          );
+                        })
+                      : ""}
+                  </div>
+                </section>
 
-              <section className="cat-for-mobile">
-                <div className="catfilter-mob mb-4">
-                  <button className="btn">
-                    <img src="dist/assets/images/filter.png"></img> Filter
-                  </button>
-                </div>
+                <section className="cat-for-mobile">
+                  <div className="catfilter-mob mb-4">
+                    <button className="btn">
+                      <img src="dist/assets/images/filter.png"></img> Filter
+                    </button>
+                  </div>
+                </section>
               </section>
-            </section>
+            )}
 
             <section className="col-sm-9 banner-list">
               <>
